@@ -2,8 +2,8 @@
 /*globals Promise:true*/
 "use strict";
 
-var cloudFoundry = require("../lib/model/CloudFoundry");
 var config = require('./config.json');
+var cloudFoundry = require("../lib/model/CloudFoundry");
 cloudFoundry = new cloudFoundry(config.CF_API_URL);
 
 //TODO: How to improve this idea
