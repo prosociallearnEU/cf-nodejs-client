@@ -10,9 +10,9 @@ cloudFoundry = new cloudFoundry(config.CF_API_URL);
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 cloudFoundry.getInfo().then(function (result) {
-	return cloudFoundry.login(result.token_endpoint,config.username,config.password);
+    return cloudFoundry.login(result.token_endpoint,config.username,config.password);
 }).then(function (result) {
-	console.log(result);
+    console.log(result);
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
