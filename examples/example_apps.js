@@ -18,6 +18,7 @@ var appName = "demo";
 var space_guid = null;
 
 //Get Apps
+/*
 cloudFoundry.getInfo().then(function (result) {
 	token_endpoint = result.token_endpoint;	
     return cloudFoundry.login(token_endpoint,config.username,config.password);
@@ -28,7 +29,7 @@ cloudFoundry.getInfo().then(function (result) {
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
-
+*/
 //Add a new App
 cloudFoundry.getInfo().then(function (result) {
 	token_endpoint = result.token_endpoint;	
