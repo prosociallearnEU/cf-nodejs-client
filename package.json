@@ -1,0 +1,28 @@
+{
+  "name": "cf-nodejs-client",
+  "version": "0.0.1",
+  "description": "A Cloud Foundry Client for Node.js",
+  "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jabrena/cf-nodejs-client.git"
+  },
+  "homepage": "https://github.com/jabrena/cf-nodejs-client#readme",
+  "main": "node index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cloud",
+    "foundry",
+    "cf",
+    "pivotal"
+  ],
+  "bugs": {
+    "url": "https://github.com/jabrena/cf-nodejs-client/issues"
+  },
+  "dependencies": {
+    "request": "^2.60.0"
+  }
+}
