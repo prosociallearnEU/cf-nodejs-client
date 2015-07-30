@@ -6,6 +6,8 @@ var config = require('./config.json');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../lib/model/Apps");
 var cloudFoundrySpaces = require("../lib/model/Spaces");
+var zipUtils = require("../lib/utils/ZipUtils");
+
 cloudFoundry = new cloudFoundry(config.CF_API_URL);
 cloudFoundryApps = new cloudFoundryApps(config.CF_API_URL);
 cloudFoundrySpaces = new cloudFoundrySpaces(config.CF_API_URL);
@@ -27,7 +29,10 @@ cloudFoundry.getInfo().then(function (result) {
 }).then(function (result) {
     return cloudFoundryApps.getResources("https://github.com/jabrena/CloudFoundryLab/raw/master/StaticWebsite_HelloWorld.zip");
 }).then(function (result) {
-    console.log(result[1].manifest);     
+	var dataRemoteFile = result;
+	zipUtils = new zipUtils(dataRemoteFile);
+	console.log(zipUtils.getData());
+    //console.log(result[1].manifest);     
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
