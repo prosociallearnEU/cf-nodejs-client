@@ -17,8 +17,8 @@ var token_endpoint = null;
 var appName = "demo2";
 var space_guid = null;
 
-//Get Apps
 /*
+//Get Apps
 cloudFoundry.getInfo().then(function (result) {
 	token_endpoint = result.token_endpoint;	
     return cloudFoundry.login(token_endpoint,config.username,config.password);
@@ -29,7 +29,7 @@ cloudFoundry.getInfo().then(function (result) {
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
-*/
+
 //Add a new App
 cloudFoundry.getInfo().then(function (result) {
 	token_endpoint = result.token_endpoint;	
@@ -43,6 +43,21 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundryApps.addApp(result.token_type,result.access_token,appName, space_guid);
 }).then(function (result) {
     console.log(result);   
+}).catch(function (reason) {
+    console.error("Error: " + reason);
+});
+*/
+
+appName = "HelloWorldJSP";
+
+//Get AppInfo by name
+cloudFoundry.getInfo().then(function (result) {
+    token_endpoint = result.token_endpoint; 
+    return cloudFoundry.login(token_endpoint,config.username,config.password);
+}).then(function (result) {
+    return cloudFoundryApps.getAppByName(result.token_type,result.access_token,appName);
+}).then(function (result) {
+    console.log(result.resources);   
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
