@@ -11,14 +11,24 @@ cloudFoundryOrg = new cloudFoundryOrg(config.CF_API_URL);
 //TODO: How to improve this idea
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
+var token_endpoint = null;
+var org_guid = null;
+
 cloudFoundry.getInfo().then(function (result) {
-    return cloudFoundry.login(result.token_endpoint,config.username,config.password);
+	token_endpoint = result.token_endpoint;
+    return cloudFoundry.login(token_endpoint,config.username,config.password);
 }).then(function (result) {
     return cloudFoundryOrg.getOrganizations(result.token_type,result.access_token);
 }).then(function (result) {
-	console.log(result.resources[0].metadata.guid);
+	org_guid = result.resources[0].metadata.guid;
+	console.log(org_guid);
 	console.log(result.resources[0].entity.name);
-    //console.log(result.resources);   
+    //console.log(result.resources);
+    return cloudFoundry.login(token_endpoint,config.username,config.password);
+}).then(function (result) {
+    return cloudFoundryOrg.getPrivateDomains(result.token_type,result.access_token,org_guid);
+}).then(function (result) {
+    console.log(result);
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
