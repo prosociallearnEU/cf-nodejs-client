@@ -1,6 +1,6 @@
 {
   "name": "cf-nodejs-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Cloud Foundry Client for Node.js",
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
   "license": "MIT",
@@ -14,15 +14,24 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "cloud",
-    "foundry",
+    "cloud foundry",
+    "cloudfoundry",
+    "cloud-foundry",
     "cf",
-    "pivotal"
+    "vcap",
+    "pivotal",
+    "pivotalcf",
+    "cloud",
+    "node",
+    "API",
+    "api"
   ],
   "bugs": {
     "url": "https://github.com/jabrena/cf-nodejs-client/issues"
   },
   "dependencies": {
+    "js-yaml": "^3.3.1",
+    "jszip": "^2.5.0",
     "request": "^2.60.0"
   }
 }

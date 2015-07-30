@@ -1,0 +1,5 @@
+{
+	"CF_API_URL" : "https://api.run.pivotal.io",
+    "username" : "XXX",
+    "password" : "YYY"
+}
