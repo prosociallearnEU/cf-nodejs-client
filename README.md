@@ -1,7 +1,7 @@
 # cf-nodejs-client [Alpha]
 A Cloud Foundry Client for Node.js
 
-## Note: Not use this library in production.
+#### Note: Not use this library in a production App.
 
 This project try to provide a library to interact with Cloud Foundry REST API.
 http://apidocs.cloudfoundry.org/213/
