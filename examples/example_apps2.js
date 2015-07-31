@@ -30,6 +30,7 @@ var domain_guid = null;
 var route_guid = null;
 
 //Publish an application in a Cloud Foundry Instance
+//cf login -a CF_URL_API -u USER -p PASSWORD --skip-ssl-validation
 //cf d StaticWebsiteHelloWorld
 //cf push  -p ../dist/StaticWebsite_HelloWorld.zip
 cloudFoundry.getInfo().then(function (result) {
