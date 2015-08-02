@@ -42,6 +42,7 @@ cloudFoundry.getInfo().then(function (result) {
 	//TODO: Refactor code
     return cloudFoundryApps.getResources(URL);
 }).then(function (result) {
+	console.log(dataRemoteFile);
 	dataRemoteFile = result;
 	//TODO: Refactor code	
 }).then(function (result) {
@@ -61,18 +62,20 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token);
 }).then(function (result) {
 	space_guid = result.resources[0].metadata.guid;
-    console.log("Space GUID: " + space_guid);
+    console.log("Space GUID: ", space_guid);
     return cloudFoundry.login(token_endpoint,config.username,config.password);
-/* This part doesn't work.     
+/* This part doesn't work.  */   
 }).then(function (result) {    	
     var filter = {
         'q': 'name:' + appName,
         'inline-relations-depth': 1
     } 	
     return cloudFoundrySpaces.getSpaceApps(result.token_type,result.access_token,space_guid,filter);
-
+}).then(function (result) {
+	console.log("here");
 	//If exist the application
 	if(result.total_results === 1){
+		console.log("Stop App");
 		console.log(result);
 		console.log(result.resources);
 		app_guid = result.resources[0].metadata.guid;
@@ -80,26 +83,27 @@ cloudFoundry.getInfo().then(function (result) {
 		console.log(result.resources[0].entity.name);
 
 		//TODO: Bug to capture the promise after stopping application
-		cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+		return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
 			return cloudFoundryApps.stopApp(result.token_type,result.access_token,app_guid);
 		});
 	}else{
 		console.log("Create App");
-		cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+		return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
 			//Thinking to remove app: cf d StaticWebsiteHelloWorld
 			return cloudFoundryApps.createApp(result.token_type,result.access_token,appName, space_guid);
 		});
 	}
-
+/*
 }).then(function (result) {
 	return cloudFoundry.login(token_endpoint,config.username,config.password);
-*/	
+
 }).then(function (result) {
 	//TODO: Check the response in this process.
 	return cloudFoundryApps.createApp(result.token_type,result.access_token,appName, space_guid);
 }).then(function (result) {
 	app_guid = result.metadata.guid;
 	console.log(app_guid);
+*/	
 /* Testing the delete method.
 	return cloudFoundry.login(token_endpoint,config.username,config.password);
 }).then(function (result) {	
@@ -108,6 +112,8 @@ cloudFoundry.getInfo().then(function (result) {
 	console.log(result);
 	console.log("App deleted");
 */
+}).then(function (result) {
+	console.log(result);
     return cloudFoundry.login(token_endpoint,config.username,config.password);
 }).then(function (result) {
     return cloudFoundryDomains.getDomains(result.token_type,result.access_token);
@@ -143,8 +149,10 @@ cloudFoundry.getInfo().then(function (result) {
 	return cloudFoundry.login(token_endpoint,config.username,config.password);
 }).then(function (result) {
 	
-	//return new Promise(function (resolve, reject) {
+	console.log("Upload");
 
+	//return new Promise(function (resolve, reject) {
+	/*
 	    cloudFoundryApps.uploadApp(result.token_type,result.access_token,appGuid,dataRemoteFile,appName + ".zip", dataRemoteFileDetails, function (error, data) {
 	        if (error) {
 	            //return callback(arguments);
@@ -172,11 +180,11 @@ cloudFoundry.getInfo().then(function (result) {
 	    });
 
 	//});
-
-	//return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appGuid,dataRemoteFile,appName + ".zip", dataRemoteFileDetails);
+*/
+	return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appGuid,dataRemoteFile,appName + ".zip", dataRemoteFileDetails);
 }).then(function (result) {
 	console.log(result);
-}).then(function (result) {
+}).catch(function (reason) {
 
     console.error("Error: " + reason);
 });
