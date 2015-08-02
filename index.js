@@ -6,4 +6,11 @@
 
 'use strict';
 
-module.exports = require('./lib');
+module.exports = {
+	Apps: require("lib/model/Apps");
+};
+
+/*
+var cfcli = require("cfcli"),
+	apps = new cfcli.Apps();
+	*/
