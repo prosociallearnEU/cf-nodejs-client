@@ -45,3 +45,12 @@ cloudFoundry.getInfo().then(function (result) {
     console.error("Error: " + reason);
 });
 */
+
+/* Testing the delete method.
+    return cloudFoundry.login(token_endpoint,config.username,config.password);
+}).then(function (result) { 
+    return cloudFoundryApps.deleteApp(result.token_type,result.access_token,app_guid);
+}).then(function (result) {
+    console.log(result);
+    console.log("App deleted");
+*/
