@@ -99,7 +99,7 @@ cloudFoundry.getInfo().then(function (result) {
         console.log("Create App");
         return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
             //Thinking to remove app: cf d StaticWebsiteHelloWorld
-            return cloudFoundryApps.createApp(result.token_type,result.access_token,appName, space_guid).then(function (result) {
+            return cloudFoundryApps.createApp(result.token_type,result.access_token,appName, space_guid, manifest).then(function (result) {
                 return new Promise(function (resolve, reject) {
                     app_guid = result.metadata.guid;
                     return resolve();
@@ -155,50 +155,20 @@ cloudFoundry.getInfo().then(function (result) {
 }).then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         var appZip = appName + ".zip";
-        console.log(dataRemoteFileDetails);
-        return cloudFoundryApps.uploadApp(result.token_type,result.access_token,app_guid,dataRemoteFile, dataRemoteFileDetails);
+        //console.log(dataRemoteFileDetails);
+        return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, dataRemoteFileDetails);
     });
 }).then(function (result) {    
     console.log(result);
+
+    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        return cloudFoundryApps.startApp(result.token_type,result.access_token,app_guid);
+    });
+
+}).then(function (result) {    
+    console.log(result);
+
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
 
-    /*
-    return new Promise(function (resolve, reject) {
-        return reject("DEMO");
-    });
-*/
-
-    //console.log("Upload");
-
-    //return new Promise(function (resolve, reject) {
-    /*
-        cloudFoundryApps.uploadApp(result.token_type,result.access_token,appGuid,dataRemoteFile,appName + ".zip", dataRemoteFileDetails, function (error, data) {
-            if (error) {
-                //return callback(arguments);
-                return reject(error);
-            }
-            var maxLoopCount = 10;
-            params.uploadJobGuid = data;
-            var sameCallback = function (error, data) {
-                if (data) {
-                    return callback(null, true);
-                   //return resolve(true);
-                } else {
-                    --maxLoopCount;
-                    if (maxLoopCount) {
-                        setTimeout(function () {
-                           cloudFoundryApps.checkJob(params, sameCallback);
-                        }, 2000);
-                    } else {
-                        return callback('Infinity loop check job');
-                        //reject('Infinity loop check job');
-                    }
-                }
-            };
-            cloudFoundryApps.checkJob(params, sameCallback);
-        });
-
-    //});
-*/
