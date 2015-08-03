@@ -152,7 +152,13 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.checkResources(result.token_type,result.access_token,dataRemoteFileDetails);
     });
-}).then(function (result) { 
+}).then(function (result) {
+    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        var appZip = appName + ".zip";
+        console.log(dataRemoteFileDetails);
+        return cloudFoundryApps.uploadApp(result.token_type,result.access_token,app_guid,dataRemoteFile, dataRemoteFileDetails);
+    });
+}).then(function (result) {    
     console.log(result);
 }).catch(function (reason) {
     console.error("Error: " + reason);
