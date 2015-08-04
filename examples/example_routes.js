@@ -2,6 +2,7 @@
 /*globals Promise:true*/
 "use strict";
 
+var randomWords = require('random-words');
 var config = require('./config.json');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundryRoutes = require("../lib/model/Routes");
@@ -19,111 +20,210 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var token_endpoint = null;
 var route_guid = null;
-
-//Get Routes
-cloudFoundry.getInfo().then(function (result) {
-	token_endpoint = result.token_endpoint;
-    return cloudFoundry.login(result.token_endpoint,config.username,config.password);
-}).then(function (result) {
-    return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token);
-}).then(function (result) {
-    console.log("# Get routes");
-    console.log(result.resources);
-}).catch(function (reason) {
-    console.error("Error: " + reason);
-});
-
-//Get a route
-cloudFoundry.getInfo().then(function (result) {
-	token_endpoint = result.token_endpoint;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) {
-    return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token);
-}).then(function (result) {
-    console.log(result);
-	route_guid = result.resources[0].metadata.guid;
-	//console.log(route_guid);
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) { 	
-	return cloudFoundryRoutes.getRoute(result.token_type,result.access_token,route_guid);
-}).then(function (result) {
-    console.log("# Get a route");
-    console.log(result);
-}).catch(function (reason) {
-    console.error("Error: " + reason);
-});
-
 var domain_guid = null;
 var space_guid = null;
+var routeName = randomWords();
+var appName = null;
+var app_guid = null;
+
+//Get Routes
+function getRoutes(){
+
+    console.log("# Get routes");
+    return new Promise(function (resolve, reject) {
+
+        cloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token);
+            }); 
+        }).then(function (result) {
+            //console.log(result.resources);
+            return resolve("OK, Test 1");
+        }).catch(function (reason) {
+            console.error("Error: " + reason);
+            return reject("KO, Test 1");
+        });
+
+    }); 
+}
+
+//Get a route
+function getRoute(){
+
+    console.log("# Get a route");
+    return new Promise(function (resolve, reject) {
+
+        cloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token);
+            });
+        }).then(function (result) {
+            if(result.resources.length == 0){
+                return reject();
+            }
+            route_guid = result.resources[0].metadata.guid;
+            //console.log(route_guid);
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                return cloudFoundryRoutes.getRoute(result.token_type,result.access_token,route_guid);
+            });            
+        }).then(function (result) {
+            //console.log(result);
+            return resolve("OK, Test 2");
+        }).catch(function (reason) {
+            console.error("Error: " + reason);
+            return reject("KO, Test 2");
+        });
+
+    });
+
+}
 
 //Add a route
-cloudFoundry.getInfo().then(function (result) {
-	token_endpoint = result.token_endpoint;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) {
-    return cloudFoundryDomains.getDomains(result.token_type,result.access_token);
-}).then(function (result) {
-	domain_guid = result.resources[0].metadata.guid;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) { 	
-	return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token);
-}).then(function (result) {
-	space_guid = result.resources[0].metadata.guid;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) { 	
-    return cloudFoundryRoutes.addRoute(result.token_type,result.access_token,domain_guid,space_guid,"routedemo1");
-}).then(function (result) {
-    console.log("# Add a route");
-	console.log(result);    
-}).catch(function (reason) {
-    console.log("# Add a route");    
-    console.error("Error: " + reason);
-});
+function addRoute(){
+
+    console.log("# Add a route"); 
+    return new Promise(function (resolve, reject) {
+
+        cloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+                return cloudFoundryDomains.getDomains(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        domain_guid = result.resources[0].metadata.guid;
+                        return resolve();
+                    });
+                });
+            });
+        }).then(function (result) {
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        space_guid = result.resources[0].metadata.guid;
+                        return resolve();
+                    });
+                });
+            });
+        }).then(function (result) {
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+                return cloudFoundryRoutes.addRoute(result.token_type,result.access_token,domain_guid,space_guid,routeName);
+            });
+        }).then(function (result) {
+            //console.log(result); 
+            return resolve("OK, Test 3");
+        }).catch(function (reason) {
+            console.error("Error: " + reason);
+            return reject("KO, Test 3");
+        });
+
+    }); 
+
+}
 
 //Check a route
-cloudFoundry.getInfo().then(function (result) {
-    token_endpoint = result.token_endpoint;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) {
-    return cloudFoundryDomains.getDomains(result.token_type,result.access_token);
-}).then(function (result) {
-    domain_guid = result.resources[0].metadata.guid;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) {
-    return cloudFoundryRoutes.checkRoute(result.token_type,result.access_token,"routedemo1",domain_guid);//Not exist    
-}).then(function (result) {
+function checkRoute(){
+
     console.log("# Check a route");
-    console.log(result);    
-}).catch(function (reason) {
-    console.log("# Check a route");    
-    console.error("Error: " + reason);
-});
+    return new Promise(function (resolve, reject) {
 
+        cloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+                return cloudFoundryDomains.getDomains(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        domain_guid = result.resources[0].metadata.guid;
+                        return resolve();
+                    });
+                });
+            });
+        }).then(function (result) {
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+                return cloudFoundryRoutes.checkRoute(result.token_type,result.access_token,"routedemo1",domain_guid);  
+            });
+        }).then(function (result) {
+            //console.log(result);
+            return resolve("OK, Test 4");  
+        }).catch(function (reason) { 
+            console.error("Error: " + reason);
+            return reject("KO, Test 4");   
+        });
 
+    });
 
-var appName = "HelloWorldJSP";
-var app_guid = "7e2a56e3-846c-4123-bf78-4878a5e24dc5";
+}
 
 //Accept Route
-cloudFoundry.getInfo().then(function (result) {
-    token_endpoint = result.token_endpoint;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) {
-    return cloudFoundryDomains.getDomains(result.token_type,result.access_token);
-}).then(function (result) {
-    domain_guid = result.resources[0].metadata.guid;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) {     
-    return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token);
-}).then(function (result) {
-    space_guid = result.resources[0].metadata.guid;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) {     
-    return cloudFoundryRoutes.acceptRoute(result.token_type,result.access_token,appName,app_guid,domain_guid,space_guid,route_guid);
-}).then(function (result) {
+function acceptRoute(){
+
     console.log("# Accept a route");
-    console.log(result);    
-}).catch(function (reason) {
-    console.log("# Accept a route");    
+    return new Promise(function (resolve, reject) {
+
+        cloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+                return cloudFoundryDomains.getDomains(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        domain_guid = result.resources[0].metadata.guid;
+                        return resolve();
+                    });
+                });
+            });
+        }).then(function (result) {
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        space_guid = result.resources[0].metadata.guid;
+                        return resolve();
+                    });
+                });
+            });
+        }).then(function (result) {
+            //TODO: Refactor this part. Maybe it is possible to use a CF method to get info from a specific App.
+            appName = "HelloWorldJSP";
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                return cloudFoundryApps.getApps(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        //console.log(result.resources.length);
+                        for(var i = 0; i < result.resources.length; i++){
+                            if(result.resources[i].entity.name == appName){
+                                //console.log(result.resources[i].entity.name);
+                                //console.log(result.resources[i].metadata);
+                                app_guid = result.resources[i].metadata.guid;
+                                return resolve(result.resources[i].metadata.guid);
+                            }
+                        }
+                        return reject("Not found App.");
+                    });
+                });
+            });            
+        }).then(function (result) {
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+                return cloudFoundryRoutes.acceptRoute(result.token_type,result.access_token,appName,app_guid,domain_guid,space_guid,route_guid);
+            });           
+        }).then(function (result) {
+            //console.log(result);
+            return resolve("OK, Test 5");
+        }).catch(function (reason) {   
+            console.error("Error: " + reason);
+            return resolve("KO, Test 5");
+        });
+
+    });
+
+}
+
+//Examples about Routes executed in an Order.
+getRoutes().then(function (result) {
+    return getRoute();
+}).then(function (result) {
+    return addRoute();
+}).then(function (result) { 
+    return checkRoute(); 
+}).then(function (result) {   
+    return acceptRoute();
+}).then(function (result) {     
+    console.log(result);
+}).catch(function (reason) { 
     console.error("Error: " + reason);
 });
