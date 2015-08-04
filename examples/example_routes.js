@@ -57,13 +57,17 @@ function getRoute(){
         cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
-                return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token);
+                return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        if(result.resources.length == 0){
+                            return reject();
+                        }
+                        route_guid = result.resources[0].metadata.guid;
+                        return resolve();
+                    });
+                });
             });
         }).then(function (result) {
-            if(result.resources.length == 0){
-                return reject();
-            }
-            route_guid = result.resources[0].metadata.guid;
             //console.log(route_guid);
             return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
                 return cloudFoundryRoutes.getRoute(result.token_type,result.access_token,route_guid);
