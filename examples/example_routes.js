@@ -35,10 +35,17 @@ function getRoutes(){
         cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
-                return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token);
+                return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        if(result.total_results == 0){
+                            return reject("No routes");
+                        }
+                        return resolve(result);
+                    });
+                });             
             }); 
         }).then(function (result) {
-            //console.log(result.resources);
+            //console.log(result);
             return resolve("OK, Test 1");
         }).catch(function (reason) {
             console.error("Error: " + reason);
