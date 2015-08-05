@@ -43,7 +43,8 @@ cloudFoundry.getInfo().then(function (result) {
                     if(result.resources[i].entity.name == "StaticWebsiteHelloWorld"){
                         console.log(result.resources[i].entity.name);
                         console.log(result.resources[i].metadata);
-                        return resolve(result.resources[i].metadata.guid);
+                        app_guid = result.resources[i].metadata.guid;
+                        return resolve();
                     }
                 }
                 return reject("Not found App.");
@@ -51,11 +52,19 @@ cloudFoundry.getInfo().then(function (result) {
         });
     });
 }).then(function (result) {
-    app_guid = result;
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.startApp(result.token_type,result.access_token,app_guid);
     });
 }).then(function (result) {
+    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        return cloudFoundryApps.stopApp(result.token_type,result.access_token,app_guid);
+    });    
+}).then(function (result) {
+    console.log(result);
+    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        return cloudFoundryApps.deleteApp(result.token_type,result.access_token,app_guid);
+    });   
+}).then(function (result) {   
     console.log(result);
 }).catch(function (reason) {
     console.error("Error: " + reason);
