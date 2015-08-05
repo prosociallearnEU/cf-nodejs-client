@@ -49,7 +49,7 @@ cloudFoundry.getInfo().then(function (result) {
 }).then(function (result) {    
     return cloudFoundryApps.stopApp(result.token_type,result.access_token,app_guid);
 }).then(function (result) {
-    console.log(result.resources);    
+    console.log(result);    
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });

@@ -70,12 +70,12 @@ function getRoute(){
                             return reject();
                         }
                         route_guid = result.resources[0].metadata.guid;
+                        //console.log(route_guid);
                         return resolve();
                     });
                 });
             });
         }).then(function (result) {
-            //console.log(route_guid);
             return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
                 return cloudFoundryRoutes.getRoute(result.token_type,result.access_token,route_guid);
             });            
