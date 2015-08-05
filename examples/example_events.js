@@ -11,10 +11,13 @@ cloudFoundryEvents = new cloudFoundryEvents(config.CF_API_URL);
 //TODO: How to improve this idea
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
+var token_endpoint = null;
+
 cloudFoundry.getInfo().then(function (result) {
-    return cloudFoundry.login(result.token_endpoint,config.username,config.password);
-}).then(function (result) {
-    return cloudFoundryEvents.getEvents(result.token_type,result.access_token);
+	token_endpoint = result.token_endpoint;	
+    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        return cloudFoundryEvents.getEvents(result.token_type,result.access_token);
+    });
 }).then(function (result) {
     console.log(result.resources);    
 }).catch(function (reason) {
