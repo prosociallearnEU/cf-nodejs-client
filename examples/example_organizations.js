@@ -16,17 +16,20 @@ var org_guid = null;
 
 cloudFoundry.getInfo().then(function (result) {
 	token_endpoint = result.token_endpoint;
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
+    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        return cloudFoundryOrg.getOrganizations(result.token_type,result.access_token).then(function (result) {
+            return new Promise(function (resolve, reject) {
+                org_guid = result.resources[0].metadata.guid;
+                console.log(org_guid);
+                console.log(result.resources[0].entity.name);
+                return resolve();
+            });
+        });
+    });
 }).then(function (result) {
-    return cloudFoundryOrg.getOrganizations(result.token_type,result.access_token);
-}).then(function (result) {
-	org_guid = result.resources[0].metadata.guid;
-	console.log(org_guid);
-	console.log(result.resources[0].entity.name);
-    //console.log(result.resources);
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) {
-    return cloudFoundryOrg.getPrivateDomains(result.token_type,result.access_token,org_guid);
+    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        return cloudFoundryOrg.getPrivateDomains(result.token_type,result.access_token,org_guid);
+    });  
 }).then(function (result) {
     console.log(result);
 }).catch(function (reason) {
