@@ -164,7 +164,9 @@ function checkRoute(){
 
 }
 
-//Accept Route
+/*
+//Associate Route
+//TODO: Move example to apps
 function acceptRoute(){
 
     console.log("# Accept a route");
@@ -223,6 +225,7 @@ function acceptRoute(){
     });
 
 }
+*/
 
 //Examples about Routes executed in an Order.
 getRoutes().then(function (result) {
@@ -230,9 +233,7 @@ getRoutes().then(function (result) {
 }).then(function (result) {
     return addRoute();
 }).then(function (result) { 
-    return checkRoute(); 
-}).then(function (result) {   
-    return acceptRoute();
+    return checkRoute();
 }).then(function (result) {     
     console.log(result);
 }).catch(function (reason) { 
