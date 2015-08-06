@@ -140,7 +140,6 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.associateRoute(result.token_type,result.access_token,appName,app_guid,domain_guid,space_guid,route_guid);
     });
-/*
 }).then(function (result) {
     //console.log(result);
     console.log("21");
@@ -148,7 +147,7 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.checkResources(result.token_type,result.access_token,zipResources);
     });
-*/
+
 }).then(function (result) {
     var dataFile2 = result;
     console.log(dataFile2);
