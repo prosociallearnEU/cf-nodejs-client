@@ -2,8 +2,8 @@
 /*globals Promise:true*/
 "use strict";
 
-var config = require('./configPivotal.json');
-//var config = require('./config.json');
+//var config = require('./configPivotal.json');
+var config = require('./config.json');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../lib/model/Apps");
 var cloudFoundrySpaces = require("../lib/model/Spaces");
@@ -23,7 +23,9 @@ zipUtils = new zipUtils();
 //TODO: How to improve this idea
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-var URL = "https://github.com/jabrena/CloudFoundryLab/raw/master/StaticWebsite_HelloWorld.zip";
+//TODO: Check routes (Create routes)
+
+var URL = "https://github.com/jabrena/CloudFoundryLab/raw/master/zips/StaticWebsite_HelloWorld.zip";
 var token_endpoint = null;
 var appName = null;
 var app_guid = null;
@@ -145,30 +147,21 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.checkResources(result.token_type,result.access_token,zipResources);
     });
-//STOP
+
+}).then(function (result) {
+    console.log("22"); 
+    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        var appZip = appName + ".zip";
+        console.log(zipResources);
+        return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
+    });
+//STOP    
 }).then(function (result) {
     console.log("RESULT: ", result);
     return new Promise(function (resolve, reject) {
         console.log("STOP HERE");
         return reject();
     });
-}).then(function (result) {
-    console.log("22"); 
-    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
-        var appZip = appName + ".zip";
-        console.log(zipResources);
-        //zipResources[0].fn = "./index.html";
-        //zipResources[1].fn = "./manifest.yml";
-        //console.log(zipResources);
-        /*
-        return new Promise(function (resolve, reject) {
-            reject(result);
-        });
-*/
-
-        return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
-    });
-
 //TODO: Refactor using a Loop of Promises
 }).then(function (result) {
     console.log("23");
