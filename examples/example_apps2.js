@@ -153,7 +153,7 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         var appZip = appName + ".zip";
         console.log(zipResources);
-        return cloudFoundryApps.uploadApp2(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
+        return cloudFoundryApps.uploadApp4(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
     });
 //STOP
 /*  
