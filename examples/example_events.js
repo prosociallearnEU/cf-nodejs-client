@@ -2,8 +2,8 @@
 /*globals Promise:true*/
 "use strict";
 
-var config = require('./configPivotal.json'); //Slower. Test with time
-//var config = require('./config.json');
+var config = require('./config.json');
+//var config = require('./configPivotal.json'); //Slower. Test with time
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundryEvents = require("../lib/model/Events");
 cloudFoundry = new cloudFoundry(config.CF_API_URL);

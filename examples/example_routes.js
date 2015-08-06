@@ -2,9 +2,9 @@
 /*globals Promise:true*/
 "use strict";
 
-var randomWords = require('random-words');
-//var config = require('./configPivotal.json');
 var config = require('./config.json');
+//var config = require('./configPivotal.json');
+var randomWords = require('random-words');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundryRoutes = require("../lib/model/Routes");
 var cloudFoundryDomains = require("../lib/model/Domains");

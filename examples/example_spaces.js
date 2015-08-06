@@ -2,7 +2,8 @@
 /*globals Promise:true*/
 "use strict";
 
-var config = require('./configPivotal.json');
+var config = require('./config.json');
+//var config = require('./configPivotal.json');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundrySpaces = require("../lib/model/Spaces");
 var cloudFoundryApps = require("../lib/model/Apps");
