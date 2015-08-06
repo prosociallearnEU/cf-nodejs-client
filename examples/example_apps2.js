@@ -2,8 +2,8 @@
 /*globals Promise:true*/
 "use strict";
 
-//var config = require('./configPivotal.json');
 var config = require('./config.json');
+//var config = require('./configPivotal.json');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../lib/model/Apps");
 var cloudFoundrySpaces = require("../lib/model/Spaces");
@@ -153,9 +153,10 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         var appZip = appName + ".zip";
         console.log(zipResources);
-        return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
+        return cloudFoundryApps.uploadApp2(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
     });
-//STOP    
+//STOP
+/*  
 }).then(function (result) {
     console.log("RESULT: ", result);
     return new Promise(function (resolve, reject) {
@@ -163,6 +164,7 @@ cloudFoundry.getInfo().then(function (result) {
         return reject();
     });
 //TODO: Refactor using a Loop of Promises
+*/
 }).then(function (result) {
     console.log("23");
     job_guid = result.metadata.guid;
