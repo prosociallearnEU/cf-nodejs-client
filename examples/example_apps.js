@@ -2,7 +2,8 @@
 /*globals Promise:true*/
 "use strict";
 
-var config = require('./config.json');
+var config = require('./configPivotal.json');
+//var config = require('./config.json');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../lib/model/Apps");
 var cloudFoundrySpaces = require("../lib/model/Spaces");
@@ -44,13 +45,4 @@ cloudFoundry.getInfo().then(function (result) {
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
-*/
-
-/* Testing the delete method.
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
-}).then(function (result) { 
-    return cloudFoundryApps.deleteApp(result.token_type,result.access_token,app_guid);
-}).then(function (result) {
-    console.log(result);
-    console.log("App deleted");
 */

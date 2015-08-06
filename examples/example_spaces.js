@@ -2,7 +2,7 @@
 /*globals Promise:true*/
 "use strict";
 
-var config = require('./config.json');
+var config = require('./configPivotal.json');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundrySpaces = require("../lib/model/Spaces");
 var cloudFoundryApps = require("../lib/model/Apps");
@@ -40,6 +40,9 @@ cloudFoundry.getInfo().then(function (result) {
         }  
         return cloudFoundrySpaces.getSpaceApps(result.token_type,result.access_token,space_guid,filter).then(function (result) {
             return new Promise(function (resolve, reject) {
+                if(result.total_results === 0){
+                    return reject("No app.");
+                }
                 app_guid = result.resources[0].metadata.guid;
                 console.log("App GUID: " + app_guid);              
                 return resolve();

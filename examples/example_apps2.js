@@ -2,8 +2,8 @@
 /*globals Promise:true*/
 "use strict";
 
-//var sleep = require('sleep');
-var config = require('./config.json');
+var config = require('./configPivotal.json');
+//var config = require('./config.json');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../lib/model/Apps");
 var cloudFoundrySpaces = require("../lib/model/Spaces");
@@ -23,7 +23,7 @@ zipUtils = new zipUtils();
 //TODO: How to improve this idea
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-var URL = "https://github.com/jabrena/CloudFoundryLab/raw/master/StaticWebsite_HelloWorld/dist/StaticWebsite_HelloWorld.zip";
+var URL = "https://github.com/jabrena/CloudFoundryLab/raw/master/StaticWebsite_HelloWorld.zip";
 var token_endpoint = null;
 var appName = null;
 var app_guid = null;
@@ -41,6 +41,7 @@ var job_status = null;
 //cf d StaticWebsiteHelloWorld
 //cf push  -p ../dist/StaticWebsite_HelloWorld.zip
 cloudFoundry.getInfo().then(function (result) {
+    console.log(result);
     token_endpoint = result.token_endpoint;
 
     //TODO: Improve performance
@@ -64,6 +65,7 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token).then(function (result) {
             return new Promise(function (resolve, reject) {
+                console.log(result.resources);
                 space_guid = result.resources[0].metadata.guid;
                 console.log("Space GUID: ", space_guid);
                 return resolve();
@@ -100,12 +102,6 @@ cloudFoundry.getInfo().then(function (result) {
             });
         });
     }
-/*    
-}).then(function (result) {
-    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
-        return cloudFoundryDomains.getDomains(result.token_type,result.access_token);
-    });
-*/  
 }).then(function (result) {
     console.log("13");
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
@@ -116,17 +112,20 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryDomains.getDomains(result.token_type,result.access_token).then(function (result) {
             return new Promise(function (resolve, reject) {
+                console.log(result.resources);
                 domain_guid = result.resources[0].metadata.guid;
                 console.log("Domain GUID: " , domain_guid);
                 return resolve();
             });
         });
     }); 
+//TODO: Check if exist route    
 }).then(function (result) {
     console.log("17");      
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryRoutes.checkRoute(result.token_type,result.access_token,appName,domain_guid).then(function (result) {
             return new Promise(function (resolve, reject) {
+                console.log(result);
                 route_guid = result.resources[0].metadata.guid;
                 //console.log(result.resources);
                 console.log("Route GUID: " , route_guid);
@@ -146,14 +145,13 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.checkResources(result.token_type,result.access_token,zipResources);
     });
-   
+//STOP
 }).then(function (result) {
-    console.log("RESULT" + result);
+    console.log("RESULT: ", result);
     return new Promise(function (resolve, reject) {
         console.log("STOP HERE");
         return reject();
     });
-
 }).then(function (result) {
     console.log("22"); 
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {

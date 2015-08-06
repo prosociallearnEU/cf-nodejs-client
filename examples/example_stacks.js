@@ -2,7 +2,7 @@
 /*globals Promise:true*/
 "use strict";
 
-var config = require('./config.json');
+var config = require('./configPivotal.json');
 var cloudFoundry = require("../lib/model/CloudFoundry");
 var cloudFoundryStacks = require("../lib/model/Stacks");
 cloudFoundry = new cloudFoundry(config.CF_API_URL);
@@ -25,7 +25,7 @@ function getStacks(){
                 return cloudFoundryStacks.getStacks(result.token_type,result.access_token);
             });
 		}).then(function (result) {
-		    return resolve(result);   
+		    return resolve(result.resources);   
 		}).catch(function (reason) {
 		    console.error("Error: " + reason);
 		    return reject(reason);
