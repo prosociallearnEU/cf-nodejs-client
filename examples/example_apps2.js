@@ -136,7 +136,7 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.associateRoute(result.token_type,result.access_token,appName,app_guid,domain_guid,space_guid,route_guid);
     });
-/*
+
 }).then(function (result) {
     //console.log(result);
     console.log("21");
@@ -146,16 +146,15 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.checkResources(result.token_type,result.access_token,zipResources);
     });
-*/
 }).then(function (result) {
-    //zipResources = result;
-    zipResources = [{}];
+    zipResources = result;
+    //zipResources = null;
     console.log("RES: " + JSON.stringify(zipResources));
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         var appZip = appName + ".zip";
         console.log(zipResources);
         //zipResources = dataFile2;
-        return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
+        return cloudFoundryApps.uploadApp2(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
     });
 }).then(function (result) {
     console.log("23");
