@@ -155,7 +155,8 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         var appZip = appName + ".zip";
         console.log(zipResources);
-        return cloudFoundryApps.uploadApp3(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, dataFile2);
+        zipResources = dataFile2;
+        return cloudFoundryApps.uploadApp3(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
     });
 //STOP
 /*  
@@ -167,8 +168,10 @@ cloudFoundry.getInfo().then(function (result) {
     });
 //TODO: Refactor using a Loop of Promises
 */
+
 }).then(function (result) {
     console.log("23");
+    console.log(result);
     job_guid = result.metadata.guid;
     job_status = result.entity.status;
     console.log(result.metadata.guid);
@@ -309,10 +312,10 @@ cloudFoundry.getInfo().then(function (result) {
     console.error("Error: " + reason);
 });
 
-    function sleep(time, callback) {
-        var stop = new Date().getTime();
-        while(new Date().getTime() < stop + time) {
-            ;
-        }
-        callback();
+function sleep(time, callback) {
+    var stop = new Date().getTime();
+    while(new Date().getTime() < stop + time) {
+        ;
     }
+    callback();
+}
