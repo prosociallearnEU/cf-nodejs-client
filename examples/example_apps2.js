@@ -43,7 +43,7 @@ var job_status = null;
 //cf d StaticWebsiteHelloWorld
 //cf push  -p ../dist/StaticWebsite_HelloWorld.zip
 cloudFoundry.getInfo().then(function (result) {
-    console.log(result);
+    //console.log(result);
     token_endpoint = result.token_endpoint;
 
     //TODO: Improve performance
@@ -67,7 +67,7 @@ cloudFoundry.getInfo().then(function (result) {
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token).then(function (result) {
             return new Promise(function (resolve, reject) {
-                console.log(result.resources);
+                //console.log(result.resources);
                 space_guid = result.resources[0].metadata.guid;
                 console.log("Space GUID: ", space_guid);
                 return resolve();
@@ -105,16 +105,14 @@ cloudFoundry.getInfo().then(function (result) {
         });
     }
 }).then(function (result) {
-    console.log("13");
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryDomains.getSharedDomains(result.token_type,result.access_token);
     });  
-}).then(function (result) {
-    console.log("15");      
+}).then(function (result) {    
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryDomains.getDomains(result.token_type,result.access_token).then(function (result) {
             return new Promise(function (resolve, reject) {
-                console.log(result.resources);
+                //console.log(result.resources);
                 domain_guid = result.resources[0].metadata.guid;
                 console.log("Domain GUID: " , domain_guid);
                 return resolve();
@@ -122,8 +120,7 @@ cloudFoundry.getInfo().then(function (result) {
         });
     }); 
 //TODO: Check if exist route    
-}).then(function (result) {
-    console.log("17");      
+}).then(function (result) {     
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryRoutes.checkRoute(result.token_type,result.access_token,appName,domain_guid).then(function (result) {
             return new Promise(function (resolve, reject) {
@@ -136,39 +133,30 @@ cloudFoundry.getInfo().then(function (result) {
         }); 
     });
 }).then(function (result) {
-    console.log("19");
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.associateRoute(result.token_type,result.access_token,appName,app_guid,domain_guid,space_guid,route_guid);
     });
+/*
 }).then(function (result) {
     //console.log(result);
     console.log("21");
-    console.log(zipResources);     
+    console.log(zipResources);
+
+    //zipResources = [{"fn":"index.html","sha1":"6d94e23263b6e29c5ad1db4d11cca92889d8cd77","size":250},{"fn":"output.txt","sha1":"2e95bd69b6a879131c50d3c13a5998b9d4aae849","size":18963},{"fn":"subFolder","sha1":"0","size":0},{"fn":"subFolder/index2.html","sha1":"24f55c0b24f5b8356d2f83e4d61dddeb4d63964a","size":204}]; 
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         return cloudFoundryApps.checkResources(result.token_type,result.access_token,zipResources);
     });
-
+*/
 }).then(function (result) {
-    var dataFile2 = result;
-    console.log(dataFile2);
-    console.log("22"); 
+    //zipResources = result;
+    zipResources = [{}];
+    console.log("RES: " + JSON.stringify(zipResources));
     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
         var appZip = appName + ".zip";
         console.log(zipResources);
-        zipResources = dataFile2;
-        return cloudFoundryApps.uploadApp3(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
+        //zipResources = dataFile2;
+        return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
     });
-//STOP
-/*  
-}).then(function (result) {
-    console.log("RESULT: ", result);
-    return new Promise(function (resolve, reject) {
-        console.log("STOP HERE");
-        return reject();
-    });
-//TODO: Refactor using a Loop of Promises
-*/
-
 }).then(function (result) {
     console.log("23");
     console.log(result);
