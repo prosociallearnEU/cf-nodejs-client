@@ -154,7 +154,7 @@ cloudFoundry.getInfo().then(function (result) {
         var appZip = appName + ".zip";
         console.log(zipResources);
         //zipResources = dataFile2;
-        return cloudFoundryApps.uploadApp2(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
+        return cloudFoundryApps.uploadApp5(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
     });
 }).then(function (result) {
     console.log("23");
