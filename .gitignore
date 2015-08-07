@@ -27,5 +27,7 @@ build/Release
 node_modules
 
 examples/config.json
+examples/configPivotal.json
+
 
 
