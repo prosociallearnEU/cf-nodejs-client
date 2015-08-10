@@ -17,3 +17,30 @@ The library uses Promises.
 https://promisesaplus.com/
 
 https://strongloop.com/strongblog/promises-in-node-js-with-q-an-alternative-to-callbacks/
+
+Usage
+
+``` Javascript
+
+/*jslint node: true*/
+/*global describe: true, it: true*/
+"use strict";
+
+var config = require('./config.json');
+var cloudFoundry = require("cf-nodejs-client").CloudFoundry;
+cloudFoundry = new cloudFoundry(config.CF_API_URL);
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+var token_endpoint = null;
+
+cloudFoundry.getInfo().then(function (result) {
+	token_endpoint = result.token_endpoint;	
+    return cloudFoundry.login(token_endpoint,config.username,config.password);
+}).then(function (result) {
+    console.log(result);   
+}).catch(function (reason) {
+    console.error("Error: " + reason);
+});
+
+```
