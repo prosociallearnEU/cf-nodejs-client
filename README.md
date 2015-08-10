@@ -18,7 +18,7 @@ https://promisesaplus.com/
 
 https://strongloop.com/strongblog/promises-in-node-js-with-q-an-alternative-to-callbacks/
 
-Usage
+# Usage
 
 ``` Javascript
 
