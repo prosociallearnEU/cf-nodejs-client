@@ -154,8 +154,9 @@ cloudFoundry.getInfo().then(function (result) {
         var appZip = appName + ".zip";
         console.log(zipResources);
         //zipResources = dataFile2;
-        return cloudFoundryApps.uploadApp5(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
+        return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appName,app_guid,dataRemoteFile, zipResources);
     });
+/*
 }).then(function (result) {
     console.log("23");
     console.log(result);
@@ -274,7 +275,7 @@ cloudFoundry.getInfo().then(function (result) {
             resolve(result);
         });
     }
-
+*/
 }).then(function (result) {
     console.log("27");    
     console.log(result);
@@ -298,6 +299,8 @@ cloudFoundry.getInfo().then(function (result) {
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
+
+/**** EXAMPLE UTILS ****/
 
 function sleep(time, callback) {
     var stop = new Date().getTime();

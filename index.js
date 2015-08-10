@@ -6,11 +6,25 @@
 
 'use strict';
 
-module.exports = {
-	Apps: require("lib/model/Apps");
-};
+var used = [], 
+    exports = module.exports = {};
 
-/*
-var cfcli = require("cfcli"),
-	apps = new cfcli.Apps();
-	*/
+/**
+ * Library Version
+ * @type {String}
+ */
+exports.version = '0.0.4';
+
+/**
+ * Support for Apps
+ * @type {[type]}
+ */
+var Apps = require('./lib/model/Apps');
+exports.Apps = Apps;
+
+/**
+ * Support for Cloud Foundry 
+ * @type {[type]}
+ */
+var CloudFoundry = require('./lib/model/CloudFoundry');
+exports.CloudFoundry = CloudFoundry;

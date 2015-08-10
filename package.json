@@ -11,7 +11,8 @@
   "homepage": "https://github.com/jabrena/cf-nodejs-client#readme",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "mocha test"
   },
   "keywords": [
     "cloud foundry",
@@ -35,5 +36,10 @@
     "jszip": "^2.5.0",
     "request": "^2.60.0",
     "restler": "^3.3.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
+    "mocha": "^1.8.0"
   }
 }
