@@ -27,8 +27,10 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 //TODO: Check routes (Create routes)
 
 var URL = "https://github.com/jabrena/CloudFoundryLab/raw/master/zips/StaticWebsite_HelloWorld.zip";
-var filePath = "./StaticWebsite_HelloWorld.zip";
-var buildPack = "https://github.com/cloudfoundry/staticfile-buildpack";
+var filePath = "./staticAppZip.zip";
+//var filePath = "dictatorgame-master.zip";
+//var buildPack = "https://github.com/cloudfoundry/staticfile-buildpack";
+var buildPack = "https://github.com/cloudfoundry/nodejs-buildpack";
 var token_endpoint = null;
 var appName = null;
 var app_guid = null;
