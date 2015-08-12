@@ -1,6 +1,8 @@
 # cf-nodejs-client [Alpha]
 A Cloud Foundry Client for Node.js
 
+[![Build Status](https://travis-ci.org/jabrena/cf-nodejs-client.svg)](https://travis-ci.org/jabrena/cf-nodejs-client)
+
 #### Note: Not use this library in a production App.
 
 This project try to provide a library to interact with Cloud Foundry REST API.
