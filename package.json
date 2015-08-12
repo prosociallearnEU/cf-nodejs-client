@@ -16,9 +16,9 @@
   },
   "config": {
     "blanket": {
-        "data-cover-never": "node_modules",
-        "pattern": "./lib/model/Apps.js"
-    }  
+      "data-cover-never": "node_modules",
+      "pattern": "./lib/model/Apps.js"
+    }
   },
   "keywords": [
     "cloud foundry",
@@ -44,9 +44,9 @@
     "restler": "^3.3.0"
   },
   "devDependencies": {
-    "archiver": "^0.14.4",
-    "blanket": "^1.1.7",
-    "chai": "^3.2.0",
-    "mocha": "^1.21.5"
+    "archiver": "0.14.4",
+    "blanket": "1.1.7",
+    "chai": "3.2.0",
+    "mocha": "2.2.5"
   }
 }
