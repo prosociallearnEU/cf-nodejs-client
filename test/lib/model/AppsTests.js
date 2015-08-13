@@ -17,6 +17,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 describe("Cloud Foundry Apps", function () {
 
     it("The platform returns Apps", function () {
+        this.timeout(2500);
+
     	var token_endpoint = null;
 		return cloudFoundry.getInfo().then(function (result) {
 			token_endpoint = result.token_endpoint;	
