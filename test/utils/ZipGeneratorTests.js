@@ -9,7 +9,7 @@ var fs = require('fs');
 var zipGenerator = require('./ZipGenerator');
 zipGenerator = new zipGenerator();
 
-describe.only("Zip Generator", function () {
+describe("Zip Generator", function () {
 
     it("Class generate a zip", function () {
 

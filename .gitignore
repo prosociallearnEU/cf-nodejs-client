@@ -30,3 +30,4 @@ node_modules
 examples/config.json
 examples/configPivotal.json
 config.json
+staticApp.zip

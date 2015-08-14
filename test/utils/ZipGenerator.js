@@ -9,6 +9,12 @@ function ZipGenerator(){
 
 }
 
+/**
+ * https://github.com/archiverjs/node-archiver
+ * 
+ * @param  {[type]} zipName [description]
+ * @return {[type]}         [description]
+ */
 ZipGenerator.prototype.generate = function (zipName) {
 
 	var HTMLContent = "<!DOCTYPE html><html><header><title>This is title</title></header><body><h1>Hello world</h1></body></html>";
@@ -52,7 +58,6 @@ ZipGenerator.prototype.remove = function(zipName){
 		});
 	});
 }
-
 
 
 module.exports = ZipGenerator;
