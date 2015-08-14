@@ -14,12 +14,6 @@
     "start": "node index.js",
     "test": "mocha"
   },
-  "config": {
-    "blanket": {
-      "data-cover-never": "node_modules",
-      "pattern": "./lib/model/Apps.js"
-    }
-  },
   "keywords": [
     "cloud foundry",
     "cloudfoundry",
@@ -47,6 +41,7 @@
     "archiver": "0.14.4",
     "blanket": "1.1.7",
     "chai": "3.2.0",
+    "chai-as-promised": "5.1.0",
     "mocha": "2.2.5",
     "random-words": "0.0.1"
   }
