@@ -32,6 +32,29 @@ describe("Cloud Foundry Apps", function () {
 
 });
 
+/**
+ *     return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        return cloudFoundryApps.getApps(result.token_type,result.access_token).then(function (result) {
+            return new Promise(function (resolve, reject) {
+                console.log(result.resources.length);
+                for(var i = 0; i < result.resources.length; i++){
+                    if(result.resources[i].entity.name == "NodeJSHelloWorld"){
+                        console.log(result.resources[i].entity.name);
+                        console.log(result.resources[i].metadata);
+                        app_guid = result.resources[i].metadata.guid;
+                        return resolve();
+                    }
+                }
+                return reject("Not found App.");
+            });
+        });
+    });
+}).then(function (result) {
+    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+        return cloudFoundryApps.getSummary(result.token_type,result.access_token,app_guid);
+    });
+ */
+
 /*
 //Associate Route
 //TODO: Move example to apps

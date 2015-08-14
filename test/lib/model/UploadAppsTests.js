@@ -182,31 +182,38 @@ function uploadApp(appName,app_guid,filePath){
 
 describe.only("Cloud Foundry Upload App process", function () {
 
-    it("Upload a simple app", function () {
+    it("Create & Upload a simple Static app", function () {
         this.timeout(10000);
 
     	var token_endpoint = null;
         var appName = "app" + randomWords() + randomInt(1,10);
         var app_guid = null;
-        var zipName = "./staticApp.zip";
+        var zipPath = "./staticApp.zip";
         var buildPack = "https://github.com/cloudfoundry/staticfile-buildpack";
         //var buildPack = "https://github.com/cloudfoundry/nodejs-buildpack";        
 
 		return createApp(appName,buildPack).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).to.not.be.undefined;
-            return zipGenerator.generate(zipName);
+            return zipGenerator.generate(zipPath);
         }).then(function (result) {
             //Does exist the zip?   
-            fs.exists(zipName, function(result){
+            fs.exists(zipPath, function(result){
                 expect(result).to.be.true;
             });
-            return cloudFoundry.getInfo();
-        }).then(function (result) {
-            token_endpoint = result.token_endpoint; 
-            return uploadApp(appName,app_guid,zipName);
+            return uploadApp(appName,app_guid,zipPath);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
+            return cloudFoundry.getInfo();
+        }).then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                return cloudFoundryApps.deleteApp(result.token_type,result.access_token,app_guid);
+            });             
+        }).then(function (result) {
+            console.log(result);
+            expect('everthing').to.be.ok;
+
             //TODO: 20150811
             //It is necessary to start the app manually.
             console.log("cf start", appName);
