@@ -25,18 +25,6 @@ function randomInt (low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-/*
-var token_endpoint = null;
-var page = 1;//Pagination parameters
-var routesList = [];
-var route_guid = null;
-var domain_guid = null;
-var space_guid = null;
-var routeName = randomWords() + randomInt(1,10);
-var appName = null;
-var app_guid = null;
-*/
-
 //Get routes
 function getRoutes(){
 
