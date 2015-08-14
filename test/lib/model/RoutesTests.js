@@ -302,7 +302,7 @@ describe("Cloud Foundry Routes", function () {
 
     });
 
-    it("The platform returns a unique Route", function () {
+    it("The platform returns an unique Route", function () {
 
         return getRoute().then(function (result) {
             expect(result.metadata.guid).to.not.be.undefined;
