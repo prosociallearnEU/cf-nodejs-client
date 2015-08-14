@@ -20,6 +20,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 describe("Cloud foundry Spaces", function () {
 
     it("The platform always has defined a Space to operate.", function () {
+        this.timeout(3000);
+
         var token_endpoint = null;
         var space_guid = null;
         return cloudFoundry.getInfo().then(function (result) {
@@ -39,7 +41,7 @@ describe("Cloud foundry Spaces", function () {
     });
 
     it("The platform returns a unique Space.", function () {
-        this.timeout(2500);
+        this.timeout(4500);
 
         var token_endpoint = null;
         var space_guid = null;
@@ -64,9 +66,12 @@ describe("Cloud foundry Spaces", function () {
     });
 
     it.skip("The platform returns Apps deployed in a Space.", function () {
+        this.timeout(3000);
+
         var token_endpoint = null;
         var space_guid = null;
         var app_guid = null;
+
         return cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint; 
             return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {

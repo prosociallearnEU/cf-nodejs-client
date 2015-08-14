@@ -281,6 +281,7 @@ function checkRoute(routeName){
 describe("Cloud Foundry Routes", function () {
 
     it("The platform returns Routes", function () {
+        this.timeout(3500);
 
         return getRoutes().then(function (result) {
             expect(result.total_results).to.not.be.undefined;
@@ -291,6 +292,7 @@ describe("Cloud Foundry Routes", function () {
     });
 
     it("The platform returns an unique Route", function () {
+        this.timeout(5000);
 
         return getRoute().then(function (result) {
             expect(result.metadata.guid).to.not.be.undefined;
@@ -312,7 +314,7 @@ describe("Cloud Foundry Routes", function () {
     });
 
     it("Remove a Route", function () {
-        this.timeout(6500);
+        this.timeout(25000);
 
         var token_endpoint = null;
         var route_guid = null;
@@ -340,14 +342,13 @@ describe("Cloud Foundry Routes", function () {
             return getRoutes();         
         }).then(function (result) {
             expect(result.total_results).to.equal(initial_route_count);
-        }).catch(function (reason) {
-            console.log(reason);
-            expect(impossible).to.not.be.undefined;
         });
 
     });
 
     it("Check a impossible route", function () {
+        this.timeout(5000);
+
         var routeName = "noroute";
 
         return checkRoute(routeName).then(function (result) {

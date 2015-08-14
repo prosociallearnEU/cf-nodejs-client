@@ -180,10 +180,10 @@ function uploadApp(appName,app_guid,filePath){
     });        
 }
 
-describe.only("Cloud Foundry Upload App process", function () {
+describe("Cloud Foundry Upload App process", function () {
 
     it("Create & Upload a simple Static app", function () {
-        this.timeout(10000);
+        this.timeout(30000);
 
     	var token_endpoint = null;
         var appName = "app" + randomWords() + randomInt(1,10);

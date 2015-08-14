@@ -17,6 +17,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 describe("Cloud foundry Organizations", function () {
 
     it("The platform returns the Organizations defined", function () {
+        this.timeout(3000);
+
         var token_endpoint = null;
         var org_guid = null;
         return cloudFoundry.getInfo().then(function (result) {
@@ -37,6 +39,8 @@ describe("Cloud foundry Organizations", function () {
     });
 
     it("The platform returns the private domains from a Organization", function () {
+        this.timeout(5000);
+
         var token_endpoint = null;
         var org_guid = null;
         return cloudFoundry.getInfo().then(function (result) {

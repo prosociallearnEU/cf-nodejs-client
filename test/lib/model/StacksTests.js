@@ -17,6 +17,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 describe("Cloud foundry Stacks", function () {
 
     it("The platform returns Stacks installed", function () {
+        this.timeout(3000);
+
     	var token_endpoint = null;
 		return cloudFoundry.getInfo().then(function (result) {
 			token_endpoint = result.token_endpoint;	
