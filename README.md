@@ -78,3 +78,5 @@ node example.js
 ```
 
 If you have question, [create an issue](https://github.com/jabrena/cf-nodejs-client/issues). 
+
+Juan Antonio
