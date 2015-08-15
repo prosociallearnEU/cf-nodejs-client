@@ -7,7 +7,7 @@ A Cloud Foundry Client for Node.js
 
 #### Note: This package is not ready for a production App yet.
 
-This project tries to provide a client library to interact with Cloud Foundry REST API.
+This project provides a client library to interact with Cloud Foundry REST API.
 http://apidocs.cloudfoundry.org/ the client provides objects to retrieve information about the following concepts:
 
 * Apps
