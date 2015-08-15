@@ -70,7 +70,7 @@ cloudFoundry.getInfo().then(function (result) {
 
 ```
 
-Save and run:
+Save the file and test:
 
 ``` shell
 node example.js
