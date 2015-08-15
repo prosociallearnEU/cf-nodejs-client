@@ -45,7 +45,7 @@ Once you have installed the package define in a isolated config file the credent
 }
 ```
 
-With the credentials defined, create a new file this simple example to authenticate with the platform.
+With the credentials defined, create a new file to paste this code to authenticate with the platform.
 
 **example.js**
 
@@ -69,3 +69,12 @@ cloudFoundry.getInfo().then(function (result) {
 });
 
 ```
+
+Save and run:
+
+``` shell
+node example.js
+
+```
+
+If you have questions or some doubt, [create an issue](https://github.com/jabrena/cf-nodejs-client/issues). 
