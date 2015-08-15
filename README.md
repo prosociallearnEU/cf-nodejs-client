@@ -7,8 +7,18 @@ A Cloud Foundry Client for Node.js
 
 #### Note: Not ready for a production App yet.
 
-This project try to provide a library to interact with Cloud Foundry REST API.
-http://apidocs.cloudfoundry.org/
+This project tries to provide a client library to interact with Cloud Foundry REST API.
+http://apidocs.cloudfoundry.org/ the client provides objects to retrieve information about the following concepts:
+
+* Apps
+* Routes
+* Spaces
+* Domains
+* Organizations
+* Stacks
+* Jobs
+
+Take a look the [Tests cases](https://github.com/jabrena/cf-nodejs-client/tree/master/test/) developed with [Mocha](https://mochajs.org/) & [Chai](http://chaijs.com/api/bdd/)
 
 # Usage
 
