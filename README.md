@@ -5,7 +5,7 @@ A Cloud Foundry Client for Node.js
 
 [![Build Status](https://travis-ci.org/jabrena/cf-nodejs-client.svg)](https://travis-ci.org/jabrena/cf-nodejs-client)
 
-#### Note: Not ready for a production App yet.
+#### Note: This package is not ready for a production App yet.
 
 This project tries to provide a client library to interact with Cloud Foundry REST API.
 http://apidocs.cloudfoundry.org/ the client provides objects to retrieve information about the following concepts:
