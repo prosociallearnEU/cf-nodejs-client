@@ -1,36 +1,27 @@
 # cf-nodejs-client [Alpha]
 A Cloud Foundry Client for Node.js
 
+[![NPM](https://nodei.co/npm/cf-nodejs-client.png?compact=true)](https://nodei.co/npm/cf-nodejs-client/)
+
 [![Build Status](https://travis-ci.org/jabrena/cf-nodejs-client.svg)](https://travis-ci.org/jabrena/cf-nodejs-client)
 
-#### Note: Not use this library in a production App.
+#### Note: Not ready for a production App yet.
 
 This project try to provide a library to interact with Cloud Foundry REST API.
-http://apidocs.cloudfoundry.org/213/
-
-Currently, Pivotal offer the following clients:
-
-https://github.com/cloudfoundry/cli
-
-https://github.com/cloudfoundry/cf-java-client
-
-The library uses Promises.
-
-https://promisesaplus.com/
-
-https://strongloop.com/strongblog/promises-in-node-js-with-q-an-alternative-to-callbacks/
+http://apidocs.cloudfoundry.org/
 
 # Usage
 
 ``` Javascript
 
-/*jslint node: true*/
-/*global describe: true, it: true*/
 "use strict";
 
-var config = require('./config.json');
+var pivotal_endpoint = "https://api.run.pivotal.io";
+var pivotal_user = "xxx";
+var pivotal_password = "yyy";
+
 var cloudFoundry = require("cf-nodejs-client").CloudFoundry;
-cloudFoundry = new cloudFoundry(config.CF_API_URL);
+cloudFoundry = new cloudFoundry(pivotal_endpoint);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -38,7 +29,7 @@ var token_endpoint = null;
 
 cloudFoundry.getInfo().then(function (result) {
 	token_endpoint = result.token_endpoint;	
-    return cloudFoundry.login(token_endpoint,config.username,config.password);
+    return cloudFoundry.login(token_endpoint,pivotal_user,pivotal_password);
 }).then(function (result) {
     console.log(result);   
 }).catch(function (reason) {
