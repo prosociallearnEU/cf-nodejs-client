@@ -3,7 +3,9 @@
 "use strict";
 
 var chai = require("chai"),
+    chaiAsPromised = require("chai-as-promised"),
     expect = require("chai").expect;
+chai.use(chaiAsPromised);
 
 
 var config = require('../../../config.json');
@@ -26,7 +28,7 @@ describe("Cloud Foundry Apps", function () {
     	}).then(function (result) {
             return cloudFoundryApps.getApps(result.token_type,result.access_token);
         }).then(function (result) { 
-            expect(result.total_results).to.not.be.undefined;
+            expect(result.total_results).to.be.a('number');
 		});
     });    
 

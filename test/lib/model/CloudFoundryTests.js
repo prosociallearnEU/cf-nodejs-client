@@ -3,7 +3,9 @@
 "use strict";
 
 var chai = require("chai"),
+    chaiAsPromised = require("chai-as-promised"),
     expect = require("chai").expect;
+chai.use(chaiAsPromised);
 
 
 var config = require('../../../config.json');
@@ -15,9 +17,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 describe("Cloud Foundry", function () {
 
     it("The connection with the PaaS is OK", function () {
-		return cloudFoundry.getInfo().then(function (result) {
-			expect(result.name).to.equal("vcap");
-		});
+        return expect(cloudFoundry.getInfo()).eventually.property("name", "vcap");
     });
 
     it("The authentication with the PaaS is OK", function () {

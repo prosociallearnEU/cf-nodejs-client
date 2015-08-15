@@ -183,7 +183,7 @@ function uploadApp(appName,app_guid,filePath){
 }
 
 
-describe.only("Cloud Foundry Upload App process", function () {
+describe("Cloud Foundry Upload App process", function () {
 
     it("Create & Upload a simple Static app", function () {
         this.timeout(30000);
