@@ -11,18 +11,13 @@ nconf.argv().env().file({ file: 'config.json' });
 
 var cloudFoundry = require("../../../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../../../lib/model/Apps");
-var cloudFoundrySpaces = require("../../../lib/model/Spaces");
-var cloudFoundryDomains = require("../../../lib/model/Domains");
-var cloudFoundryRoutes = require("../../../lib/model/Routes");
-var cloudFoundryJobs = require("../../../lib/model/Jobs");
+var buildPacks = require("../../../lib/model/BuildPacks");
 cloudFoundry = new cloudFoundry(nconf.get('CF_API_URL'));
 cloudFoundryApps = new cloudFoundryApps(nconf.get('CF_API_URL'));
-cloudFoundrySpaces = new cloudFoundrySpaces(nconf.get('CF_API_URL'));
-cloudFoundryDomains = new cloudFoundryDomains(nconf.get('CF_API_URL'));
-cloudFoundryRoutes = new cloudFoundryRoutes(nconf.get('CF_API_URL'));
-cloudFoundryJobs = new cloudFoundryJobs(nconf.get('CF_API_URL'));
+buildPacks = new buildPacks();
 
-//var a = require("../../../examples/macros/macros.Apps");
+var appMacros = require("../../../examples/macros/AppMacros");
+appMacros = new appMacros(nconf.get('CF_API_URL'),nconf.get('username'),nconf.get('password'));
 
 var fs = require('fs');
 var zipGenerator = require('../../utils/ZipGenerator');
@@ -30,162 +25,11 @@ zipGenerator = new zipGenerator();
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-
-
 function randomInt (low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-function createApp(appName, buildPack){
-
-    var token_endpoint = null;
-    var app_guid = null;
-    var space_guid = null;
-    var domain_guid = null;
-    var routeName = null;
-    var route_guid = null;
-    var route_create_flag = false;
-
-    return new Promise(function (resolve, reject) {
-
-        cloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
- 
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token).then(function (result) {
-                    return new Promise(function (resolve, reject) {
-                        space_guid = result.resources[0].metadata.guid;
-                        //console.log("Space guid: ", space_guid);
-                        return resolve();
-                    });
-                });         
-            });
-        //Does exist the application?   
-        }).then(function (result) {
-            var filter = {
-                'q': 'name:' + appName,
-                'inline-relations-depth': 1
-            }       
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundrySpaces.getSpaceApps(result.token_type,result.access_token,space_guid,filter);
-            });
-        }).then(function (result) {
-
-            //If exist the application, Stop
-            if(result.total_results === 1){        
-                console.log("Stop App: " + appName);
-                app_guid = result.resources[0].metadata.guid;
-                console.log("App guid: " , app_guid);
-                console.log(result.resources[0].entity.name);
-
-                return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                    return cloudFoundryApps.stopApp(result.token_type,result.access_token,app_guid);
-                });
-            }else{       
-                //console.log("Create App");
-                return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                    return cloudFoundryApps.createApp(result.token_type,result.access_token,appName, space_guid, buildPack).then(function (result) {
-                        return new Promise(function (resolve, reject) {
-                            //console.log(result);
-                            app_guid = result.metadata.guid;
-                            return resolve();
-                        });
-                    });
-                });
-            }
-        }).then(function (result) {
-            //TODO: How to make the inference?
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryDomains.getSharedDomains(result.token_type,result.access_token);
-            });  
-        }).then(function (result) {    
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryDomains.getDomains(result.token_type,result.access_token).then(function (result) {
-                    return new Promise(function (resolve, reject) {
-                        domain_guid = result.resources[0].metadata.guid;
-                        //console.log("Domain guid: " , domain_guid);
-                        return resolve();
-                    });
-                });
-            }); 
-        }).then(function (result) {     
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryRoutes.checkRoute(result.token_type,result.access_token,appName,domain_guid).then(function (result) {
-                    return new Promise(function (resolve, reject) {
-                        if(result.total_results == 1){
-                            console.log("Exist a Route");
-                            //console.log(result.resources);
-                            route_guid = result.resources[0].metadata.guid;
-                            console.log("Route guid: " , route_guid);
-                            return resolve(result);
-                        }else{
-                            //Add Route
-                            route_create_flag = true; //Workaround
-                            return resolve();
-                        }
-
-                    });
-                }); 
-            });
-        }).then(function (result) {
-            //TODO: Refactor syntax to code in the right place
-            if(route_create_flag){
-                //Add Route
-                //console.log("Create a Route");
-                routeName = appName;
-                return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {   
-                    return cloudFoundryRoutes.addRoute(result.token_type,result.access_token,domain_guid,space_guid,routeName).then(function (result) {
-                        return new Promise(function (resolve, reject) {
-                            //console.log(result);
-                            route_guid = result.metadata.guid;
-                            return resolve(result);
-                        });
-                    });  
-                });
-            }else{
-                return new Promise(function (resolve, reject) {
-                    return resolve();
-                });
-            }
-        }).then(function (result) {
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryApps.associateRoute(result.token_type,result.access_token,appName,app_guid,domain_guid,space_guid,route_guid);
-            });
-        }).then(function (result) {
-            //console.log(result);
-            return resolve(result);
-        }).catch(function (reason) {
-            console.error("Error: " + reason);
-            return reject(reason);
-        });            
-
-    }); 
-
-}
-
-function uploadApp(appName,app_guid,filePath){
-
-    var token_endpoint = null;
-
-    return new Promise(function (resolve, reject) {
-
-        cloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appName,app_guid,filePath);
-            });
-        }).then(function (result) {
-            return resolve(result);
-        }).catch(function (reason) {
-            console.error("Error: " + reason);
-            return reject(reason);
-        }); 
-
-    });        
-}
-
-
-describe("Cloud Foundry Upload App process", function () {
+describe.only("Cloud Foundry Upload App process", function () {
 
     it("Create & Upload a simple Static app", function () {
         this.timeout(30000);
@@ -194,19 +38,18 @@ describe("Cloud Foundry Upload App process", function () {
         var appName = "app" + randomWords() + randomInt(1,10);
         var app_guid = null;
         var zipPath = "./staticApp.zip";
-        var buildPack = "https://github.com/cloudfoundry/staticfile-buildpack";
-        //var buildPack = "https://github.com/cloudfoundry/nodejs-buildpack";        
+        var buildPack = buildPacks.get("static");      
 
-		return createApp(appName,buildPack).then(function (result) {
+		return appMacros.createApp(appName,buildPack).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).to.not.be.undefined;
-            return zipGenerator.generate(zipPath);
+            return zipGenerator.generate(zipPath,1,0);
         }).then(function (result) {
             //Does exist the zip?   
             fs.exists(zipPath, function(result){
                 expect(result).to.be.true;
             });
-            return uploadApp(appName,app_guid,zipPath);
+            return appMacros.uploadApp(appName,app_guid,zipPath);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return cloudFoundry.getInfo();

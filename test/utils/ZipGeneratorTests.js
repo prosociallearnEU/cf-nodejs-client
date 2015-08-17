@@ -15,7 +15,7 @@ describe("Zip Generator", function () {
 
         var zipName = "staticApp.zip";
 
-        return zipGenerator.generate(zipName).then(function (result) {
+        return zipGenerator.generate(zipName,1,0).then(function (result) {
             //Does exist the zip?   
             fs.exists(zipName, function(result){
                 expect(result).to.be.true;

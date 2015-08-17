@@ -9,37 +9,49 @@ function ZipGenerator(){
 
 }
 
+ZipGenerator.prototype.generateDummyFile = function (weight){
+
+	//console.log("Creating a dummy " + weight + "MB file");
+
+	var seed = "1234567890123456789\n";
+	var content = "";
+	var oneK = 52;
+	var oneMB = 1024;
+	var iterations = oneK*oneMB*weight;
+	for(var i = 0; i< iterations; i++){
+		content += seed;
+	}
+
+	return content;
+}
+
 /**
  * https://github.com/archiverjs/node-archiver
  * 
  * @param  {[type]} zipName [description]
  * @return {[type]}         [description]
  */
-ZipGenerator.prototype.generate = function (zipName) {
+ZipGenerator.prototype.generate = function (zipName,weight,compressionRate) {
 
 	var HTMLContent = "<!DOCTYPE html><html><header><title>This is title</title></header><body><h1>Hello world</h1></body></html>";
+
+	var self = this;
 
 	return new Promise(function (resolve, reject) {
 
 		var output = fs.createWriteStream(zipName);
-		var archive = archiver('zip');
+		var archive = archiver('zip', { zlib: { level: compressionRate } });
 		archive.append(HTMLContent, { name:'index.html' });
-		//archive.append(fs.createReadStream(folderPath + "/" + fileDummy), { name:'dummy.txt' });
-		//archive.append(fs.createReadStream(folderPath + "/" + fileDummy), { name:'dummy2.txt' });
-		//archive.append(fs.createReadStream(folderPath + "/" + fileDummy), { name:'dummy3.txt' });
-		//archive.append(fs.createReadStream(folderPath + "/" + fileDummy), { name:'dummy4.txt' });
 
-/*
-		for(var i = 0; i< 700; i++){
-			archive.append(fs.createReadStream("./docs/" + "/" + "logo3.png"), { name:'logo' + i + ".png" });
+		if(weight > 0){
+			archive.append(self.generateDummyFile(weight), { name:'dummy.txt' });
 		}
-		*/
 
 		archive.pipe(output);
 		archive.finalize();
 
 		output.on('close', function() {
-			console.log(zipName + " : " + archive.pointer() + ' total bytes');
+			console.log(zipName + " : " + ((archive.pointer()/1024)/1024).toFixed(2) + 'MB');
 			return resolve();
 		});
 
