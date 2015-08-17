@@ -32,7 +32,7 @@ function randomInt (low, high) {
 describe.only("Cloud Foundry Upload App process", function () {
 
     it("Create & Upload a simple Static app", function () {
-        this.timeout(30000);
+        this.timeout(40000);
 
     	var token_endpoint = null;
         var appName = "app" + randomWords() + randomInt(1,10);
