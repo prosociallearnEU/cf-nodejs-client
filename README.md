@@ -4,6 +4,8 @@ A Cloud Foundry Client for Node.js
 [![NPM](https://nodei.co/npm/cf-nodejs-client.png?compact=true)](https://nodei.co/npm/cf-nodejs-client/)
 
 [![Build Status](https://travis-ci.org/jabrena/cf-nodejs-client.svg)](https://travis-ci.org/jabrena/cf-nodejs-client)
+[![Dependency Status](https://david-dm.org/jabrena/cf-nodejs-client.svg)](https://david-dm.org/jabrena/cf-nodejs-client)
+[![devDependency Status](https://david-dm.org/jabrena/cf-nodejs-client/dev-status.svg)](https://david-dm.org/jabrena/cf-nodejs-client#info=devDependencies)
 
 #### Note: This package is not ready for a production App yet.
 
