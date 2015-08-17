@@ -5,12 +5,13 @@
 var chai = require("chai"),
     expect = require("chai").expect;
 
+var nconf = require('nconf');
+nconf.argv().env().file({ file: 'config.json' });
 
-var config = require('../../../config.json');
 var cloudFoundry = require("../../../lib/model/CloudFoundry");
 var cloudFoundryStacks = require("../../../lib/model/Stacks");
-cloudFoundry = new cloudFoundry(config.CF_API_URL);
-cloudFoundryStacks = new cloudFoundryStacks(config.CF_API_URL);
+cloudFoundry = new cloudFoundry(nconf.get('CF_API_URL'));
+cloudFoundryStacks = new cloudFoundryStacks(nconf.get('CF_API_URL'));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -22,7 +23,7 @@ describe("Cloud foundry Stacks", function () {
     	var token_endpoint = null;
 		return cloudFoundry.getInfo().then(function (result) {
 			token_endpoint = result.token_endpoint;	
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryStacks.getStacks(result.token_type,result.access_token);
             });
         }).then(function (result) { 

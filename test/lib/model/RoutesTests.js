@@ -6,18 +6,19 @@ var chai = require("chai"),
     expect = require("chai").expect;
 var randomWords = require('random-words');
 
+var nconf = require('nconf');
+nconf.argv().env().file({ file: 'config.json' });
 
-var config = require('../../../config.json');
 var cloudFoundry = require("../../../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../../../lib/model/Apps");
 var cloudFoundryRoutes = require("../../../lib/model/Routes");
 var cloudFoundryDomains = require("../../../lib/model/Domains");
 var cloudFoundrySpaces = require("../../../lib/model/Spaces");
-cloudFoundry = new cloudFoundry(config.CF_API_URL);
-cloudFoundryApps = new cloudFoundryApps(config.CF_API_URL);
-cloudFoundryRoutes = new cloudFoundryRoutes(config.CF_API_URL);
-cloudFoundryDomains = new cloudFoundryDomains(config.CF_API_URL);
-cloudFoundrySpaces = new cloudFoundrySpaces(config.CF_API_URL);
+cloudFoundry = new cloudFoundry(nconf.get('CF_API_URL'));
+cloudFoundryApps = new cloudFoundryApps(nconf.get('CF_API_URL'));
+cloudFoundryRoutes = new cloudFoundryRoutes(nconf.get('CF_API_URL'));
+cloudFoundryDomains = new cloudFoundryDomains(nconf.get('CF_API_URL'));
+cloudFoundrySpaces = new cloudFoundrySpaces(nconf.get('CF_API_URL'));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -35,7 +36,7 @@ function getRoutes(){
 
         cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token,page).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         if(result.total_results == 0){
@@ -66,7 +67,7 @@ function getRoute(){
 
         cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token,page).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         if(result.resources.length == 0){
@@ -79,7 +80,7 @@ function getRoute(){
                 });
             });
         }).then(function (result) {
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryRoutes.getRoute(result.token_type,result.access_token,route_guid);
             });            
         }).then(function (result) {
@@ -106,7 +107,7 @@ function addRoute(){
 
         cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {   
                 return cloudFoundryDomains.getDomains(result.token_type,result.access_token).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         domain_guid = result.resources[0].metadata.guid;
@@ -115,7 +116,7 @@ function addRoute(){
                 });
             });
         }).then(function (result) {
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         space_guid = result.resources[0].metadata.guid;
@@ -124,7 +125,7 @@ function addRoute(){
                 });
             });
         }).then(function (result) {
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {   
                 return cloudFoundryRoutes.addRoute(result.token_type,result.access_token,domain_guid,space_guid,routeName);
             });
         }).then(function (result) {
@@ -149,7 +150,7 @@ function removeRoute(){
 
         cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token,page).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         if(result.total_results == 0){
@@ -177,7 +178,7 @@ function removeRoute(){
                     //TODO: How to do a Loop with promises to paginate?
                     //Manual pagination for second page
                     page = 2;
-                    return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                    return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                         return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token,page).then(function (result) {
                             return new Promise(function (resolve, reject) {
                                 if(result.total_results == 0){
@@ -220,11 +221,11 @@ function removeRoute(){
                 return reject("KO, Test 1");  
             }
         }).then(function (result) {
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {   
                 return cloudFoundryRoutes.deleteRoute(result.token_type,result.access_token,route_guid);  
             });
         }).then(function (result) {
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryRoutes.getRoutes(result.token_type,result.access_token,page).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         if(result.total_results == 0){
@@ -256,7 +257,7 @@ function checkRoute(routeName){
 
         cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {   
                 return cloudFoundryDomains.getDomains(result.token_type,result.access_token).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         domain_guid = result.resources[0].metadata.guid;
@@ -265,7 +266,7 @@ function checkRoute(routeName){
                 });
             });
         }).then(function (result) {
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {   
                 return cloudFoundryRoutes.checkRoute(result.token_type,result.access_token,routeName,domain_guid);  
             });
         }).then(function (result) {
@@ -330,7 +331,7 @@ describe("Cloud Foundry Routes", function () {
             expect(result.total_results).to.equal(initial_route_count+1);          
             return cloudFoundry.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
-                return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+                return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {   
                     return cloudFoundryRoutes.deleteRoute(result.token_type,result.access_token,route_guid).then(function (result) {
                         return new Promise(function (resolve, reject) {
                             return resolve(result);

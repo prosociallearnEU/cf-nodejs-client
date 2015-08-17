@@ -6,19 +6,21 @@ var chai = require("chai"),
     expect = require("chai").expect;
 var randomWords = require('random-words');
 
-var config = require('../../../config.json');
+var nconf = require('nconf');
+nconf.argv().env().file({ file: 'config.json' });
+
 var cloudFoundry = require("../../../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../../../lib/model/Apps");
 var cloudFoundrySpaces = require("../../../lib/model/Spaces");
 var cloudFoundryDomains = require("../../../lib/model/Domains");
 var cloudFoundryRoutes = require("../../../lib/model/Routes");
 var cloudFoundryJobs = require("../../../lib/model/Jobs");
-cloudFoundry = new cloudFoundry(config.CF_API_URL);
-cloudFoundryApps = new cloudFoundryApps(config.CF_API_URL);
-cloudFoundrySpaces = new cloudFoundrySpaces(config.CF_API_URL);
-cloudFoundryDomains = new cloudFoundryDomains(config.CF_API_URL);
-cloudFoundryRoutes = new cloudFoundryRoutes(config.CF_API_URL);
-cloudFoundryJobs = new cloudFoundryJobs(config.CF_API_URL);
+cloudFoundry = new cloudFoundry(nconf.get('CF_API_URL'));
+cloudFoundryApps = new cloudFoundryApps(nconf.get('CF_API_URL'));
+cloudFoundrySpaces = new cloudFoundrySpaces(nconf.get('CF_API_URL'));
+cloudFoundryDomains = new cloudFoundryDomains(nconf.get('CF_API_URL'));
+cloudFoundryRoutes = new cloudFoundryRoutes(nconf.get('CF_API_URL'));
+cloudFoundryJobs = new cloudFoundryJobs(nconf.get('CF_API_URL'));
 
 //var a = require("../../../examples/macros/macros.Apps");
 
@@ -49,7 +51,7 @@ function createApp(appName, buildPack){
         cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
  
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundrySpaces.getSpaces(result.token_type,result.access_token).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         space_guid = result.resources[0].metadata.guid;
@@ -64,7 +66,7 @@ function createApp(appName, buildPack){
                 'q': 'name:' + appName,
                 'inline-relations-depth': 1
             }       
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundrySpaces.getSpaceApps(result.token_type,result.access_token,space_guid,filter);
             });
         }).then(function (result) {
@@ -76,12 +78,12 @@ function createApp(appName, buildPack){
                 console.log("App guid: " , app_guid);
                 console.log(result.resources[0].entity.name);
 
-                return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                     return cloudFoundryApps.stopApp(result.token_type,result.access_token,app_guid);
                 });
             }else{       
                 //console.log("Create App");
-                return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+                return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                     return cloudFoundryApps.createApp(result.token_type,result.access_token,appName, space_guid, buildPack).then(function (result) {
                         return new Promise(function (resolve, reject) {
                             //console.log(result);
@@ -93,11 +95,11 @@ function createApp(appName, buildPack){
             }
         }).then(function (result) {
             //TODO: How to make the inference?
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryDomains.getSharedDomains(result.token_type,result.access_token);
             });  
         }).then(function (result) {    
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryDomains.getDomains(result.token_type,result.access_token).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         domain_guid = result.resources[0].metadata.guid;
@@ -107,7 +109,7 @@ function createApp(appName, buildPack){
                 });
             }); 
         }).then(function (result) {     
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryRoutes.checkRoute(result.token_type,result.access_token,appName,domain_guid).then(function (result) {
                     return new Promise(function (resolve, reject) {
                         if(result.total_results == 1){
@@ -131,7 +133,7 @@ function createApp(appName, buildPack){
                 //Add Route
                 //console.log("Create a Route");
                 routeName = appName;
-                return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {   
+                return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {   
                     return cloudFoundryRoutes.addRoute(result.token_type,result.access_token,domain_guid,space_guid,routeName).then(function (result) {
                         return new Promise(function (resolve, reject) {
                             //console.log(result);
@@ -146,7 +148,7 @@ function createApp(appName, buildPack){
                 });
             }
         }).then(function (result) {
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryApps.associateRoute(result.token_type,result.access_token,appName,app_guid,domain_guid,space_guid,route_guid);
             });
         }).then(function (result) {
@@ -169,7 +171,7 @@ function uploadApp(appName,app_guid,filePath){
 
         cloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryApps.uploadApp(result.token_type,result.access_token,appName,app_guid,filePath);
             });
         }).then(function (result) {
@@ -210,7 +212,7 @@ describe("Cloud Foundry Upload App process", function () {
             return cloudFoundry.getInfo();
         }).then(function (result) {
             token_endpoint = result.token_endpoint;
-            return cloudFoundry.login(token_endpoint,config.username,config.password).then(function (result) {
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
                 return cloudFoundryApps.deleteApp(result.token_type,result.access_token,app_guid);
             });             
         }).then(function (result) {
