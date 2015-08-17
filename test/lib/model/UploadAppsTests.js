@@ -29,7 +29,7 @@ function randomInt (low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-describe.only("Cloud Foundry Upload App process", function () {
+describe("Cloud Foundry Upload App process", function () {
 
     it("Create a Static App, Upload 1MB zip & Remove app", function () {
         this.timeout(40000);
@@ -150,6 +150,80 @@ describe.only("Cloud Foundry Upload App process", function () {
         var staticBuildPack = buildPacks.get("static");
         var zipPath = "./staticApp.zip";
         var weight = 20;//MB
+        var compressionRate = 0;//No compression
+    
+
+        return appMacros.createApp(appName,staticBuildPack).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).to.not.be.undefined;
+            expect(result.entity.buildpack).to.equal(staticBuildPack);
+            return zipGenerator.generate(zipPath,weight,compressionRate);
+        }).then(function (result) {
+            //Does exist the zip?   
+            fs.exists(zipPath, function(result){
+                expect(result).to.be.true;
+            });
+            return appMacros.uploadApp(appName,app_guid,zipPath);
+        }).then(function (result) {
+            expect(JSON.stringify(result)).to.equal("{}");
+            return cloudFoundry.getInfo();
+        }).then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
+                return cloudFoundryApps.deleteApp(result.token_type,result.access_token,app_guid);
+            });             
+        }).then(function (result) {
+            console.log(result);
+            expect('everthing').to.be.ok;               
+        });
+    });
+
+    it("Create a Static App, Upload 50MB zip & Remove app", function () {
+        this.timeout(80000);
+
+        var token_endpoint = null;
+        var app_guid = null;
+        var appName = "app" + randomWords() + randomInt(1,10);
+        var staticBuildPack = buildPacks.get("static");
+        var zipPath = "./staticApp.zip";
+        var weight = 50;//MB
+        var compressionRate = 0;//No compression
+    
+
+        return appMacros.createApp(appName,staticBuildPack).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).to.not.be.undefined;
+            expect(result.entity.buildpack).to.equal(staticBuildPack);
+            return zipGenerator.generate(zipPath,weight,compressionRate);
+        }).then(function (result) {
+            //Does exist the zip?   
+            fs.exists(zipPath, function(result){
+                expect(result).to.be.true;
+            });
+            return appMacros.uploadApp(appName,app_guid,zipPath);
+        }).then(function (result) {
+            expect(JSON.stringify(result)).to.equal("{}");
+            return cloudFoundry.getInfo();
+        }).then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
+                return cloudFoundryApps.deleteApp(result.token_type,result.access_token,app_guid);
+            });             
+        }).then(function (result) {
+            console.log(result);
+            expect('everthing').to.be.ok;               
+        });
+    });
+
+    it("Create a Static App, Upload 100MB zip & Remove app", function () {
+        this.timeout(150000);
+
+        var token_endpoint = null;
+        var app_guid = null;
+        var appName = "app" + randomWords() + randomInt(1,10);
+        var staticBuildPack = buildPacks.get("static");
+        var zipPath = "./staticApp.zip";
+        var weight = 100;//MB
         var compressionRate = 0;//No compression
     
 
