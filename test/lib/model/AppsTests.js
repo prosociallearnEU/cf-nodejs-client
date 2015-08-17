@@ -7,16 +7,20 @@ var chai = require("chai"),
     expect = require("chai").expect;
 chai.use(chaiAsPromised);
 
+var nconf = require('nconf');
+nconf.argv().env().file({ file: 'config.json' });
 
-var config = require('../../../config.json');
+console.log('foo: ' + nconf.get('CF_API_URL'));
+
+//var config = require('../../../config.json');
 var cloudFoundry = require("../../../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../../../lib/model/Apps");
-cloudFoundry = new cloudFoundry(config.CF_API_URL);
-cloudFoundryApps = new cloudFoundryApps(config.CF_API_URL);
+cloudFoundry = new cloudFoundry(nconf.get('CF_API_URL'));
+cloudFoundryApps = new cloudFoundryApps(nconf.get('CF_API_URL'));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-describe("Cloud Foundry Apps", function () {
+describe.only("Cloud Foundry Apps", function () {
 
     it("The platform returns Apps", function () {
         this.timeout(2500);
@@ -24,7 +28,7 @@ describe("Cloud Foundry Apps", function () {
     	var token_endpoint = null;
 		return cloudFoundry.getInfo().then(function (result) {
 			token_endpoint = result.token_endpoint;	
-    		return cloudFoundry.login(token_endpoint,config.username,config.password);
+    		return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password'));
     	}).then(function (result) {
             return cloudFoundryApps.getApps(result.token_type,result.access_token);
         }).then(function (result) { 
