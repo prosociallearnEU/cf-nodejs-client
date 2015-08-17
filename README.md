@@ -4,6 +4,7 @@ A Cloud Foundry Client for Node.js
 [![NPM](https://nodei.co/npm/cf-nodejs-client.png?compact=true)](https://nodei.co/npm/cf-nodejs-client/)
 
 [![Build Status](https://travis-ci.org/jabrena/cf-nodejs-client.svg)](https://travis-ci.org/jabrena/cf-nodejs-client)
+[![Coverage Status](https://coveralls.io/repos/jabrena/cf-nodejs-client/badge.svg?branch=master&service=github)](https://coveralls.io/github/jabrena/cf-nodejs-client?branch=master)
 [![Dependency Status](https://david-dm.org/jabrena/cf-nodejs-client.svg)](https://david-dm.org/jabrena/cf-nodejs-client)
 [![devDependency Status](https://david-dm.org/jabrena/cf-nodejs-client/dev-status.svg)](https://david-dm.org/jabrena/cf-nodejs-client#info=devDependencies)
 
