@@ -17,7 +17,7 @@ cloudFoundryApps = new cloudFoundryApps(nconf.get('CF_API_URL'));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-describe.only("Cloud Foundry Apps", function () {
+describe("Cloud Foundry Apps", function () {
 
     it("The platform returns Apps", function () {
         this.timeout(2500);
