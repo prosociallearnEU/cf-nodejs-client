@@ -10,9 +10,6 @@ chai.use(chaiAsPromised);
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
-console.log('foo: ' + nconf.get('CF_API_URL'));
-
-//var config = require('../../../config.json');
 var cloudFoundry = require("../../../lib/model/CloudFoundry");
 var cloudFoundryApps = require("../../../lib/model/Apps");
 cloudFoundry = new cloudFoundry(nconf.get('CF_API_URL'));
