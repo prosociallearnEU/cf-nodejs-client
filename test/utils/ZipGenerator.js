@@ -51,7 +51,7 @@ ZipGenerator.prototype.generate = function (zipName,weight,compressionRate) {
 		archive.finalize();
 
 		output.on('close', function() {
-			console.log(zipName + " : " + ((archive.pointer()/1024)/1024).toFixed(2) + 'MB');
+			//console.log(zipName + " : " + ((archive.pointer()/1024)/1024).toFixed(2) + 'MB');
 			return resolve();
 		});
 
