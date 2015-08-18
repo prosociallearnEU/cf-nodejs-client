@@ -6,25 +6,25 @@ var chai = require("chai"),
     expect = require("chai").expect;
 var fs = require('fs');
 
-var zipGenerator = require('./ZipGenerator');
-zipGenerator = new zipGenerator();
+var ZipGenerator = require('./ZipGenerator');
+ZipGenerator = new ZipGenerator();
 
-describe("Zip Generator", function () {
+describe.only("Zip Generator", function () {
 
     it("Generates a zip", function () {
 
         var zipName = "staticApp.zip";
 
-        return zipGenerator.generate(zipName,1,0).then(function (result) { 
-            fs.exists(zipName, function(result){
+        return ZipGenerator.generate(zipName, 1, 0).then(function (result) {
+            fs.exists(zipName, function (result) {
                 expect(result).to.be.true;
             });
-            return zipGenerator.remove(zipName);
+            return ZipGenerator.remove(zipName);
         }).then(function (result) {
-            fs.exists(zipName, function(result){
+            fs.exists(zipName, function (result) {
                 expect(result).to.be.false;
-            });            
-        }); 
+            });
+        });
 
-    }); 
+    });
 });

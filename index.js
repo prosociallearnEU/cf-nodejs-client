@@ -3,10 +3,10 @@
  * Copyright(c) 2015 Juan Antonio Breña Moral
  * MIT Licensed
  */
-
+/*jslint node: true*/
 'use strict';
 
-var used = [], 
+var used = [],
     exports = module.exports = {};
 
 /**
