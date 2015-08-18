@@ -1,8 +1,4 @@
-# cf-nodejs-client 
-
-[![Build Status](https://travis-ci.org/jabrena/cf-nodejs-client.svg)](https://travis-ci.org/jabrena/cf-nodejs-client)
-[![Dependency Status](https://david-dm.org/jabrena/cf-nodejs-client.svg)](https://david-dm.org/jabrena/cf-nodejs-client)
-[![devDependency Status](https://david-dm.org/jabrena/cf-nodejs-client/dev-status.svg)](https://david-dm.org/jabrena/cf-nodejs-client#info=devDependencies)
+# cf-nodejs-client [![Build Status](https://travis-ci.org/jabrena/cf-nodejs-client.svg)](https://travis-ci.org/jabrena/cf-nodejs-client) [![Dependency Status](https://david-dm.org/jabrena/cf-nodejs-client.svg)](https://david-dm.org/jabrena/cf-nodejs-client) [![devDependency Status](https://david-dm.org/jabrena/cf-nodejs-client/dev-status.svg)](https://david-dm.org/jabrena/cf-nodejs-client#info=devDependencies)
 
 A Cloud Foundry Client for Node.js
 
