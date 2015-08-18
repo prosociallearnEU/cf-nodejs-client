@@ -26,7 +26,9 @@
     "cloud",
     "node",
     "API",
-    "api"
+    "api",
+    "REST",
+    "cf client"
   ],
   "bugs": {
     "url": "https://github.com/jabrena/cf-nodejs-client/issues"
