@@ -21,7 +21,7 @@ cloudFoundryApps = new cloudFoundryApps(nconf.get('CF_API_URL'));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-describe("Cloud Foundry Apps", function () {
+describe.only("Cloud Foundry Apps", function () {
 
     it("The platform returns Apps", function () {
         this.timeout(2500);
@@ -97,5 +97,68 @@ describe("Cloud Foundry Apps", function () {
             expect(reason).to.equal("Not found App.");
         });
     }); 
+
+    it("The platform returns Stats from an App", function () {
+        this.timeout(3500);
+
+        var token_endpoint = null;
+        var app_guid = null;
+        return cloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint; 
+            return cloudFoundry.login(token_endpoint,username,password).then(function (result) {
+                return cloudFoundryApps.getApps(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        expect(result.total_results).to.be.a('number');
+                        if(result.total_results > 0){
+                            app_guid = result.resources[0].metadata.guid;
+                            return resolve();
+                        }else{
+                            return reject("Not found App.");
+                        }
+                    });
+                });
+            });
+        }).then(function (result) {
+            return cloudFoundry.login(token_endpoint,username,password).then(function (result) {
+                return cloudFoundryApps.getStats(result.token_type,result.access_token,app_guid);
+            });
+        }).then(function (result) { 
+            console.log(result);
+            expect('everthing').to.be.ok;
+        }).catch(function (reason) {
+            expect(reason).to.equal("Not found App.");
+        });
+    }); 
+
+    it("The platform returns instances from an App", function () {
+        this.timeout(3500);
+
+        var token_endpoint = null;
+        var app_guid = null;
+        return cloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint; 
+            return cloudFoundry.login(token_endpoint,username,password).then(function (result) {
+                return cloudFoundryApps.getApps(result.token_type,result.access_token).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        expect(result.total_results).to.be.a('number');
+                        if(result.total_results > 0){
+                            app_guid = result.resources[0].metadata.guid;
+                            return resolve();
+                        }else{
+                            return reject("Not found App.");
+                        }
+                    });
+                });
+            });
+        }).then(function (result) {
+            return cloudFoundry.login(token_endpoint,username,password).then(function (result) {
+                return cloudFoundryApps.getInstances(result.token_type,result.access_token,app_guid);
+            });
+        }).then(function (result) { 
+            expect('everthing').to.be.ok;
+        }).catch(function (reason) {
+            expect(reason).to.equal("Not found App.");
+        });
+    });
 
 });
