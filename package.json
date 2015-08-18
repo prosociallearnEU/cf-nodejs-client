@@ -11,6 +11,7 @@
   "homepage": "https://github.com/jabrena/cf-nodejs-client#readme",
   "main": "index.js",
   "scripts": {
+    "preversion" : "mocha",
     "start": "node index.js",
     "test": "mocha"
   },

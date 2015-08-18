@@ -67,7 +67,7 @@ describe("Cloud Foundry Upload App process", function () {
         });
     });    
 
-    it("Create a Static App, Upload 5MB zip & Remove app", function () {
+    it.skip("Create a Static App, Upload 5MB zip & Remove app", function () {
         this.timeout(40000);
 
         var token_endpoint = null;
@@ -215,7 +215,7 @@ describe("Cloud Foundry Upload App process", function () {
         });
     });
 
-    it("Create a Static App, Upload 100MB zip & Remove app", function () {
+    it.skip("Create a Static App, Upload 100MB zip & Remove app", function () {
         this.timeout(150000);
 
         var token_endpoint = null;

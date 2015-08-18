@@ -11,12 +11,11 @@ zipGenerator = new zipGenerator();
 
 describe("Zip Generator", function () {
 
-    it("Class generate a zip", function () {
+    it("Generates a zip", function () {
 
         var zipName = "staticApp.zip";
 
-        return zipGenerator.generate(zipName,1,0).then(function (result) {
-            //Does exist the zip?   
+        return zipGenerator.generate(zipName,1,0).then(function (result) { 
             fs.exists(zipName, function(result){
                 expect(result).to.be.true;
             });
