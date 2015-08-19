@@ -10,25 +10,29 @@ chai.use(chaiAsPromised);
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
-var cloudFoundry = require("../../../lib/model/CloudFoundry");
-cloudFoundry = new cloudFoundry(nconf.get('CF_API_URL'));
+var cf_api_url = nconf.get('CF_API_URL'),
+    username = nconf.get('username'),
+    password = nconf.get('password');
+
+var CloudFoundry = require("../../../lib/model/CloudFoundry");
+CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 describe("Cloud Foundry", function () {
 
     it("The connection with the PaaS is OK", function () {
-        return expect(cloudFoundry.getInfo()).eventually.property("name", "vcap");
+        return expect(CloudFoundry.getInfo()).eventually.property("name", "vcap");
     });
 
     it("The authentication with the PaaS is OK", function () {
-    	var token_endpoint = null;
-		return cloudFoundry.getInfo().then(function (result) {
-			token_endpoint = result.token_endpoint;	
-    		return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password'));
-    	}).then(function (result) {
-			expect(result.token_type).to.equal("bearer");
-		});
-    });    
+        var token_endpoint = null;
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            expect(result.token_type).to.equal("bearer");
+        });
+    });
 
 });

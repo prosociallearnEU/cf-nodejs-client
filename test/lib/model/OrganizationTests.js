@@ -1,5 +1,6 @@
 /*jslint node: true*/
 /*global describe: true, it: true*/
+/*globals Promise:true*/
 "use strict";
 
 var chai = require("chai"),
@@ -8,10 +9,14 @@ var chai = require("chai"),
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
-var cloudFoundry = require("../../../lib/model/CloudFoundry");
-var cloudFoundryOrg = require("../../../lib/model/Organizations");
-cloudFoundry = new cloudFoundry(nconf.get('CF_API_URL'));
-cloudFoundryOrg = new cloudFoundryOrg(nconf.get('CF_API_URL'));
+var cf_api_url = nconf.get('CF_API_URL'),
+    username = nconf.get('username'),
+    password = nconf.get('password');
+
+var CloudFoundry = require("../../../lib/model/CloudFoundry");
+var CloudFoundryOrg = require("../../../lib/model/Organizations");
+CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
+CloudFoundryOrg = new CloudFoundryOrg(nconf.get('CF_API_URL'));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -21,21 +26,21 @@ describe("Cloud foundry Organizations", function () {
         this.timeout(3000);
 
         var token_endpoint = null;
-        var org_guid = null;
-        return cloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint; 
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryOrg.getOrganizations(result.token_type,result.access_token).then(function (result) {
-                    return new Promise(function (resolve, reject) {
-                        org_guid = result.resources[0].metadata.guid;
+        //var org_guid = null;
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                return CloudFoundryOrg.getOrganizations(result.token_type, result.access_token).then(function (result) {
+                    return new Promise(function (resolve) {
+                        //org_guid = result.resources[0].metadata.guid;
                         //console.log(org_guid);
                         //console.log(result.resources[0].entity.name);
-                        return resolve(org_guid);
+                        return resolve(result);
                     });
                 });
             });
-        }).then(function (result) { 
-            expect(result).to.not.be.undefined;
+        }).then(function (result) {
+            expect(result.total_results).is.a("number");
         });
     });
 
@@ -44,11 +49,11 @@ describe("Cloud foundry Organizations", function () {
 
         var token_endpoint = null;
         var org_guid = null;
-        return cloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint; 
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryOrg.getOrganizations(result.token_type,result.access_token).then(function (result) {
-                    return new Promise(function (resolve, reject) {
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                return CloudFoundryOrg.getOrganizations(result.token_type, result.access_token).then(function (result) {
+                    return new Promise(function (resolve) {
                         org_guid = result.resources[0].metadata.guid;
                         //console.log(org_guid);
                         //console.log(result.resources[0].entity.name);
@@ -56,13 +61,13 @@ describe("Cloud foundry Organizations", function () {
                     });
                 });
             });
+        }).then(function () {
+            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                return CloudFoundryOrg.getPrivateDomains(result.token_type, result.access_token, org_guid);
+            });
         }).then(function (result) {
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryOrg.getPrivateDomains(result.token_type,result.access_token,org_guid);
-            }); 
-        }).then(function (result) {
-            expect(result.total_results).to.not.be.undefined;
+            expect(result.total_results).is.a("number");
         });
-    });      
+    });
 
 });

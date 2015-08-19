@@ -9,10 +9,14 @@ var chai = require("chai"),
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
-var cloudFoundry = require("../../../lib/model/CloudFoundry");
-var cloudFoundryDomains = require("../../../lib/model/Domains");
-cloudFoundry = new cloudFoundry(nconf.get('CF_API_URL'));
-cloudFoundryDomains = new cloudFoundryDomains(nconf.get('CF_API_URL'));
+var cf_api_url = nconf.get('CF_API_URL'),
+    username = nconf.get('username'),
+    password = nconf.get('password');
+
+var CloudFoundry = require("../../../lib/model/CloudFoundry");
+var CloudFoundryDomains = require("../../../lib/model/Domains");
+CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
+CloudFoundryDomains = new CloudFoundryDomains(nconf.get('CF_API_URL'));
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -23,10 +27,10 @@ describe("Cloud foundry Domains", function () {
 
         var token_endpoint = null;
         var domain = null;
-        return cloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint; 
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryDomains.getDomains(result.token_type,result.access_token);
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                return CloudFoundryDomains.getDomains(result.token_type, result.access_token);
             });
         }).then(function (result) {
             domain = result.resources[0].entity.name;
@@ -34,17 +38,17 @@ describe("Cloud foundry Domains", function () {
             //expect(config.CF_API_URL).to.contain(domain);
             expect(result.total_results).to.not.be.undefined;
         });
-    });     
+    });
 
     it("The platform returns Shared domains defined", function () {
         this.timeout(5000);
 
         var token_endpoint = null;
         var domain = null;
-        return cloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint; 
-            return cloudFoundry.login(token_endpoint,nconf.get('username'),nconf.get('password')).then(function (result) {
-                return cloudFoundryDomains.getSharedDomains(result.token_type,result.access_token);
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                return CloudFoundryDomains.getSharedDomains(result.token_type, result.access_token);
             });
         }).then(function (result) {
             domain = result.resources[0].entity.name;
@@ -52,6 +56,6 @@ describe("Cloud foundry Domains", function () {
             //expect(config.CF_API_URL).to.contain(domain);
             expect(result.total_results).to.not.be.undefined;
         });
-    }); 
+    });
 
 });

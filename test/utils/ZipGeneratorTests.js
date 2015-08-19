@@ -9,18 +9,18 @@ var fs = require('fs');
 var ZipGenerator = require('./ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
-describe.only("Zip Generator", function () {
+describe("Zip Generator", function () {
 
     it("Generates a zip", function () {
 
         var zipName = "staticApp.zip";
 
-        return ZipGenerator.generate(zipName, 1, 0).then(function (result) {
+        return ZipGenerator.generate(zipName, 1, 0).then(function () {
             fs.exists(zipName, function (result) {
                 expect(result).to.be.true;
             });
             return ZipGenerator.remove(zipName);
-        }).then(function (result) {
+        }).then(function () {
             fs.exists(zipName, function (result) {
                 expect(result).to.be.false;
             });
