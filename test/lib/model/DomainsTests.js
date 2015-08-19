@@ -34,9 +34,9 @@ describe("Cloud foundry Domains", function () {
             });
         }).then(function (result) {
             domain = result.resources[0].entity.name;
+            expect(domain).is.a("string");
             expect(result.resources.length).to.be.above(0);
-            //expect(config.CF_API_URL).to.contain(domain);
-            expect(result.total_results).to.not.be.undefined;
+            expect(result.total_results).is.a("number");
         });
     });
 
@@ -52,9 +52,9 @@ describe("Cloud foundry Domains", function () {
             });
         }).then(function (result) {
             domain = result.resources[0].entity.name;
+            expect(domain).is.a("string");
             expect(result.resources.length).to.be.above(0);
-            //expect(config.CF_API_URL).to.contain(domain);
-            expect(result.total_results).to.not.be.undefined;
+            expect(result.total_results).is.a("number");
         });
     });
 

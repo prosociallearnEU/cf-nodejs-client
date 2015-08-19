@@ -15,7 +15,7 @@ var cf_api_url = nconf.get('CF_API_URL'),
     password = nconf.get('password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
-CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
+CloudFoundry = new CloudFoundry(cf_api_url);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 

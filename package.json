@@ -11,9 +11,9 @@
   "homepage": "https://github.com/jabrena/cf-nodejs-client#readme",
   "main": "index.js",
   "scripts": {
-    "preversion" : "mocha",
+    "preversion" : "mocha test",
     "start": "node index.js",
-    "test": "mocha"
+    "test": "mocha test"
   },
   "keywords": [
     "cloud foundry",

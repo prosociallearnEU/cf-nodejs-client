@@ -17,12 +17,12 @@ describe("Zip Generator", function () {
 
         return ZipGenerator.generate(zipName, 1, 0).then(function () {
             fs.exists(zipName, function (result) {
-                expect(result).to.be.true;
+                expect(result).be.equal(true);
             });
             return ZipGenerator.remove(zipName);
         }).then(function () {
             fs.exists(zipName, function (result) {
-                expect(result).to.be.false;
+                expect(result).be.equal(false);
             });
         });
 
