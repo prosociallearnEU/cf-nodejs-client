@@ -8,6 +8,7 @@ var randomWords = require('random-words');
 
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
+
 var cf_api_url = nconf.get('CF_API_URL'),
     username = nconf.get('username'),
     password = nconf.get('password');
@@ -39,7 +40,7 @@ describe("Cloud Foundry Upload App process", function () {
 
         var token_endpoint = null;
         var app_guid = null;
-        var appName = "app" + randomWords() + randomInt(1, 10);
+        var appName = "app" + randomWords() + randomInt(1, 100);
         var staticBuildPack = BuildPacks.get("static");
         var zipPath = "./staticApp.zip";
         var weight = 1;//MB
@@ -47,13 +48,13 @@ describe("Cloud Foundry Upload App process", function () {
 
         return AppMacros.createApp(appName, staticBuildPack).then(function (result) {
             app_guid = result.metadata.guid;
-            expect(app_guid).to.not.be.undefined;
+            expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
             return ZipGenerator.generate(zipPath, weight, compressionRate);
         }).then(function () {
             //Does exist the zip?   
             fs.exists(zipPath, function (result) {
-                expect(result).to.be.true;
+                expect(result).to.equal(true);
             });
             return AppMacros.uploadApp(appName, app_guid, zipPath);
         }).then(function (result) {
@@ -66,7 +67,7 @@ describe("Cloud Foundry Upload App process", function () {
             });
         }).then(function (result) {
             console.log(result);
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         });
     });
 
@@ -75,7 +76,7 @@ describe("Cloud Foundry Upload App process", function () {
 
         var token_endpoint = null;
         var app_guid = null;
-        var appName = "app" + randomWords() + randomInt(1, 10);
+        var appName = "app" + randomWords() + randomInt(1, 100);
         var staticBuildPack = BuildPacks.get("static");
         var zipPath = "./staticApp.zip";
         var weight = 5;//MB
@@ -83,13 +84,13 @@ describe("Cloud Foundry Upload App process", function () {
 
         return AppMacros.createApp(appName, staticBuildPack).then(function (result) {
             app_guid = result.metadata.guid;
-            expect(app_guid).to.not.be.undefined;
+            expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
             return ZipGenerator.generate(zipPath, weight, compressionRate);
         }).then(function () {
             //Does exist the zip?   
             fs.exists(zipPath, function (result) {
-                expect(result).to.be.true;
+                expect(result).to.equal(true);
             });
             return AppMacros.uploadApp(appName, app_guid, zipPath);
         }).then(function (result) {
@@ -102,7 +103,7 @@ describe("Cloud Foundry Upload App process", function () {
             });
         }).then(function () {
             //console.log(result);
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         });
     });
 
@@ -111,7 +112,7 @@ describe("Cloud Foundry Upload App process", function () {
 
         var token_endpoint = null;
         var app_guid = null;
-        var appName = "app" + randomWords() + randomInt(1, 10);
+        var appName = "app" + randomWords() + randomInt(1, 100);
         var staticBuildPack = BuildPacks.get("static");
         var zipPath = "./staticApp.zip";
         var weight = 10;//MB
@@ -119,13 +120,13 @@ describe("Cloud Foundry Upload App process", function () {
 
         return AppMacros.createApp(appName, staticBuildPack).then(function (result) {
             app_guid = result.metadata.guid;
-            expect(app_guid).to.not.be.undefined;
+            expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
             return ZipGenerator.generate(zipPath, weight, compressionRate);
         }).then(function () {
             //Does exist the zip?   
             fs.exists(zipPath, function (result) {
-                expect(result).to.be.true;
+                expect(result).to.equal(true);
             });
             return AppMacros.uploadApp(appName, app_guid, zipPath);
         }).then(function (result) {
@@ -138,7 +139,7 @@ describe("Cloud Foundry Upload App process", function () {
             });
         }).then(function (result) {
             console.log(result);
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         });
     });
 
@@ -147,7 +148,7 @@ describe("Cloud Foundry Upload App process", function () {
 
         var token_endpoint = null;
         var app_guid = null;
-        var appName = "app" + randomWords() + randomInt(1, 10);
+        var appName = "app" + randomWords() + randomInt(1, 100);
         var staticBuildPack = BuildPacks.get("static");
         var zipPath = "./staticApp.zip";
         var weight = 20;//MB
@@ -155,13 +156,13 @@ describe("Cloud Foundry Upload App process", function () {
 
         return AppMacros.createApp(appName, staticBuildPack).then(function (result) {
             app_guid = result.metadata.guid;
-            expect(app_guid).to.not.be.undefined;
+            expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
             return ZipGenerator.generate(zipPath, weight, compressionRate);
         }).then(function () {
             //Does exist the zip?   
             fs.exists(zipPath, function (result) {
-                expect(result).to.be.true;
+                expect(result).to.equal(true);
             });
             return AppMacros.uploadApp(appName, app_guid, zipPath);
         }).then(function (result) {
@@ -174,7 +175,7 @@ describe("Cloud Foundry Upload App process", function () {
             });
         }).then(function (result) {
             console.log(result);
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         });
     });
 
@@ -183,7 +184,7 @@ describe("Cloud Foundry Upload App process", function () {
 
         var token_endpoint = null;
         var app_guid = null;
-        var appName = "app" + randomWords() + randomInt(1, 10);
+        var appName = "app" + randomWords() + randomInt(1, 100);
         var staticBuildPack = BuildPacks.get("static");
         var zipPath = "./staticApp.zip";
         var weight = 50;//MB
@@ -191,13 +192,13 @@ describe("Cloud Foundry Upload App process", function () {
 
         return AppMacros.createApp(appName, staticBuildPack).then(function (result) {
             app_guid = result.metadata.guid;
-            expect(app_guid).to.not.be.undefined;
+            expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
             return ZipGenerator.generate(zipPath, weight, compressionRate);
         }).then(function () {
             //Does exist the zip?   
             fs.exists(zipPath, function (result) {
-                expect(result).to.be.true;
+                expect(result).to.equal(true);
             });
             return AppMacros.uploadApp(appName, app_guid, zipPath);
         }).then(function (result) {
@@ -210,7 +211,7 @@ describe("Cloud Foundry Upload App process", function () {
             });
         }).then(function (result) {
             console.log(result);
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         });
     });
 
@@ -219,7 +220,7 @@ describe("Cloud Foundry Upload App process", function () {
 
         var token_endpoint = null;
         var app_guid = null;
-        var appName = "app" + randomWords() + randomInt(1, 10);
+        var appName = "app" + randomWords() + randomInt(1, 100);
         var staticBuildPack = BuildPacks.get("static");
         var zipPath = "./staticApp.zip";
         var weight = 100;//MB
@@ -227,13 +228,13 @@ describe("Cloud Foundry Upload App process", function () {
 
         return AppMacros.createApp(appName, staticBuildPack).then(function (result) {
             app_guid = result.metadata.guid;
-            expect(app_guid).to.not.be.undefined;
+            expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
             return ZipGenerator.generate(zipPath, weight, compressionRate);
         }).then(function () {
             //Does exist the zip?   
             fs.exists(zipPath, function (result) {
-                expect(result).to.be.true;
+                expect(result).to.equal(true);
             });
             return AppMacros.uploadApp(appName, app_guid, zipPath);
         }).then(function (result) {
@@ -246,7 +247,7 @@ describe("Cloud Foundry Upload App process", function () {
             });
         }).then(function (result) {
             console.log(result);
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         });
     });
 
