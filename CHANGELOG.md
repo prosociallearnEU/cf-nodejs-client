@@ -1,4 +1,4 @@
-## Version 0.0.6 2015-08-14
+## Version 0.0.6 2015-08-20
 
 - Better support for: Create App, Upload Bits for App & Start App
 
