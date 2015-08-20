@@ -26,6 +26,8 @@ describe("Cloud Foundry", function () {
     });
 
     it("The authentication with the PaaS is OK", function () {
+        this.timeout(2500);
+
         var token_endpoint = null;
         return CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;

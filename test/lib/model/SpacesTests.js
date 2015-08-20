@@ -71,7 +71,7 @@ describe("Cloud foundry Spaces", function () {
     });
 
     it("The platform returns Apps deployed in a Space.", function () {
-        this.timeout(3000);
+        this.timeout(4000);
 
         var token_endpoint = null;
         var space_guid = null;
