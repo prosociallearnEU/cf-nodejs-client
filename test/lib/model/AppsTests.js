@@ -111,7 +111,7 @@ describe("Cloud Foundry Apps", function () {
             });
         }).then(function (result) {
             console.log(result);
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
         });
@@ -142,7 +142,7 @@ describe("Cloud Foundry Apps", function () {
                 return CloudFoundryApps.getSummary(result.token_type, result.access_token, app_guid);
             });
         }).then(function () {
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
         });
@@ -173,7 +173,7 @@ describe("Cloud Foundry Apps", function () {
                 return CloudFoundryApps.getStats(result.token_type, result.access_token, app_guid);
             });
         }).then(function () {
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
         });
@@ -204,7 +204,7 @@ describe("Cloud Foundry Apps", function () {
                 return CloudFoundryApps.getInstances(result.token_type, result.access_token, app_guid);
             });
         }).then(function () {
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
         });
@@ -255,7 +255,7 @@ describe("Cloud Foundry Apps", function () {
             });
         }).then(function (result) {
             console.log(result.entity.state);
-            expect('everthing').to.be.ok;
+            expect(true).to.equal(true);
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
         });
