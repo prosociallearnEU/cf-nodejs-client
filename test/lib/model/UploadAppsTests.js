@@ -65,8 +65,8 @@ describe("Cloud Foundry Upload App process", function () {
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
                 return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
             });
-        }).then(function (result) {
-            console.log(result);
+        }).then(function () {
+            //console.log(result);
             expect(true).to.equal(true);
         });
     });
@@ -137,8 +137,8 @@ describe("Cloud Foundry Upload App process", function () {
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
                 return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
             });
-        }).then(function (result) {
-            console.log(result);
+        }).then(function () {
+            //console.log(result);
             expect(true).to.equal(true);
         });
     });
@@ -173,8 +173,8 @@ describe("Cloud Foundry Upload App process", function () {
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
                 return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
             });
-        }).then(function (result) {
-            console.log(result);
+        }).then(function () {
+            //console.log(result);
             expect(true).to.equal(true);
         });
     });
@@ -209,8 +209,8 @@ describe("Cloud Foundry Upload App process", function () {
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
                 return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
             });
-        }).then(function (result) {
-            console.log(result);
+        }).then(function () {
+            //console.log(result);
             expect(true).to.equal(true);
         });
     });
@@ -245,8 +245,8 @@ describe("Cloud Foundry Upload App process", function () {
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
                 return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
             });
-        }).then(function (result) {
-            console.log(result);
+        }).then(function () {
+            //console.log(result);
             expect(true).to.equal(true);
         });
     });
