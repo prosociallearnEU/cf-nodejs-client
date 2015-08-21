@@ -117,8 +117,8 @@ describe("Cloud Foundry Apps", function () {
         });
     });
 
-    it("The platform returns a Summary from an App", function () {
-        this.timeout(3500);
+    it.only("The platform returns a Summary from an App", function () {
+        this.timeout(4500);
 
         var token_endpoint = null;
         var app_guid = null;
@@ -141,7 +141,8 @@ describe("Cloud Foundry Apps", function () {
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
                 return CloudFoundryApps.getSummary(result.token_type, result.access_token, app_guid);
             });
-        }).then(function () {
+        }).then(function (result) {
+            console.log(result);
             expect(true).to.equal(true);
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
