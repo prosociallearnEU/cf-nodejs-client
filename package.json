@@ -34,8 +34,9 @@
     "url": "https://github.com/jabrena/cf-nodejs-client/issues"
   },
   "dependencies": {
-    "request": "^2.60.0",
-    "restler": "^3.3.0"
+    "request": "2.60.0",
+    "restler": "3.3.0",
+    "ws": "0.8.0"
   },
   "devDependencies": {
     "archiver": "0.14.4",
