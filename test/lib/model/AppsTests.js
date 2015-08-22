@@ -117,7 +117,7 @@ describe("Cloud Foundry Apps", function () {
         });
     });
 
-    it.only("The platform returns a Summary from an App", function () {
+    it("The platform returns a Summary from an App", function () {
         this.timeout(4500);
 
         var token_endpoint = null;
