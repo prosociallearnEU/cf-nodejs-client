@@ -110,7 +110,7 @@ describe("Cloud Foundry Apps", function () {
                 });
             });
         }).then(function (result) {
-            console.log(result);
+            //console.log(result);
             expect(true).to.equal(true);
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
