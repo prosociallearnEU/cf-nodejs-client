@@ -19,7 +19,7 @@ CloudFoundryLogs = new CloudFoundryLogs();
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-describe.only("Cloud foundry Logs", function () {
+describe("Cloud foundry Logs", function () {
 
     it("The platform returns Logs", function () {
         this.timeout(6000);
