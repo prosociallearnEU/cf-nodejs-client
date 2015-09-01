@@ -142,7 +142,7 @@ describe("Cloud Foundry Apps", function () {
                 return CloudFoundryApps.getSummary(result.token_type, result.access_token, app_guid);
             });
         }).then(function (result) {
-            console.log(result);
+            //console.log(result);
             expect(true).to.equal(true);
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
@@ -212,7 +212,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it("Start an App", function () {
-        this.timeout(50000);
+        this.timeout(60000);
 
         var token_endpoint = null;
         var space_guid = null;
