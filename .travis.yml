@@ -1,5 +1,4 @@
 language: node_js
 node_js:
-  - "io.js"
   - "0.12"
 sudo: false
