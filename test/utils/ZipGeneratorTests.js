@@ -27,4 +27,16 @@ describe("Zip Generator", function () {
         });
 
     });
+
+    it.skip("Generates a large zip", function () {
+
+        var zipName = "staticAppLarge.zip";
+
+        return ZipGenerator.generate(zipName, 100, 0).then(function () {
+            fs.exists(zipName, function (result) {
+                expect(result).be.equal(true);
+            });
+        });
+
+    });
 });
