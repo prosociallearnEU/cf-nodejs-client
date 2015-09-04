@@ -15,7 +15,9 @@ var endPoint = nconf.get('CF_API_URL'),
     password = nconf.get('password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
+var CloudFoundryApps = require("../../../lib/model/Apps");
 CloudFoundry = new CloudFoundry();
+CloudFoundryApps = new CloudFoundryApps(endPoint);
 
 describe("Cloud Foundry", function () {
 
@@ -37,6 +39,30 @@ describe("Cloud Foundry", function () {
             return CloudFoundry.login(token_endpoint, username, password);
         }).then(function (result) {
             expect(result.token_type).to.equal("bearer");
+        });
+    });
+
+    it.only("Using Login with refresh", function () {
+        this.timeout(2500);
+
+        CloudFoundry.setEndPoint(endPoint);
+
+        var token_endpoint = null;
+        var refresh_token = null;
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            refresh_token = result.refresh_token;
+            return CloudFoundry.loginRefresh(token_endpoint, refresh_token);
+        }).then(function (result) {
+            expect(result.token_type).to.equal("bearer");
+            return CloudFoundry.loginRefresh(token_endpoint, refresh_token);
+        }).then(function (result) {
+            return CloudFoundryApps.getApps(result.token_type, result.access_token);
+        }).then(function (result) {
+            console.log(result);
+            expect(true).to.equal(true);
         });
     });
 

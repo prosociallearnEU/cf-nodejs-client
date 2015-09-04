@@ -18,9 +18,9 @@ var cf_api_url = nconf.get('CF_API_URL'),
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
 var CloudFoundryApps = require("../../../lib/model/Apps");
 var CloudFoundrySpaces = require("../../../lib/model/Spaces");
-CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
-CloudFoundryApps = new CloudFoundryApps(nconf.get('CF_API_URL'));
-CloudFoundrySpaces = new CloudFoundrySpaces(nconf.get('CF_API_URL'));
+CloudFoundry = new CloudFoundry(cf_api_url);
+CloudFoundryApps = new CloudFoundryApps(cf_api_url);
+CloudFoundrySpaces = new CloudFoundrySpaces(cf_api_url);
 
 function block(token_endpoint, app_guid) {
 
