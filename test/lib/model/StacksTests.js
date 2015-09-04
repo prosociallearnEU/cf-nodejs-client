@@ -17,8 +17,6 @@ var CloudFoundryStacks = require("../../../lib/model/Stacks");
 CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
 CloudFoundryStacks = new CloudFoundryStacks(nconf.get('CF_API_URL'));
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 describe("Cloud foundry Stacks", function () {
 
     it("The platform returns Stacks installed", function () {

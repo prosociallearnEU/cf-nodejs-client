@@ -18,8 +18,6 @@ var CloudFoundryDomains = require("../../../lib/model/Domains");
 CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
 CloudFoundryDomains = new CloudFoundryDomains(nconf.get('CF_API_URL'));
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 describe("Cloud foundry Domains", function () {
 
     it("The platform returns Domains defined", function () {

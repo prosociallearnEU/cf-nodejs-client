@@ -50,13 +50,12 @@ With the credentials defined, create a new file to paste this code to authentica
 
 var config = require('./config.json');//Load CF configuration
 
-var cloudFoundry = require("cf-nodejs-client").CloudFoundry;
-cloudFoundry = new cloudFoundry(config.endpoint);
+var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
+CloudFoundry = new cloudFoundry();
+CloudFoundry.setEndPoint(config.endpoint);
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
-cloudFoundry.getInfo().then(function (result) {
-    return cloudFoundry.login(result.token_endpoint,config.username,config.password);
+CloudFoundry.getInfo().then(function (result) {
+    return CloudFoundry.login(result.token_endpoint,config.username,config.password);
 }).then(function (result) {
     console.log(result);   
 }).catch(function (reason) {

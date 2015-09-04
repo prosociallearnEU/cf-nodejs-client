@@ -20,8 +20,6 @@ CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
 CloudFoundrySpaces = new CloudFoundrySpaces(nconf.get('CF_API_URL'));
 CloudFoundryApps = new CloudFoundryApps(nconf.get('CF_API_URL'));
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 describe("Cloud foundry Spaces", function () {
 
     it("The platform always has defined a Space to operate.", function () {

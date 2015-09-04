@@ -17,8 +17,6 @@ var CloudFoundryLogs = require("../../../lib/model/Logs");
 CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
 CloudFoundryLogs = new CloudFoundryLogs();
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 describe.skip("Cloud foundry Logs", function () {
 
     it("The platform returns Logs", function () {

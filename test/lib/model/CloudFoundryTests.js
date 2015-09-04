@@ -17,8 +17,6 @@ var endPoint = nconf.get('CF_API_URL'),
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
 CloudFoundry = new CloudFoundry();
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 describe("Cloud Foundry", function () {
 
     it("The connection with the PaaS is OK", function () {

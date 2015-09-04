@@ -35,8 +35,6 @@ var fs = require('fs');
 var ZipGenerator = require('../../utils/ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 function randomInt(low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }

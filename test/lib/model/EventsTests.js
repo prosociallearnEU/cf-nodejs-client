@@ -17,8 +17,6 @@ var CloudFoundryEvents = require("../../../lib/model/Events");
 CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
 CloudFoundryEvents = new CloudFoundryEvents(nconf.get('CF_API_URL'));
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 describe("Cloud foundry Events", function () {
 
     it("The platform returns the Organizations defined", function () {

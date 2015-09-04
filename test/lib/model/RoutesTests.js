@@ -25,8 +25,6 @@ CloudFoundryRoutes = new CloudFoundryRoutes(nconf.get('CF_API_URL'));
 CloudFoundryDomains = new CloudFoundryDomains(nconf.get('CF_API_URL'));
 CloudFoundrySpaces = new CloudFoundrySpaces(nconf.get('CF_API_URL'));
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 function randomInt(low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
