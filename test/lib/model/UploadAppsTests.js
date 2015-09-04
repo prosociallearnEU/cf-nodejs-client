@@ -146,7 +146,7 @@ describe("Cloud Foundry Upload App process", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return AppMacros.uploadApp(appName, app_guid, zipPath);
+            return AppMacros.uploadApp(app_guid, zipPath);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return CloudFoundry.getInfo();
@@ -182,7 +182,7 @@ describe("Cloud Foundry Upload App process", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return AppMacros.uploadApp(appName, app_guid, zipPath);
+            return AppMacros.uploadApp(app_guid, zipPath);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return CloudFoundry.getInfo();
@@ -218,7 +218,7 @@ describe("Cloud Foundry Upload App process", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return AppMacros.uploadApp(appName, app_guid, zipPath);
+            return AppMacros.uploadApp(app_guid, zipPath);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return CloudFoundry.getInfo();
@@ -254,7 +254,7 @@ describe("Cloud Foundry Upload App process", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return AppMacros.uploadApp(appName, app_guid, zipPath);
+            return AppMacros.uploadApp(app_guid, zipPath);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return CloudFoundry.getInfo();
@@ -290,7 +290,7 @@ describe("Cloud Foundry Upload App process", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return AppMacros.uploadApp(appName, app_guid, zipPath);
+            return AppMacros.uploadApp(app_guid, zipPath);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return CloudFoundry.getInfo();
@@ -326,7 +326,7 @@ describe("Cloud Foundry Upload App process", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return AppMacros.uploadApp(appName, app_guid, zipPath);
+            return AppMacros.uploadApp(app_guid, zipPath);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return CloudFoundry.getInfo();
@@ -363,7 +363,7 @@ describe("Cloud Foundry Upload App process", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return AppMacros.uploadApp(appName, app_guid, zipPath);
+            return AppMacros.uploadApp(app_guid, zipPath);
         //Start
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");

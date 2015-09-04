@@ -48,16 +48,18 @@ function block(token_endpoint, app_guid) {
 }
 
 function recursiveExample(token_endpoint, app_guid) {
+    var iterationLimit = 10;
     var counter = 0;
 
     return new Promise(function check(resolve, reject) {
+
 
         block(token_endpoint, app_guid).then(function (result) {
             console.log(result["0"].state);
             //console.log(counter);
             if (result["0"].state === "RUNNING") {
                 resolve(result);
-            } else if (counter === 5) {
+            } else if (counter === iterationLimit) {
                 reject(new Error("Timeout"));
             } else {
                 //console.log("next try");

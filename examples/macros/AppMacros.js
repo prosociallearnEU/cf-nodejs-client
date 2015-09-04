@@ -151,7 +151,7 @@ AppMacros.prototype.createApp = function (appName, buildPack) {
 
 };
 
-AppMacros.prototype.uploadApp = function (appName, app_guid, filePath) {
+AppMacros.prototype.uploadApp = function (app_guid, filePath) {
 
     var token_endpoint = null;
 
@@ -162,7 +162,7 @@ AppMacros.prototype.uploadApp = function (appName, app_guid, filePath) {
         CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             return CloudFoundry.login(token_endpoint, self.username, self.password).then(function (result) {
-                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, appName, app_guid, filePath);
+                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, filePath);
             });
         }).then(function (result) {
             return resolve(result);
