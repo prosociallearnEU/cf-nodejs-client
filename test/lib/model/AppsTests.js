@@ -53,7 +53,6 @@ function recursiveExample(token_endpoint, app_guid) {
 
     return new Promise(function check(resolve, reject) {
 
-
         block(token_endpoint, app_guid).then(function (result) {
             console.log(result["0"].state);
             //console.log(counter);

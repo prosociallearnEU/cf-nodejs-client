@@ -1,6 +1,6 @@
 /*jslint node: true*/
 /*global Promise:true*/
-/*global describe: true, it: true*/
+/*global describe: true, before:true, it: true*/
 "use strict";
 
 var chai = require("chai"),
@@ -251,17 +251,17 @@ function createApp(appName, buildPack) {
 
     });
 
-};
+}
 
 describe("Cloud Foundry Upload App process", function () {
 
     var token_endpoint = null;
 
-    before(function(){
+    before(function () {
         return CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-        });  
-    })
+        });
+    });
 
     it("Create a Static App, Upload 1MB zip & Remove app", function () {
         this.timeout(40000);
@@ -285,10 +285,45 @@ describe("Cloud Foundry Upload App process", function () {
             });
 
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath);
-            });            
+                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath, false);
+            });
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
+            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
+            });
+        }).then(function () {
+            //console.log(result);
+            expect(true).to.equal(true);
+        });
+    });
+
+    it("Create a Static App, Upload 1MB (async = false) zip & Remove app", function () {
+        this.timeout(40000);
+
+        var app_guid = null;
+        var appName = "app2" + randomWords() + randomInt(1, 100);
+        var staticBuildPack = BuildPacks.get("static");
+        var zipPath = "./staticApp.zip";
+        var weight = 1;//MB
+        var compressionRate = 0;//No compression    
+
+        return createApp(appName, staticBuildPack).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).is.a("string");
+            expect(result.entity.buildpack).to.equal(staticBuildPack);
+            return ZipGenerator.generate(zipPath, weight, compressionRate);
+        }).then(function () {
+            //Does exist the zip?   
+            fs.exists(zipPath, function (result) {
+                expect(result).to.equal(true);
+            });
+
+            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath, true);
+            });
+        }).then(function (result) {
+            expect(result.metadata.guid).to.be.a('string');
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
                 return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
             });
@@ -320,8 +355,8 @@ describe("Cloud Foundry Upload App process", function () {
             });
 
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath);
-            }); 
+                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath, false);
+            });
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
@@ -355,8 +390,8 @@ describe("Cloud Foundry Upload App process", function () {
             });
 
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath);
-            }); 
+                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath, false);
+            });
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
@@ -389,7 +424,7 @@ describe("Cloud Foundry Upload App process", function () {
                 expect(result).to.equal(true);
             });
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath);
+                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath, false);
             });
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
@@ -424,7 +459,7 @@ describe("Cloud Foundry Upload App process", function () {
             });
 
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath);
+                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath, false);
             });
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
@@ -459,7 +494,7 @@ describe("Cloud Foundry Upload App process", function () {
             });
 
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath);
+                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath, false);
             });
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
@@ -496,7 +531,7 @@ describe("Cloud Foundry Upload App process", function () {
             });
 
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath);
+                return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, zipPath, false);
             });
         //Start
         }).then(function (result) {
