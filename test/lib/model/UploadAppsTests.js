@@ -253,6 +253,14 @@ function createApp(appName, buildPack) {
 
 }
 
+function sleep(time, callback) {
+    var stop = new Date().getTime();
+    while (new Date().getTime() < stop + time) {
+        ;
+    }
+    callback();
+}
+
 describe("Cloud Foundry Upload App process", function () {
 
     var token_endpoint = null;
@@ -306,7 +314,9 @@ describe("Cloud Foundry Upload App process", function () {
         var staticBuildPack = BuildPacks.get("static");
         var zipPath = "./staticApp.zip";
         var weight = 1;//MB
-        var compressionRate = 0;//No compression    
+        var compressionRate = 0;//No compression
+        var job_guid = null;
+        var job_status = null;
 
         return createApp(appName, staticBuildPack).then(function (result) {
             app_guid = result.metadata.guid;
@@ -324,6 +334,90 @@ describe("Cloud Foundry Upload App process", function () {
             });
         }).then(function (result) {
             expect(result.metadata.guid).to.be.a('string');
+
+            job_guid = result.metadata.guid;
+            job_status = result.entity.status;
+            //console.log(result.metadata.guid);
+            //console.log(result.entity.status);
+
+            if (job_status === "queued") {
+
+                sleep(5000, function () {
+                    console.log("5 second");
+                });
+
+                return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                    return CloudFoundryJobs.getJob(result.token_type, result.access_token, job_guid).then(function (result) {
+                        return new Promise(function (resolve) {
+                            var status = result.entity.status;
+                            console.log(status);
+                            resolve(result);
+                        });
+                    });
+                });
+            } else {
+                return new Promise(function (resolve) {
+                    resolve(result);
+                });
+            }
+        }).then(function (result) {
+            expect(result.metadata.guid).to.be.a('string');
+
+            //console.log(result);
+            job_guid = result.metadata.guid;
+            job_status = result.entity.status;
+            //console.log(result.metadata.guid);
+            //console.log(result.entity.status);
+
+            if (job_status === "queued") {
+
+                sleep(5000, function () {
+                    console.log("5 second");
+                });
+
+                return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                    return CloudFoundryJobs.getJob(result.token_type, result.access_token, job_guid).then(function (result) {
+                        return new Promise(function (resolve) {
+                            var status = result.entity.status;
+                            console.log(status);
+                            resolve(result);
+                        });
+                    });
+                });
+            } else {
+                return new Promise(function (resolve) {
+                    resolve(result);
+                });
+            }
+        }).then(function (result) {
+            expect(result.metadata.guid).to.be.a('string');
+
+            job_guid = result.metadata.guid;
+            job_status = result.entity.status;
+            //console.log(result.metadata.guid);
+            //console.log(result.entity.status);
+
+            if (job_status === "queued") {
+
+                sleep(5000, function () {
+                    console.log("5 second");
+                });
+
+                return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+                    return CloudFoundryJobs.getJob(result.token_type, result.access_token, job_guid).then(function (result) {
+                        return new Promise(function (resolve) {
+                            var status = result.entity.status;
+                            console.log(status);
+                            resolve(result);
+                        });
+                    });
+                });
+            } else {
+                return new Promise(function (resolve) {
+                    resolve(result);
+                });
+            }
+        }).then(function () {
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
                 return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
             });

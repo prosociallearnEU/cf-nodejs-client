@@ -82,7 +82,7 @@ istanbul cover node_modules/mocha/bin/_mocha -- -R spec
 
 ```
 
-At the moment, the test suite covers the 89.55%
+At the moment, the test suite covers the 91.22%
 
 If you have question, [create an issue](https://github.com/jabrena/cf-nodejs-client/issues). 
 
