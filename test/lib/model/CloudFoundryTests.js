@@ -42,7 +42,7 @@ describe("Cloud Foundry", function () {
         });
     });
 
-    it.only("Using Login with refresh", function () {
+    it.skip("Using Login to execute 2 REST operations", function () {
         this.timeout(2500);
 
         CloudFoundry.setEndPoint(endPoint);
@@ -50,17 +50,14 @@ describe("Cloud Foundry", function () {
         var token_endpoint = null;
         var refresh_token = null;
         return CloudFoundry.getInfo().then(function (result) {
+            console.log(result);
             token_endpoint = result.token_endpoint;
             return CloudFoundry.login(token_endpoint, username, password);
         }).then(function (result) {
-            refresh_token = result.refresh_token;
-            return CloudFoundry.loginRefresh(token_endpoint, refresh_token);
-        }).then(function (result) {
-            expect(result.token_type).to.equal("bearer");
-            return CloudFoundry.loginRefresh(token_endpoint, refresh_token);
-        }).then(function (result) {
             return CloudFoundryApps.getApps(result.token_type, result.access_token);
         }).then(function (result) {
+            return CloudFoundryApps.getApps(result.token_type, result.access_token);
+        }).then(function (result) {            
             console.log(result);
             expect(true).to.equal(true);
         });

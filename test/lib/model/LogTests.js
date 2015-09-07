@@ -1,5 +1,5 @@
 /*jslint node: true*/
-/*global describe: true, it: true*/
+/*global describe: true, before: true, it: true */
 "use strict";
 
 var chai = require("chai"),
@@ -13,36 +13,46 @@ var cf_api_url = nconf.get('CF_API_URL'),
     password = nconf.get('password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
+var CloudFoundryApps = require("../../../lib/model/Apps");
 var CloudFoundryLogs = require("../../../lib/model/Logs");
-CloudFoundry = new CloudFoundry(nconf.get('CF_API_URL'));
+CloudFoundry = new CloudFoundry(cf_api_url);
+CloudFoundryApps = new CloudFoundryApps(cf_api_url);
 CloudFoundryLogs = new CloudFoundryLogs();
 
-describe.skip("Cloud foundry Logs", function () {
+describe("Cloud foundry Logs", function () {
+
+    var token_endpoint = null;
+    var logging_endpoint = null;
+
+    before(function () {
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            logging_endpoint = result.logging_endpoint;
+        });
+    });
 
     it("The platform returns Logs", function () {
         this.timeout(6000);
 
-        var token_endpoint = null;
-        var logging_endpoint = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            logging_endpoint = result.logging_endpoint;
-            CloudFoundryLogs.setEndpoint(logging_endpoint);
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryLogs.getTail(result.token_type, result.access_token, "788a28be-2aea-40e4-baf3-3d2347e94415");
-            });
-        }).then(function (result) {
+        var app_guid = null;
 
+        return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
+            return CloudFoundryApps.getApps(result.token_type, result.access_token);
+        }).then(function (result) {
+            app_guid = result.resources[0].metadata.guid;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            //Process URL to use with Recent Method.
+            logging_endpoint = logging_endpoint.replace("wss", "https");
+            logging_endpoint = logging_endpoint.replace(":4443", "");
+            //console.log(logging_endpoint);
+
+            CloudFoundryLogs.setEndpoint(logging_endpoint);
+            return CloudFoundryLogs.getRecent(result.token_type, result.access_token, app_guid);
+        }).then(function () {
+            //console.log(result);
             expect(true).is.equal(true);
         });
     });
 
 });
-
-function sleep(time, callback) {
-    var stop = new Date().getTime();
-    while(new Date().getTime() < stop + time) {
-        ;
-    }
-    callback();
-}
