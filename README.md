@@ -12,6 +12,7 @@ This project provides a simple client library to interact with the [Cloud Foundr
 * Domains
 * Organizations
 * Stacks
+* Logs
 * Jobs
 
 Take a look the [Tests cases](https://github.com/jabrena/cf-nodejs-client/tree/master/test/) developed with [Mocha](https://mochajs.org/) & [Chai](http://chaijs.com/api/bdd/) to understand some stuff about [Cloud Foundry](https://www.cloudfoundry.org/)  and the usage of this client.
