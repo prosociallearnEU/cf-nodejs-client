@@ -261,4 +261,27 @@ describe("Cloud Foundry Apps", function () {
         });
     });
 
+    it.skip("The platform returns Routes from an App", function () {
+        this.timeout(50000);
+
+        var token_endpoint = null;
+        var app_guid = null;
+
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            return CloudFoundryApps.getApps(result.token_type, result.access_token);
+        }).then(function (result) {
+            app_guid = result.resources[0].metadata.guid;
+            expect(result.total_results).to.be.a('number');
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            return CloudFoundryApps.getAppRoutes(result.token_type, result.access_token, app_guid);
+        }).then(function (result) {
+            console.log(result.resources);
+            expect(result.total_results).to.be.a('number');
+        });
+    });
+
 });
