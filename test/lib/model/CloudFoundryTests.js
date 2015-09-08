@@ -1,5 +1,5 @@
 /*jslint node: true*/
-/*global describe: true, it: true*/
+/*global describe: true, before: true, it: true*/
 "use strict";
 
 var chai = require("chai"),
@@ -17,63 +17,46 @@ var endPoint = nconf.get('CF_API_URL'),
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
 var CloudFoundryApps = require("../../../lib/model/Apps");
 CloudFoundry = new CloudFoundry();
+CloudFoundry.setEndPoint(endPoint);
 CloudFoundryApps = new CloudFoundryApps(endPoint);
 
 describe("Cloud Foundry", function () {
 
+    var token_endpoint = null;
+    var token_type = null;
+    var access_token = null;
+
+    before(function () {
+        this.timeout(5000);
+
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            token_type = result.token_type;
+            access_token = result.access_token;
+        });
+    });
+
     it("The connection with the PaaS is OK", function () {
-
-        CloudFoundry.setEndPoint(endPoint);
-
         return expect(CloudFoundry.getInfo()).eventually.property("name", "vcap");
     });
 
     it("The authentication with the PaaS is OK", function () {
-        this.timeout(2500);
-
-        CloudFoundry.setEndPoint(endPoint);
-
-        var token_endpoint = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password);
-        }).then(function (result) {
-            expect(result.token_type).to.equal("bearer");
-        });
+        expect(token_type).to.equal("bearer");
     });
 
-    it.skip("Using Login to execute 2 REST operations", function () {
+    it.only("Using An unique Login, it is possible to execute 3 REST operations", function () {
         this.timeout(2500);
 
-        CloudFoundry.setEndPoint(endPoint);
-
-        var token_endpoint = null;
-        var refresh_token = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            console.log(result);
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password);
-        }).then(function (result) {
-            return CloudFoundryApps.getApps(result.token_type, result.access_token);
-        }).then(function (result) {
-            return CloudFoundryApps.getApps(result.token_type, result.access_token);
-        }).then(function (result) {            
-            console.log(result);
+        return CloudFoundryApps.getApps(token_type, access_token).then(function () {
+            return CloudFoundryApps.getApps(token_type, access_token);
+        }).then(function () {
+            return CloudFoundryApps.getApps(token_type, access_token);
+        }).then(function () {
+            return CloudFoundryApps.getApps(token_type, access_token);
+        }).then(function () {
             expect(true).to.equal(true);
-        });
-    });
-
-    it("Use the constructor without the EndPoint", function () {
-        this.timeout(2500);
-
-        CloudFoundry.setEndPoint(endPoint);
-
-        var token_endpoint = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password);
-        }).then(function (result) {
-            expect(result.token_type).to.equal("bearer");
         });
     });
 
