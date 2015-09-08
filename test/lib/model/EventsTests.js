@@ -1,5 +1,5 @@
 /*jslint node: true*/
-/*global describe: true, it: true*/
+/*global describe: true, before: true, it: true*/
 "use strict";
 
 var chai = require("chai"),
@@ -19,14 +19,24 @@ CloudFoundryEvents = new CloudFoundryEvents(nconf.get('CF_API_URL'));
 
 describe("Cloud foundry Events", function () {
 
-    it("The platform returns the Organizations defined", function () {
-        var token_endpoint = null;
+    var token_endpoint = null;
+    var token_type = null;
+    var access_token = null;
+
+    before(function () {
+        this.timeout(5000);
+
         return CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryEvents.getEvents(result.token_type, result.access_token);
-            });
+            return CloudFoundry.login(token_endpoint, username, password);
         }).then(function (result) {
+            token_type = result.token_type;
+            access_token = result.access_token;
+        });
+    });
+
+    it("The platform returns the Organizations defined", function () {
+        return CloudFoundryEvents.getEvents(token_type, access_token).then(function (result) {
             expect(result.total_results).is.a("number");
         });
     });

@@ -46,7 +46,7 @@ describe("Cloud Foundry", function () {
         expect(token_type).to.equal("bearer");
     });
 
-    it.only("Using An unique Login, it is possible to execute 3 REST operations", function () {
+    it("Using an unique Login, it is possible to execute 3 REST operations", function () {
         this.timeout(2500);
 
         return CloudFoundryApps.getApps(token_type, access_token).then(function () {

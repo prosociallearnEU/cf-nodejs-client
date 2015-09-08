@@ -23,11 +23,19 @@ describe("Cloud foundry Logs", function () {
 
     var token_endpoint = null;
     var logging_endpoint = null;
+    var token_type = null;
+    var access_token = null;
 
     before(function () {
+        this.timeout(5000);
+
         return CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             logging_endpoint = result.logging_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            token_type = result.token_type;
+            access_token = result.access_token;
         });
     });
 
@@ -36,19 +44,13 @@ describe("Cloud foundry Logs", function () {
 
         var app_guid = null;
 
-        return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-            return CloudFoundryApps.getApps(result.token_type, result.access_token);
-        }).then(function (result) {
+        return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
             app_guid = result.resources[0].metadata.guid;
-            return CloudFoundry.login(token_endpoint, username, password);
-        }).then(function (result) {
-            //Process URL to use with Recent Method.
+            //Process URL
             logging_endpoint = logging_endpoint.replace("wss", "https");
             logging_endpoint = logging_endpoint.replace(":4443", "");
-            //console.log(logging_endpoint);
-
             CloudFoundryLogs.setEndpoint(logging_endpoint);
-            return CloudFoundryLogs.getRecent(result.token_type, result.access_token, app_guid);
+            return CloudFoundryLogs.getRecent(token_type, access_token, app_guid);
         }).then(function () {
             //console.log(result);
             expect(true).is.equal(true);

@@ -1,5 +1,5 @@
 /*jslint node: true*/
-/*global describe: true, it: true*/
+/*global describe: true, before: true, it: true*/
 /*globals Promise:true*/
 "use strict";
 
@@ -20,17 +20,27 @@ CloudFoundryDomains = new CloudFoundryDomains(nconf.get('CF_API_URL'));
 
 describe("Cloud foundry Domains", function () {
 
+    var token_endpoint = null;
+    var token_type = null;
+    var access_token = null;
+
+    before(function () {
+        this.timeout(5000);
+
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            token_type = result.token_type;
+            access_token = result.access_token;
+        });
+    });
+
     it("The platform returns Domains defined", function () {
         this.timeout(3000);
 
-        var token_endpoint = null;
         var domain = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryDomains.getDomains(result.token_type, result.access_token);
-            });
-        }).then(function (result) {
+        return CloudFoundryDomains.getDomains(token_type, access_token).then(function (result) {
             domain = result.resources[0].entity.name;
             expect(domain).is.a("string");
             expect(result.resources.length).to.be.above(0);
@@ -41,14 +51,8 @@ describe("Cloud foundry Domains", function () {
     it("The platform returns Shared domains defined", function () {
         this.timeout(5000);
 
-        var token_endpoint = null;
         var domain = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryDomains.getSharedDomains(result.token_type, result.access_token);
-            });
-        }).then(function (result) {
+        return CloudFoundryDomains.getSharedDomains(token_type, access_token).then(function (result) {
             domain = result.resources[0].entity.name;
             expect(domain).is.a("string");
             expect(result.resources.length).to.be.above(0);

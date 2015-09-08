@@ -1,6 +1,5 @@
 /*jslint node: true*/
-/*global describe: true, it: true*/
-/*globals Promise:true*/
+/*global describe: true, before: true, it: true*/
 "use strict";
 
 var chai = require("chai"),
@@ -20,24 +19,26 @@ CloudFoundryOrg = new CloudFoundryOrg(nconf.get('CF_API_URL'));
 
 describe("Cloud foundry Organizations", function () {
 
+    var token_endpoint = null;
+    var token_type = null;
+    var access_token = null;
+
+    before(function () {
+        this.timeout(5000);
+
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            token_type = result.token_type;
+            access_token = result.access_token;
+        });
+    });
+
     it("The platform returns the Organizations defined", function () {
         this.timeout(3000);
 
-        var token_endpoint = null;
-        //var org_guid = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryOrg.getOrganizations(result.token_type, result.access_token).then(function (result) {
-                    return new Promise(function (resolve) {
-                        //org_guid = result.resources[0].metadata.guid;
-                        //console.log(org_guid);
-                        //console.log(result.resources[0].entity.name);
-                        return resolve(result);
-                    });
-                });
-            });
-        }).then(function (result) {
+        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
             expect(result.total_results).is.a("number");
         });
     });
@@ -45,24 +46,10 @@ describe("Cloud foundry Organizations", function () {
     it("The platform returns the private domains from a Organization", function () {
         this.timeout(5000);
 
-        var token_endpoint = null;
         var org_guid = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryOrg.getOrganizations(result.token_type, result.access_token).then(function (result) {
-                    return new Promise(function (resolve) {
-                        org_guid = result.resources[0].metadata.guid;
-                        //console.log(org_guid);
-                        //console.log(result.resources[0].entity.name);
-                        return resolve(org_guid);
-                    });
-                });
-            });
-        }).then(function () {
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryOrg.getPrivateDomains(result.token_type, result.access_token, org_guid);
-            });
+        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+            org_guid = result.resources[0].metadata.guid;
+            return CloudFoundryOrg.getPrivateDomains(token_type, access_token, org_guid);
         }).then(function (result) {
             expect(result.total_results).is.a("number");
         });
