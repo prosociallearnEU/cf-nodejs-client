@@ -259,7 +259,7 @@ function sleep(time, callback) {
     callback();
 }
 
-describe("Cloud Foundry Upload App process", function () {
+describe.skip("Cloud Foundry Upload App process", function () {
 
     var token_endpoint = null;
     var token_type = null;
@@ -307,6 +307,8 @@ describe("Cloud Foundry Upload App process", function () {
             return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
                 return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
             });
+        //}).then(function () {
+        //    CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid)
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);

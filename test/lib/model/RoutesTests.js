@@ -115,7 +115,7 @@ describe("Cloud Foundry Routes", function () {
             return CloudFoundryRoutes.getRoutes(token_type, access_token, page);
         }).then(function (result) {
             expect(result.total_results).to.equal(initial_route_count + 1);
-            return CloudFoundryRoutes.deleteRoute(result.token_type, result.access_token, route_guid);
+            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
         }).then(function () {
             return CloudFoundryRoutes.getRoutes(token_type, access_token, page);
         }).then(function (result) {
@@ -131,6 +131,113 @@ describe("Cloud Foundry Routes", function () {
 
         return CloudFoundryRoutes.checkRoute(token_type, access_token, routeName, domain_guid).then(function (result) {
             expect(result.total_results).to.equal(0);
+        });
+
+    });
+
+    //Inner function used to check when an application run in the system.
+    function recursiveGetRoutes(token_type, access_token) {
+
+        console.log("Get a array of routes from CF instances");
+
+        var iterationLimit = 50;
+        var counter = 1;
+        var arrayRouteList = [];
+
+        return new Promise(function check(resolve, reject) {
+
+            CloudFoundryRoutes.getRoutes(token_type, access_token, counter).then(function (result) {
+                console.log(counter);
+
+                //Fill Array
+                var i = 0;
+                for (i = 0; i < result.resources.length; i++) {
+                    arrayRouteList.push(result.resources[i].metadata.guid);
+                }
+
+                //Criteria to exit
+                if (result.total_pages === counter) {
+                    resolve(arrayRouteList);
+                } else if (counter === iterationLimit) {
+                    reject(new Error("Timeout"));
+                } else {
+                    counter += 1;
+                    setTimeout(check, 1000, resolve, reject);
+                }
+            }, reject); //Catch any check exceptions;
+
+        });
+
+    }
+
+    function recursiveRemoveRoutes(token_type, access_token, routeArray) {
+
+        console.log("Remove routes using a route array");
+
+        var iterationLimit = 1500;
+        var counter = 1;
+        var route_guid = null;
+
+        return new Promise(function check(resolve, reject) {
+
+            route_guid = routeArray[counter];
+            CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid).then(function (result) {
+                console.log(counter, route_guid);
+
+                //Criteria to exit
+                if (counter === routeArray.length) {
+                    resolve("OK");
+                } else if (counter === iterationLimit) {
+                    reject(new Error("Timeout"));
+                } else {
+                    counter += 1;
+                    setTimeout(check, 1000, resolve, reject);
+                }
+            }, reject); //Catch any check exceptions;
+
+        });
+
+    }
+
+    it("Paginate routes", function () {
+        this.timeout(50000);
+
+        return recursiveGetRoutes(token_type, access_token).then(function (result) {
+            expect(true).to.equal(true);
+        }).catch(function (reason) {
+            expect(reason).to.equal("Timeout");
+        });
+
+    });
+
+    it.skip("Paginate and remove bad routes", function () {
+        this.timeout(50000);
+
+        return recursiveGetRoutes(token_type, access_token).then(function (result) {
+
+            var i = 0;
+            for (i = 0; i < result.length; i++) {
+                console.log(i + " " + result[i]);
+            }
+
+            return recursiveRemoveRoutes(token_type, access_token, result);
+        }).then(function () {
+            expect(true).to.equal(true);
+        }).catch(function (reason) {
+            expect(reason).to.equal("Timeout");
+        });
+
+
+    });
+
+    it("Get total of routes", function () {
+        this.timeout(5000);
+
+        var page = 1;
+
+        return CloudFoundryRoutes.getRoutes(token_type, access_token, page).then(function (result) {
+            console.log(result.total_results);
+            expect(result.total_results).to.be.below(1001);
         });
 
     });
