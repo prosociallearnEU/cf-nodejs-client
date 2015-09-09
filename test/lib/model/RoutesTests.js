@@ -138,7 +138,7 @@ describe("Cloud Foundry Routes", function () {
     //Inner function used to check when an application run in the system.
     function recursiveGetRoutes(token_type, access_token) {
 
-        console.log("Get a array of routes from CF instances");
+        //console.log("Get a array of routes from CF instances");
 
         var iterationLimit = 50;
         var counter = 1;
@@ -147,7 +147,7 @@ describe("Cloud Foundry Routes", function () {
         return new Promise(function check(resolve, reject) {
 
             CloudFoundryRoutes.getRoutes(token_type, access_token, counter).then(function (result) {
-                console.log(counter);
+                //console.log(counter);
 
                 //Fill Array
                 var i = 0;
