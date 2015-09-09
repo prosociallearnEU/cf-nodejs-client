@@ -1,6 +1,5 @@
 /*jslint node: true*/
-/*global describe: true, it: true*/
-/*globals Promise:true*/
+/*global describe: true, before:true, it: true*/
 "use strict";
 
 var chai = require("chai"),
@@ -22,23 +21,27 @@ CloudFoundryApps = new CloudFoundryApps(nconf.get('CF_API_URL'));
 
 describe("Cloud foundry Spaces", function () {
 
+    var token_endpoint = null;
+    var token_type = null;
+    var access_token = null;
+
+    before(function () {
+        this.timeout(5000);
+
+        return CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            token_type = result.token_type;
+            access_token = result.access_token;
+        });
+
+    });
+
     it("The platform always has defined a Space to operate.", function () {
         this.timeout(3000);
 
-        var token_endpoint = null;
-        //var space_guid = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundrySpaces.getSpaces(result.token_type, result.access_token).then(function (result) {
-                    return new Promise(function (resolve) {
-                        //space_guid = result.resources[0].metadata.guid;
-                        //console.log("Space GUID: " + space_guid);                
-                        return resolve(result);
-                    });
-                });
-            });
-        }).then(function (result) {
+        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
             expect(result.total_results).to.be.above(0);
         });
     });
@@ -46,23 +49,12 @@ describe("Cloud foundry Spaces", function () {
     it("The platform returns a unique Space.", function () {
         this.timeout(4500);
 
-        var token_endpoint = null;
         var space_guid = null;
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundrySpaces.getSpaces(result.token_type, result.access_token).then(function (result) {
-                    return new Promise(function (resolve) {
-                        space_guid = result.resources[0].metadata.guid;
-                        //console.log("Space GUID: " + space_guid);                
-                        return resolve(result);
-                    });
-                });
-            });
+
+        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+            space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundrySpaces.getSpace(result.token_type, result.access_token, space_guid);
-            });
+            return CloudFoundrySpaces.getSpace(token_type, access_token, space_guid);
         }).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         });
@@ -71,31 +63,15 @@ describe("Cloud foundry Spaces", function () {
     it("The platform returns Apps deployed in a Space.", function () {
         this.timeout(4000);
 
-        var token_endpoint = null;
         var space_guid = null;
-        //var app_guid = null;
 
-        return CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundrySpaces.getSpaces(result.token_type, result.access_token).then(function (result) {
-                    return new Promise(function (resolve) {
-                        space_guid = result.resources[0].metadata.guid;
-                        return resolve(result);
-                    });
-                });
-            });
+        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+            space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                //var filter = {
-                //    'q': 'name:' + "APPX",
-                //    'inline-relations-depth': 1
-                //}
-                var filter = {
-                    'guid' : space_guid
-                };
-                return CloudFoundrySpaces.getSpaceApps(result.token_type, result.access_token, space_guid, filter);
-            });
+            var filter = {
+                'guid' : space_guid
+            };
+            return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter);
         }).then(function (result) {
             expect(result.total_results).to.be.a('number');
         });

@@ -262,11 +262,20 @@ function sleep(time, callback) {
 describe("Cloud Foundry Upload App process", function () {
 
     var token_endpoint = null;
+    var token_type = null;
+    var access_token = null;
 
     before(function () {
+        this.timeout(5000);
+
         return CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, username, password);
+        }).then(function (result) {
+            token_type = result.token_type;
+            access_token = result.access_token;
         });
+
     });
 
     it("Create a Static App, Upload 1MB zip & Remove app", function () {
