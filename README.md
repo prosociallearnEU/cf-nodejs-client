@@ -52,7 +52,7 @@ With the credentials defined, create a new file to paste this code to authentica
 var config = require('./config.json');//Load CF configuration
 
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
-CloudFoundry = new cloudFoundry();
+CloudFoundry = new CloudFoundry();
 CloudFoundry.setEndPoint(config.endpoint);
 
 CloudFoundry.getInfo().then(function (result) {
