@@ -138,7 +138,7 @@ describe("Cloud Foundry Routes", function () {
     //Inner function used to check when an application run in the system.
     function recursiveGetRoutes(token_type, access_token) {
 
-        //console.log("Get a array of routes from CF instances");
+        console.log("Get a array of routes from CF instances");
 
         var iterationLimit = 50;
         var counter = 1;
@@ -147,7 +147,7 @@ describe("Cloud Foundry Routes", function () {
         return new Promise(function check(resolve, reject) {
 
             CloudFoundryRoutes.getRoutes(token_type, access_token, counter).then(function (result) {
-                //console.log(counter);
+                console.log(counter);
 
                 //Fill Array
                 var i = 0;
@@ -158,35 +158,6 @@ describe("Cloud Foundry Routes", function () {
                 //Criteria to exit
                 if (result.total_pages === counter) {
                     resolve(arrayRouteList);
-                } else if (counter === iterationLimit) {
-                    reject(new Error("Timeout"));
-                } else {
-                    counter += 1;
-                    setTimeout(check, 1000, resolve, reject);
-                }
-            }, reject); //Catch any check exceptions;
-
-        });
-
-    }
-
-    function recursiveRemoveRoutes(token_type, access_token, routeArray) {
-
-        console.log("Remove routes using a route array");
-
-        var iterationLimit = 1500;
-        var counter = 1;
-        var route_guid = null;
-
-        return new Promise(function check(resolve, reject) {
-
-            route_guid = routeArray[counter];
-            CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid).then(function (result) {
-                console.log(counter, route_guid);
-
-                //Criteria to exit
-                if (counter === routeArray.length) {
-                    resolve("OK");
                 } else if (counter === iterationLimit) {
                     reject(new Error("Timeout"));
                 } else {
@@ -210,17 +181,128 @@ describe("Cloud Foundry Routes", function () {
 
     });
 
-    it.skip("Paginate and remove bad routes", function () {
-        this.timeout(50000);
+    it.skip("[TOOL] Paginate and remove bad routes", function () {
+        this.timeout(200000);
 
-        return recursiveGetRoutes(token_type, access_token).then(function (result) {
+        function recursiveGetAppRoutes(token_type, access_token, appRouteGuidList) {
 
-            var i = 0;
-            for (i = 0; i < result.length; i++) {
-                console.log(i + " " + result[i]);
+            console.log("Get routes from current Apps");
+
+            var iterationLimit = 10;
+            var counter = 0;
+            var app_guid = null;
+            var appRouteGuidMap = {};
+
+            return new Promise(function check(resolve, reject) {
+
+                app_guid = appRouteGuidList[counter];
+                CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid).then(function (result) {
+
+                    if (result.resources.length > 0) {
+                        if (result.resources.length > 1) {
+                            reject(new Error("RARE CASE"));
+                        }
+                        appRouteGuidMap[result.resources[0].metadata.guid] = result.resources[0].metadata.guid;
+                    }
+
+                    //Criteria to exit
+                    if (counter === (appRouteGuidList.length - 1)) {
+                        resolve(appRouteGuidMap);
+                    } else if (counter === iterationLimit) {
+                        reject(new Error("Timeout"));
+                    } else {
+                        counter += 1;
+                        setTimeout(check, 1000, resolve, reject);
+                    }
+                }, reject); //Catch any check exceptions;
+
+            });
+
+        }
+
+        function inferenceBlock(appRouteGuidMap, route_guid) {
+            return new Promise(function check(resolve, reject) {
+                if (appRouteGuidMap[route_guid] !== undefined) {
+                    return resolve(true);
+                }
+                return resolve(false);
+            });
+        }
+
+        function recursiveRemoveRoutes(token_type, access_token, appRouteGuidMap, routeArray) {
+
+            console.log("Remove routes using a route array");
+
+            var iterationLimit = 1500;
+            var counter = 0;
+            var route_guid = null;
+            var isApp = false;
+
+            return new Promise(function check(resolve, reject) {
+
+                route_guid = routeArray[counter];
+                inferenceBlock(appRouteGuidMap, route_guid).then(function (result) {
+                    isApp = result;
+                    if (isApp === false) {
+                        return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+                    }
+
+                    return new Promise(function check(resolve, reject) {
+                        return resolve();
+                    });
+                }).then(function () {
+                    console.log(counter, route_guid, isApp);
+
+                    //Criteria to exit
+                    if (counter === routeArray.length) {
+                        resolve("OK");
+                    } else if (counter === iterationLimit) {
+                        reject(new Error("Timeout"));
+                    } else {
+                        counter += 1;
+                        setTimeout(check, 1000, resolve, reject);
+                    }
+                }, reject); //Catch any check exceptions;
+
+            });
+
+        }
+
+        var appRouteGuidList = [];
+        var appRouteGuidMap = {};
+
+        return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
+
+            if (result.total_results === 0) {
+                return new Promise(function check(resolve, reject) {
+                    reject(new Error("No App"));
+                });
             }
 
-            return recursiveRemoveRoutes(token_type, access_token, result);
+            var i = 0;
+            for (i = 0; i < result.resources.length; i++) {
+                appRouteGuidList.push(result.resources[i].metadata.guid);
+            }
+
+            return recursiveGetAppRoutes(token_type, access_token, appRouteGuidList);
+        }).then(function (result) {
+            appRouteGuidMap = result;
+            //console.log(appRouteGuidMap);
+            return recursiveGetRoutes(token_type, access_token);
+        }).then(function (result) {
+            console.log(result.length);
+
+            console.log("Routes to not remove");
+            var i = 0;
+            for (i = 0; i < result.length; i++) {
+
+                if (appRouteGuidMap[result[i]] !== undefined) {
+                    console.log(i + " " + result[i]);
+                }
+
+            }
+
+            return recursiveRemoveRoutes(token_type, access_token, appRouteGuidMap, result);
         }).then(function () {
             expect(true).to.equal(true);
         }).catch(function (reason) {
@@ -243,121 +325,3 @@ describe("Cloud Foundry Routes", function () {
     });
 
 });
-
-/*
-
-//Remove Route
-//This idea is buggy. It is necessary to paginate. (Loop with promises)
-function removeRoute() {
-
-    var token_endpoint = null;
-    var routesList = [];
-    var page = 1;
-    var routeName = null;
-    var i = 0;
-    var route_guid = null;
-
-    console.log("# Remove a route");
-    return new Promise(function (resolve, reject) {
-
-        CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryRoutes.getRoutes(result.token_type, result.access_token, page).then(function (result) {
-                    return new Promise(function (resolve, reject) {
-                        if (result.total_results === 0) {
-                            return reject("No routes");
-                        }
-                        return resolve(result);
-                    });
-                });
-            });
-        }).then(function (result) {
-            //console.log(result)
-            var total = result.total_results;
-            console.log(total);
-            if (total > 0) {
-                if (total > 50) {
-                    for (i = 0; i < result.resources.length; i++) {
-                        //console.log(i, " " ,result.resources[i].entity.host, "  ", result.resources[i].metadata.guid);
-
-                        routesList.push({
-                            'route': result.resources[i].entity.host,
-                            'guid': result.resources[i].metadata.guid
-                        });
-                    }
-
-                    //TODO: How to do a Loop with promises to paginate?
-                    //Manual pagination for second page
-                    page = 2;
-                    return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                        return CloudFoundryRoutes.getRoutes(result.token_type, result.access_token, page).then(function (result) {
-                            return new Promise(function (resolve, reject) {
-                                if (result.total_results === 0) {
-                                    return reject("No routes");
-                                }
-                                //List
-
-                                for (i = 0; i < result.resources.length; i++) {
-                                    //console.log(i, " " ,result.resources[i].entity.host, "  ", result.resources[i].metadata.guid);
-                                    routesList.push({
-                                        'route': result.resources[i].entity.host,
-                                        'guid': result.resources[i].metadata.guid
-                                    });
-                                }
-
-                                //Show
-                                for (i = 0; i < routesList.length; i++) {
-                                    if (routesList[i].route === routeName) {
-                                        console.log(i + " " + routesList[i].route + " " + routesList[i].guid);
-                                        console.log("FOUND");
-                                        break;
-                                    }
-                                }
-
-                                return resolve(result);
-                            });
-                        });
-                    });
-                }else {
-                    for (i = 0; i < result.resources.length; i++) {
-                        //console.log(i, " " ,result.resources[i].entity.host, "  ", result.resources[i].metadata.guid);
-                        routesList.push({
-                            'route': result.resources[i].entity.host,
-                            'guid': result.resources[i].metadata.guid
-                        });
-                    }
-                }
-
-                return reject("KO, Test 1");
-            }else {
-                return reject("KO, Test 1");
-            }
-        }).then(function () {
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryRoutes.deleteRoute(result.token_type, result.access_token, route_guid);
-            });
-        }).then(function () {
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryRoutes.getRoutes(result.token_type, result.access_token, page).then(function (result) {
-                    return new Promise(function (resolve, reject) {
-                        if (result.total_results === 0) {
-                            return reject("No routes");
-                        }
-                        var total = result.total_results;
-                        console.log(total);
-                        return resolve(result);
-                    });
-                });
-            });
-        }).then(function (result) {
-            return resolve(result);
-        }).catch(function (reason) {
-            console.error("Error: " + reason);
-            return reject(reason);
-        });
-
-    });
-}
-
-*/

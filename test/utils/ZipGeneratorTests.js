@@ -28,7 +28,7 @@ describe("Zip Generator", function () {
 
     });
 
-    it.skip("Generates a large zip", function () {
+    it.skip("[TOOL] Generates a large zip", function () {
 
         var zipName = "staticAppLarge.zip";
 
