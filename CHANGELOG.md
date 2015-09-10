@@ -1,3 +1,12 @@
+## Version 0.7.0 2015-09-10
+
+- Big performance improvement in tests.
+- Remove the usage of process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+- Initial Log support
+
+  37 passing (2m)
+  6 pending
+
 ## Version 0.6.2 2015-09-04
 
 - CloudFoundry.setEndpoint (0.6.1)

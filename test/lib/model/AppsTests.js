@@ -217,7 +217,8 @@ describe("Cloud Foundry Apps", function () {
 
             //console.log("Get routes from current Apps");
 
-            var iterationLimit = 10;
+            //Check maybe the limit is short
+            var iterationLimit = 20;
             var counter = 0;
             var app_guid = null;
             var appRouteGuidMap = {};

@@ -87,7 +87,7 @@ describe("Cloud Foundry Routes", function () {
     });
 
 
-    it("Add a Route", function () {
+    it.skip("Add a Route", function () {
         this.timeout(3500);
 
         var routeName = randomWords() + randomInt(1, 10);
@@ -99,7 +99,7 @@ describe("Cloud Foundry Routes", function () {
     });
 
 
-    it("Remove a Route", function () {
+    it("Remove a Route (Create & Remove)", function () {
         this.timeout(25000);
 
         var route_guid = null;

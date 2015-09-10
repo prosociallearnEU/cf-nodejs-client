@@ -74,15 +74,12 @@ node example.js
 
 # Testing
 
-This project has a test suite to ensure the reability of this project. 
-Try to run the test suite:
+This project has a test suite to ensure the reability of this project. Besides, the project has invested some amount of time in testing phase to be the code with a nice coverage level.
 
 ``` shell
 istanbul cover node_modules/mocha/bin/_mocha -- -R spec
 
 ```
-
-At the moment, the test suite covers the 91.22%
 
 If you have question, [create an issue](https://github.com/jabrena/cf-nodejs-client/issues). 
 
