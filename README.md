@@ -85,6 +85,8 @@ istanbul cover node_modules/mocha/bin/_mocha -- -R spec
 
 Take a look this [doc](https://github.com/jabrena/cf-nodejs-client/blob/master/CHANGELOG.md) to check the evolution of this Client for Cloud foundry.
 
-If you have question, [create an issue](https://github.com/jabrena/cf-nodejs-client/issues). 
+# Issues
+
+If you have any question or doubt, please [create an issue](https://github.com/jabrena/cf-nodejs-client/issues). 
 
 Juan Antonio
