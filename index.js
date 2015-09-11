@@ -13,7 +13,7 @@ var used = [],
  * Library Version
  * @type {String}
  */
-exports.version = '0.0.4';
+exports.version = '0.7.0';
 
 /**
  * Support for Cloud Foundry 
