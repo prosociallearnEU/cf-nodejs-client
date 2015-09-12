@@ -13,18 +13,21 @@ var cf_api_url = nconf.get('CF_API_URL'),
     password = nconf.get('password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
+var CloudFoundrySpaces = require("../../../lib/model/Spaces");
 var CloudFoundryUserProvidedServices = require("../../../lib/model/UserProvidedServices");
 CloudFoundry = new CloudFoundry(cf_api_url);
+CloudFoundrySpaces = new CloudFoundrySpaces(cf_api_url);
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
 
-describe("Cloud foundry User Provided Services", function () {
+describe.only("Cloud foundry User Provided Services", function () {
 
     var token_endpoint = null;
     var token_type = null;
     var access_token = null;
+    var space_guid = null;
 
     before(function () {
-        this.timeout(5000);
+        this.timeout(10000);
 
         return CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
@@ -32,6 +35,9 @@ describe("Cloud foundry User Provided Services", function () {
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
+            return CloudFoundrySpaces.getSpaces(token_type, access_token);
+        }).then(function (result) {
+            space_guid = result.resources[0].metadata.guid;
         });
 
     });
@@ -54,6 +60,21 @@ describe("Cloud foundry User Provided Services", function () {
             service_guid = result.resources[0].metadata.guid;
             return CloudFoundryUserProvidedServices.getService(token_type, access_token, service_guid);
         }).then(function (result) {
+            expect(result.metadata.guid).is.a("string");
+        });
+    });
+
+    it("Create an User Provided Service", function () {
+        this.timeout(3000);
+
+        var service_guid = null;
+        var credentials = {
+            demo : "demo",
+            demo2 : "demo2"
+        };
+
+        return CloudFoundryUserProvidedServices.create(token_type, access_token, "demo", space_guid, credentials).then(function (result) {
+            //console.log(result);
             expect(result.metadata.guid).is.a("string");
         });
     });
