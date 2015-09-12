@@ -17,7 +17,7 @@ var CloudFoundryUserProvidedServices = require("../../../lib/model/UserProvidedS
 CloudFoundry = new CloudFoundry(cf_api_url);
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
 
-describe.only("Cloud foundry User Provided Services", function () {
+describe("Cloud foundry User Provided Services", function () {
 
     var token_endpoint = null;
     var token_type = null;
