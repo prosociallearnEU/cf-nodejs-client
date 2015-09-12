@@ -46,7 +46,7 @@ describe.only("Cloud foundry User Provided Services", function () {
         this.timeout(3000);
 
         return CloudFoundryUserProvidedServices.getServices(token_type, access_token).then(function (result) {
-            //console.log(result.resources);
+            console.log(result.resources);
             expect(result.total_results).is.a("number");
         });
     });
@@ -76,6 +76,17 @@ describe.only("Cloud foundry User Provided Services", function () {
         return CloudFoundryUserProvidedServices.create(token_type, access_token, "demo", space_guid, credentials).then(function (result) {
             //console.log(result);
             expect(result.metadata.guid).is.a("string");
+        });
+    });
+
+    //TODO: Create this tests in a dynamic way.
+    it("Delete an User Provided Service", function () {
+        this.timeout(3000);
+
+        var service_guid = "df9757f9-6a44-40fc-92a5-4a40ba0e0113";
+
+        return CloudFoundryUserProvidedServices.delete(token_type, access_token, service_guid).then(function (result) {
+            expect(true).to.equal(true);
         });
     });
 
