@@ -16,18 +16,26 @@ var used = [],
 exports.version = '0.7.0';
 
 /**
+ * Support for Apps
+ * @type {[type]}
+ */
+var Apps = require('./lib/model/Apps');
+exports.Apps = Apps;
+
+/**
+ * Support for Buildpacks
+ * @type {[type]}
+ */
+var BuildPacks = require('./lib/model/BuildPacks');
+exports.BuildPacks = BuildPacks;
+
+/**
  * Support for Cloud Foundry 
  * @type {[type]}
  */
 var CloudFoundry = require('./lib/model/CloudFoundry');
 exports.CloudFoundry = CloudFoundry;
 
-/**
- * Support for Apps
- * @type {[type]}
- */
-var Apps = require('./lib/model/Apps');
-exports.Apps = Apps;
 
 /**
  * Support for Domains
@@ -49,6 +57,13 @@ exports.Events = Events;
  */
 var Jobs = require('./lib/model/Jobs');
 exports.Jobs = Jobs;
+
+/**
+ * Support for Logs
+ * @type {[type]}
+ */
+var Logs = require('./lib/model/Logs');
+exports.Logs = Logs;
 
 /**
  * Support for Organizations
@@ -77,3 +92,10 @@ exports.Spaces = Spaces;
  */
 var Stacks = require('./lib/model/Stacks');
 exports.Stacks = Stacks;
+
+/**
+ * Support for User Provided Services
+ * @type {[type]}
+ */
+var UserProvidedServices = require('./lib/model/UserProvidedServices');
+exports.Stacks = UserProvidedServices;
