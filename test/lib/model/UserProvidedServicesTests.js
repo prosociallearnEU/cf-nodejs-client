@@ -36,12 +36,25 @@ describe.only("Cloud foundry User Provided Services", function () {
 
     });
 
-    it("The platform returns User Provided Services", function () {
+    it("The platform returns a list of User Provided Services", function () {
         this.timeout(3000);
 
         return CloudFoundryUserProvidedServices.getServices(token_type, access_token).then(function (result) {
             //console.log(result.resources);
             expect(result.total_results).is.a("number");
+        });
+    });
+
+    it("The platform returns the first User Provided Service", function () {
+        this.timeout(3000);
+
+        var service_guid = null;
+
+        return CloudFoundryUserProvidedServices.getServices(token_type, access_token).then(function (result) {
+            service_guid = result.resources[0].metadata.guid;
+            return CloudFoundryUserProvidedServices.getService(token_type, access_token, service_guid);
+        }).then(function (result) {
+            expect(result.metadata.guid).is.a("string");
         });
     });
 
