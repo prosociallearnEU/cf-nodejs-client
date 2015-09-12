@@ -17,8 +17,6 @@ This project provides a simple client library to interact with the [Cloud Foundr
 * Stacks
 * User Provided Services
 
-Take a look the [Tests cases](https://github.com/jabrena/cf-nodejs-client/tree/master/test/) developed with [Mocha](https://mochajs.org/) & [Chai](http://chaijs.com/api/bdd/) to understand some stuff about [Cloud Foundry](https://www.cloudfoundry.org/)  and the usage of this client.
-
 # Applications
 
 [Node.js](https://nodejs.org/) with [Express](http://expressjs.com/) are a great combination to develop Web applications. If you [observe the Sinatra market](https://www.google.com/trends/explore#q=python%20flask%2C%20node%20express%2C%20go%20martini%2C%20java%20spark%2C%20java%20spring%20boot&cmpt=q&tz=Etc%2FGMT-2), you will notice that the community goes in that address. This library could be useful for you to develop a Web Application to interact with a Cloud Foundry Instance.
@@ -76,7 +74,9 @@ node example.js
 
 # Testing
 
-This project has a test suite to ensure the reability of this project. Besides, the project has invested some amount of time in testing phase to be the code with a nice coverage level.
+This project has a test suite to ensure the reability of this project. Take a look the [Tests cases](https://github.com/jabrena/cf-nodejs-client/tree/master/test/) developed with [Mocha](https://mochajs.org/) & [Chai](http://chaijs.com/api/bdd/) to understand some stuff about [Cloud Foundry](https://www.cloudfoundry.org/)  and the usage of this client.
+
+Besides, the project has invested some amount of time in testing phase to be the code with a nice coverage level.
 
 ``` shell
 istanbul cover node_modules/mocha/bin/_mocha -- -R spec
