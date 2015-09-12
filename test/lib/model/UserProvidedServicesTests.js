@@ -1,5 +1,5 @@
 /*jslint node: true*/
-/*global describe: true, it: true*/
+/*global describe: true, before:true, it: true*/
 "use strict";
 
 var chai = require("chai"),
@@ -13,11 +13,11 @@ var cf_api_url = nconf.get('CF_API_URL'),
     password = nconf.get('password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
-var CloudFoundryStacks = require("../../../lib/model/Stacks");
+var CloudFoundryUserProvidedServices = require("../../../lib/model/UserProvidedServices");
 CloudFoundry = new CloudFoundry(cf_api_url);
-CloudFoundryStacks = new CloudFoundryStacks(cf_api_url);
+CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
 
-describe("Cloud foundry Stacks", function () {
+describe.only("Cloud foundry User Provided Services", function () {
 
     var token_endpoint = null;
     var token_type = null;
@@ -36,10 +36,11 @@ describe("Cloud foundry Stacks", function () {
 
     });
 
-    it("The platform returns Stacks installed", function () {
+    it("The platform returns User Provided Services", function () {
         this.timeout(3000);
 
-        return CloudFoundryStacks.getStacks(token_type, access_token).then(function (result) {
+        return CloudFoundryUserProvidedServices.getServices(token_type, access_token).then(function (result) {
+            //console.log(result.resources);
             expect(result.total_results).is.a("number");
         });
     });

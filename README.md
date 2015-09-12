@@ -7,13 +7,15 @@
 This project provides a simple client library to interact with the [Cloud Foundry REST API](http://apidocs.cloudfoundry.org/) using [Node.js](https://nodejs.org/). The client provides objects to retrieve information about the following concepts:
 
 * Apps
+* BuildPacks
+* Domains
+* Jobs
+* Logs
+* Organizations
 * Routes
 * Spaces
-* Domains
-* Organizations
 * Stacks
-* Logs
-* Jobs
+* User Provided Services
 
 Take a look the [Tests cases](https://github.com/jabrena/cf-nodejs-client/tree/master/test/) developed with [Mocha](https://mochajs.org/) & [Chai](http://chaijs.com/api/bdd/) to understand some stuff about [Cloud Foundry](https://www.cloudfoundry.org/)  and the usage of this client.
 
