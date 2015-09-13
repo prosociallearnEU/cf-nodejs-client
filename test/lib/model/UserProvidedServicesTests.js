@@ -19,7 +19,7 @@ CloudFoundry = new CloudFoundry(cf_api_url);
 CloudFoundrySpaces = new CloudFoundrySpaces(cf_api_url);
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
 
-describe.only("Cloud foundry User Provided Services", function () {
+describe("Cloud foundry User Provided Services", function () {
 
     var token_endpoint = null;
     var token_type = null;
@@ -46,7 +46,7 @@ describe.only("Cloud foundry User Provided Services", function () {
         this.timeout(3000);
 
         return CloudFoundryUserProvidedServices.getServices(token_type, access_token).then(function (result) {
-            console.log(result.resources);
+            //console.log(result.resources);
             expect(result.total_results).is.a("number");
         });
     });
@@ -64,7 +64,7 @@ describe.only("Cloud foundry User Provided Services", function () {
         });
     });
 
-    it("Create an User Provided Service", function () {
+    it.skip("Create an User Provided Service", function () {
         this.timeout(3000);
 
         var service_guid = null;
@@ -80,7 +80,7 @@ describe.only("Cloud foundry User Provided Services", function () {
     });
 
     //TODO: Create this tests in a dynamic way.
-    it("Delete an User Provided Service", function () {
+    it.skip("Delete an User Provided Service", function () {
         this.timeout(3000);
 
         var service_guid = "df9757f9-6a44-40fc-92a5-4a40ba0e0113";
