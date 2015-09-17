@@ -4,6 +4,7 @@
 
 var chai = require("chai"),
     expect = require("chai").expect;
+var randomWords = require('random-words');
 
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
@@ -42,6 +43,10 @@ describe("Cloud foundry User Provided Services", function () {
 
     });
 
+    function randomInt(low, high) {
+        return Math.floor(Math.random() * (high - low) + low);
+    }
+
     it("The platform returns a list of User Provided Services", function () {
         this.timeout(3000);
 
@@ -55,7 +60,6 @@ describe("Cloud foundry User Provided Services", function () {
         this.timeout(3000);
 
         var service_guid = null;
-
         return CloudFoundryUserProvidedServices.getServices(token_type, access_token).then(function (result) {
             service_guid = result.resources[0].metadata.guid;
             return CloudFoundryUserProvidedServices.getService(token_type, access_token, service_guid);
@@ -67,25 +71,37 @@ describe("Cloud foundry User Provided Services", function () {
     it.skip("Create an User Provided Service", function () {
         this.timeout(3000);
 
+        var serviceName = "s" + randomWords() + randomInt(1, 100);
         var service_guid = null;
         var credentials = {
-            demo : "demo",
-            demo2 : "demo2"
+            dbname : "demo",
+            host : "8.8.8.8",
+            port : "3306", 
+            username : "root",
+            password : "123456"
         };
-
-        return CloudFoundryUserProvidedServices.create(token_type, access_token, "demo", space_guid, credentials).then(function (result) {
-            //console.log(result);
+        return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         });
     });
 
-    //TODO: Create this tests in a dynamic way.
-    it.skip("Delete an User Provided Service", function () {
+    it("Create & Delete an User Provided Service", function () {
         this.timeout(3000);
 
-        var service_guid = "df9757f9-6a44-40fc-92a5-4a40ba0e0113";
-
-        return CloudFoundryUserProvidedServices.delete(token_type, access_token, service_guid).then(function (result) {
+        var serviceName = "s" + randomWords() + randomInt(1, 100);
+        var service_guid = null;
+        var credentials = {
+            dbname : "demo",
+            host : "8.8.8.8",
+            port : "3306", 
+            username : "root",
+            password : "123456"
+        };
+        return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials).then(function (result) {
+            var service_guid = result.metadata.guid;
+            expect(service_guid).is.a("string");
+            return CloudFoundryUserProvidedServices.delete(token_type, access_token, service_guid);
+        }).then(function (result) {
             expect(true).to.equal(true);
         });
     });
