@@ -47,11 +47,22 @@ describe.only("Cloud foundry Service Bindings", function () {
         this.timeout(3000);
 
         return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token).then(function (result) {
-            //console.log(result.resources[0].entity.credentials);
+            //console.log(result.resources[0].metadata.guid);
             expect(result.total_results).is.a("number");
         });
     });
 
+    it("The platform returns the first Service Bindings", function () {
+        this.timeout(3000);
 
+        var serviceBinding_guid = null;
+        return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token).then(function (result) {
+            serviceBinding_guid = result.resources[0].metadata.guid;
+            return CloudFoundryServiceBindings.getServiceBinding(token_type, access_token, serviceBinding_guid);
+        }).then(function (result) {
+            //console.log(result);
+            expect(result.metadata.guid).is.a("string");
+        });
+    });
 
 });
