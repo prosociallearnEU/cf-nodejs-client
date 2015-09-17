@@ -13,6 +13,7 @@ This project provides a simple client library to interact with the [Cloud Foundr
 * Logs
 * Organizations
 * Routes
+* Service Bindings
 * Spaces
 * Stacks
 * User Provided Services
