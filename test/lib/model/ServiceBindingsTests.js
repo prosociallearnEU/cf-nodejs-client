@@ -51,7 +51,6 @@ describe.only("Cloud foundry Service Bindings", function () {
         this.timeout(3000);
 
         return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token).then(function (result) {
-            console.log(result.resources[1]);
             //console.log(result.resources[0].metadata.guid);
             //console.log(result.resources[0].entity.credentials);
             expect(result.total_results).is.a("number");
