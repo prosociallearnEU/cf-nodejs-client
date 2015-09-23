@@ -14,11 +14,15 @@ var cf_api_url = nconf.get('CF_API_URL'),
     password = nconf.get('password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
+var CloudFoundryApps = require("../../../lib/model/Apps");
 var CloudFoundrySpaces = require("../../../lib/model/Spaces");
+var CloudFoundryUserProvidedServices = require("../../../lib/model/UserProvidedServices");
 var CloudFoundryServiceBindings = require("../../../lib/model/ServiceBindings");
 CloudFoundry = new CloudFoundry(cf_api_url);
+CloudFoundryApps = new CloudFoundryApps(cf_api_url);
 CloudFoundrySpaces = new CloudFoundrySpaces(cf_api_url);
 CloudFoundryServiceBindings = new CloudFoundryServiceBindings(cf_api_url);
+CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
 
 describe.only("Cloud foundry Service Bindings", function () {
 
@@ -47,7 +51,9 @@ describe.only("Cloud foundry Service Bindings", function () {
         this.timeout(3000);
 
         return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token).then(function (result) {
+            //console.log(result.resources[0]);
             //console.log(result.resources[0].metadata.guid);
+            //console.log(result.resources[0].entity.credentials);
             expect(result.total_results).is.a("number");
         });
     });
@@ -62,6 +68,33 @@ describe.only("Cloud foundry Service Bindings", function () {
         }).then(function (result) {
             //console.log(result);
             expect(result.metadata.guid).is.a("string");
+        });
+    });
+
+    it.skip("The platform associate a Service with an App", function () {
+        this.timeout(3000);
+
+        var serviceBinding_guid = null;
+        var service_guid = null;
+        var app_guid = null;
+        return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token).then(function (result) {
+            serviceBinding_guid = result.resources[0].metadata.guid;
+            return CloudFoundryServiceBindings.getServiceBinding(token_type, access_token, serviceBinding_guid);
+        }).then(function (result) {
+            //console.log(result.entity.credentials);
+            expect(result.metadata.guid).is.a("string");
+            return CloudFoundryUserProvidedServices.getServices(token_type, access_token);
+        }).then(function (result) {
+            service_guid = result.resources[0].metadata.guid;
+            return CloudFoundryApps.getApps(token_type, access_token);
+        }).then(function (result) {
+            //console.log(result.resources[0]);
+            app_guid = result.resources[0].metadata.guid;
+            //console.log(app_guid);
+            return CloudFoundryServiceBindings.associateServiceWithApp(token_type, access_token, service_guid, app_guid);
+        }).then(function (result) {
+            //console.log(result);
+            expect(true).to.equal(true);
         });
     });
 
