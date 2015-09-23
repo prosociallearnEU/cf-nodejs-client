@@ -51,7 +51,7 @@ describe.only("Cloud foundry Service Bindings", function () {
         this.timeout(3000);
 
         return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token).then(function (result) {
-            //console.log(result.resources[0]);
+            console.log(result.resources[1]);
             //console.log(result.resources[0].metadata.guid);
             //console.log(result.resources[0].entity.credentials);
             expect(result.total_results).is.a("number");
@@ -94,6 +94,18 @@ describe.only("Cloud foundry Service Bindings", function () {
             return CloudFoundryServiceBindings.associateServiceWithApp(token_type, access_token, service_guid, app_guid);
         }).then(function (result) {
             //console.log(result);
+            expect(true).to.equal(true);
+        });
+    });
+
+    it.skip("The platform Remove a Service Binding", function () {
+        this.timeout(3000);
+
+        var serviceBinding_guid = null;
+        return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token).then(function (result) {
+            serviceBinding_guid = result.resources[1].metadata.guid;
+            return CloudFoundryServiceBindings.removeServiceBinding(token_type, access_token, serviceBinding_guid);
+        }).then(function (result) {
             expect(true).to.equal(true);
         });
     });
