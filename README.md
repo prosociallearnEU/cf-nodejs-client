@@ -103,9 +103,9 @@ istanbul cover node_modules/mocha/bin/_mocha -- -R spec
 
 ```
 
-**Continous integration**
+**Continous integration:**
 
-[Travis CI](https://travis-ci.org/jabrena/cf-nodejs-client/)
+[https://travis-ci.org/jabrena/cf-nodejs-client/](https://travis-ci.org/jabrena/cf-nodejs-client/)
 
 
 # Versions
