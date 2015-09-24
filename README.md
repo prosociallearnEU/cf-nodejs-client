@@ -22,8 +22,13 @@ The development doesn't cover the whole API. This library put the focus in the A
 
 * Create an App
 * Upload zip with source code
-* Start | Stop
+* Create an User Provided Services
+* Associate Apps with User Provided Services
+* Start | Stop an App
 * Logs management
+* Scale Apps (Pending)
+* Remove Apps
+* Remove User Provided Services
 
 # Applications
 
