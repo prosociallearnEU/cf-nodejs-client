@@ -126,6 +126,11 @@ describe("Cloud foundry Service Bindings", function () {
         };
         var staticBuildPack = BuildPacks.get("static");
         var app_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };      
         //Service
         var serviceName = "s" + randomWords() + randomInt(1, 100);
         var service_guid = null;
@@ -148,7 +153,7 @@ describe("Cloud foundry Service Bindings", function () {
                 throw new Error("Exist the app: " + appName);
             }
 
-            return CloudFoundryApps.createApp(token_type, access_token, appName, space_guid, staticBuildPack).then(function (result) {
+            return CloudFoundryApps.create(token_type, access_token, appOptions).then(function (result) {  
                 return new Promise(function (resolve) {
                     //console.log(result);
                     app_guid = result.metadata.guid;

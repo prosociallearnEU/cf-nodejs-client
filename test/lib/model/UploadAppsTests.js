@@ -74,12 +74,13 @@ describe("Cloud Foundry Upload App process", function () {
         callback();
     }
 
-    function createApp(token_type, access_token, domain_guid, space_guid, appName, buildPack) {
+    function createApp(token_type, access_token, domain_guid, appOptions) {
 
         var app_guid = null;
         var routeName = null;
         var route_guid = null;
         var route_create_flag = false;
+        var appName = appOptions.name;
 
         return new Promise(function (resolve, reject) {
 
@@ -87,6 +88,7 @@ describe("Cloud Foundry Upload App process", function () {
                 'q': 'name:' + appName,
                 'inline-relations-depth': 1
             };
+
             return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter).then(function (result) {
 
                 //If exist the application, Reject
@@ -94,7 +96,7 @@ describe("Cloud Foundry Upload App process", function () {
                     return reject("Exist the app:" + appName);
                 }
 
-                return CloudFoundryApps.createApp(token_type, access_token, appName, space_guid, buildPack).then(function (result) {
+                return CloudFoundryApps.create(token_type, access_token, appOptions).then(function (result) {
                     return new Promise(function (resolve) {
                         //console.log(result);
                         app_guid = result.metadata.guid;
@@ -165,7 +167,7 @@ describe("Cloud Foundry Upload App process", function () {
                 //console.log(counter);
                 if (result.resources[0].entity.package_state === "STAGED") {
                     resolve(result);
-                } else if (counter === 10) {
+                } else if (counter === 15) {
                     reject(new Error("Timeout"));
                 } else {
                     //console.log("next try");
@@ -188,7 +190,7 @@ describe("Cloud Foundry Upload App process", function () {
                 //console.log(counter);
                 if (result["0"].state === "RUNNING") {
                     resolve(result);
-                } else if (counter === 5) {
+                } else if (counter === 15) {
                     reject(new Error("Timeout"));
                 } else {
                     //console.log("next try");
@@ -211,8 +213,13 @@ describe("Cloud Foundry Upload App process", function () {
         var weight = 1;//MB
         var compressionRate = 0;//No compression
         var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };
 
-        return createApp(token_type, access_token, domain_guid, space_guid, appName, staticBuildPack).then(function (result) {
+        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -251,8 +258,13 @@ describe("Cloud Foundry Upload App process", function () {
         var weight = 1;//MB
         var compressionRate = 0;//No compression
         var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };        
 
-        return createApp(token_type, access_token, domain_guid, space_guid, appName, staticBuildPack).then(function (result) {
+        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -319,8 +331,13 @@ describe("Cloud Foundry Upload App process", function () {
         var job_guid = null;
         var job_status = null;
         var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };         
 
-        return createApp(token_type, access_token, domain_guid, space_guid, appName, staticBuildPack).then(function (result) {
+        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -443,8 +460,13 @@ describe("Cloud Foundry Upload App process", function () {
         var weight = 5;//MB
         var compressionRate = 0;//No compression
         var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };           
 
-        return createApp(token_type, access_token, domain_guid, space_guid, appName, staticBuildPack).then(function (result) {
+        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -485,8 +507,13 @@ describe("Cloud Foundry Upload App process", function () {
         var weight = 10;//MB
         var compressionRate = 0;//No compression
         var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };           
 
-        return createApp(token_type, access_token, domain_guid, space_guid, appName, staticBuildPack).then(function (result) {
+        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -527,8 +554,13 @@ describe("Cloud Foundry Upload App process", function () {
         var weight = 20;//MB
         var compressionRate = 0;//No compression
         var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };           
 
-        return createApp(token_type, access_token, domain_guid, space_guid, appName, staticBuildPack).then(function (result) {
+        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -569,8 +601,13 @@ describe("Cloud Foundry Upload App process", function () {
         var weight = 50;//MB
         var compressionRate = 0;//No compression
         var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };           
 
-        return createApp(token_type, access_token, domain_guid, space_guid, appName, staticBuildPack).then(function (result) {
+        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -611,8 +648,13 @@ describe("Cloud Foundry Upload App process", function () {
         var weight = 100;//MB
         var compressionRate = 0;//No compression
         var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };           
 
-        return createApp(token_type, access_token, domain_guid, space_guid, appName, staticBuildPack).then(function (result) {
+        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);

@@ -79,7 +79,7 @@ describe("Cloud Foundry Apps", function () {
         });
     });
 
-    it("The platform returns a Summary from an App", function () {
+    it.skip("The platform returns a Summary from an App", function () {
         this.timeout(4500);
 
         var app_guid = null;
@@ -104,7 +104,7 @@ describe("Cloud Foundry Apps", function () {
         });
     });
 
-    it("The platform returns Stats from an App", function () {
+    it.skip("The platform returns Stats from an App", function () {
         this.timeout(3500);
 
         var app_guid = null;
@@ -128,7 +128,7 @@ describe("Cloud Foundry Apps", function () {
         });
     });
 
-    it("The platform returns instances from an App", function () {
+    it.skip("The platform returns instances from an App", function () {
         this.timeout(3500);
 
         var app_guid = null;
@@ -152,7 +152,7 @@ describe("Cloud Foundry Apps", function () {
         });
     });
 
-    it("Start an App", function () {
+    it.skip("Start an App", function () {
         this.timeout(60000);
 
         //Inner function used to check when an application run in the system.
