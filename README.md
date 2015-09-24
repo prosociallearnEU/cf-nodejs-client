@@ -22,7 +22,7 @@ This project provides a simple client library to interact with the [Cloud Foundr
 
 [Node.js](https://nodejs.org/) with [Express](http://expressjs.com/) are a great combination to develop Web applications. If you <a href="https://www.google.com/trends/explore#q=python%20flask%2C%20node%20express%2C%20go%20pat%2C%20java%20spark%2C%20ruby%20sinatra&cmpt=q&tz=Etc%2FGMT-2" target="_blank">observe the Sinatra market</a>, you will notice that the community goes in that address. This library could be useful for you to develop a Web Application to interact with a Cloud Foundry Instance.
 
-The development doesn't cover the whole API. This library put the focus in the Application life cycle:
+The development doesn't cover the whole API. This library puts the focus in the Application life cycle to handle the following tasks:
 
 * Create an App
 * Upload zip with source code
