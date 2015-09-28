@@ -13,7 +13,7 @@ var used = [],
  * Library Version
  * @type {String}
  */
-exports.version = '0.7.0';
+exports.version = '0.8.0';
 
 /**
  * Support for Apps
@@ -78,6 +78,13 @@ exports.Organizations = Organizations;
  */
 var Routes = require('./lib/model/Routes');
 exports.Routes = Routes;
+
+/**
+ * Support for ServiceBindings
+ * @type {[type]}
+ */
+var ServiceBindings = require('./lib/model/ServiceBindings');
+exports.ServiceBindings = ServiceBindings;
 
 /**
  * Support for Spaces
