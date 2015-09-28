@@ -1,3 +1,11 @@
+## Version 0.8.0 2015-09-28
+
+- Adding support for User Provided Services
+- Adding support for Service Binding
+
+  39 passing (1m)
+  14 pending
+
 ## Version 0.7.0 2015-09-10
 
 - Big performance improvement in tests.
