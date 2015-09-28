@@ -190,4 +190,49 @@ describe("Cloud foundry Service Bindings", function () {
         });
     });
 
+    //Note: it is necessary to stop->start to apply the change with the service.
+    it.skip("[TOOL] Given an app, bind a service.", function () {
+        this.timeout(3000);
+
+        var serviceBinding_guid = null;
+        var app_guid = null;
+        var app_name = "nodehwmysql";
+        var filter = {
+            'q': 'name:' + app_name,
+            'inline-relations-depth': 1
+        };
+        var ups_name = 'mySQLService';
+        var service_guid = null             
+        return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter).then(function (result) {
+            app_guid = result.resources[0].metadata.guid;
+            console.log(app_guid);
+            return CloudFoundryUserProvidedServices.getServices(token_type, access_token);
+        }).then(function (result) {
+            //console.log(result.resources);
+            return new Promise(function (resolve, reject) {
+                expect(result.total_results).to.be.a('number');
+                var i = 0;
+                for (i = 0; i < result.resources.length; i++) {
+                    if (result.resources[i].entity.name === ups_name) {
+                        service_guid = result.resources[i].metadata.guid;
+                        return resolve(service_guid);
+                    }
+                }
+                return reject("Not found User Provided Service.");
+            });
+        }).then(function (result) {
+            console.log(result);
+            return CloudFoundryServiceBindings.associateServiceWithApp(token_type, access_token, service_guid, app_guid).then(function (result) {
+                return new Promise(function (resolve) {
+                    //console.log(result);
+                    serviceBinding_guid = result.metadata.guid;
+                    return resolve(serviceBinding_guid);
+                });
+            });
+        }).then(function (result) {
+            console.log(result);
+            expect(true).to.equal(true);
+        });
+    });
+
 });
