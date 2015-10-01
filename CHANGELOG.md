@@ -1,3 +1,10 @@
+## Version 0.8.0 2015-10-01
+
+- Adding adding method in the whole project: setEndPoint
+
+  39 passing (2m)
+  14 pending
+
 ## Version 0.8.0 2015-09-28
 
 - Adding support for User Provided Services
