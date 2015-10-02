@@ -6,9 +6,9 @@
   "license": "Apache 2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jabrena/cf-nodejs-client.git"
+    "url": "git+https://github.com/prosociallearnEU/cf-nodejs-client.git"
   },
-  "homepage": "https://github.com/jabrena/cf-nodejs-client#readme",
+  "homepage": "https://github.com/prosociallearnEU/cf-nodejs-client#readme",
   "main": "index.js",
   "scripts": {
     "preversion": "mocha test",
@@ -31,25 +31,24 @@
     "cf client"
   ],
   "bugs": {
-    "url": "https://github.com/jabrena/cf-nodejs-client/issues"
+    "url": "https://github.com/prosociallearnEU/cf-nodejs-client/issues"
   },
   "dependencies": {
-    "request": "2.61.0",
-    "restler": "3.3.0"
+    "request": "2.64.0",
+    "restler": "3.4.0"
   },
-  "devDependencies": {
+  "devDependencies": { 
+    "mocha": "2.3.3",    
+    "chai": "3.3.0",
+    "chai-as-promised": "5.1.0",    
+    "istanbul": "0.3.21",
+    "nconf": "0.8.0",
+    "random-words": "0.0.1",   
     "archiver": "0.15.1",
-    "chai": "3.2.0",
-    "chai-as-promised": "5.1.0",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
+    "grunt-jsdoc": "0.6.10",
     "grunt-connect": "0.2.0",
-    "grunt-jsdoc": "0.6.8",
-    "grunt-open": "0.2.3",
-    "istanbul": "0.3.19",
-    "mocha": "2.3.2",
-    "nconf": "0.7.2",
-    "phantom": "0.7.2",
-    "random-words": "0.0.1"
+    "grunt-open": "0.2.3"
   }
 }
