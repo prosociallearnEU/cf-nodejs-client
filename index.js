@@ -1,8 +1,3 @@
-/*!
- * cf-nodejs-client
- * Copyright(c) 2015 Juan Antonio Breña Moral
- * MIT Licensed
- */
 /*jslint node: true*/
 'use strict';
 
