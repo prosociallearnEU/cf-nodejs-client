@@ -1,3 +1,10 @@
+## Version 0.8.3 2015-10-19
+
+- Adding the capability to add filters in a Service Binding Search.
+
+  39 passing (1m)
+  15 pending
+
 ## Version 0.8.2 2015-10-19
 
 - Minor fix in index.js to export UserProvidedServices in the right way.
