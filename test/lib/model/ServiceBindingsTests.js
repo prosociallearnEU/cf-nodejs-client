@@ -26,7 +26,7 @@ CloudFoundryServiceBindings = new CloudFoundryServiceBindings(cf_api_url);
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
 BuildPacks = new BuildPacks();
 
-describe.only("Cloud foundry Service Bindings", function () {
+describe("Cloud foundry Service Bindings", function () {
 
     var token_endpoint = null;
     var token_type = null;
