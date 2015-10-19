@@ -26,7 +26,7 @@ CloudFoundryServiceBindings = new CloudFoundryServiceBindings(cf_api_url);
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
 BuildPacks = new BuildPacks();
 
-describe("Cloud foundry Service Bindings", function () {
+describe.only("Cloud foundry Service Bindings", function () {
 
     var token_endpoint = null;
     var token_type = null;
@@ -62,6 +62,21 @@ describe("Cloud foundry Service Bindings", function () {
             expect(result.total_results).is.a("number");
         });
     });
+
+    it.skip("The platform returns a list of Service Bindings with a filter", function () {
+        this.timeout(3000);
+
+        var filter = {
+            'q': 'app_guid:' + "65be2a2d-a643-4e01-b33d-8755d5934ae6"
+        };
+        return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token, filter).then(function (result) {
+            console.log(result.resources);
+            //console.log(result.resources[0].metadata.guid);
+            //console.log(result.resources[0].entity.credentials);
+            expect(result.total_results).is.a("number");
+        });
+    });
+
 
     it("The platform returns the first Service Bindings", function () {
         this.timeout(3000);
