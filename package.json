@@ -50,5 +50,9 @@
     "grunt-jsdoc": "0.6.10",
     "grunt-connect": "0.2.0",
     "grunt-open": "0.2.3"
-  }
+  },
+  "files": [
+    "index.js",
+    "lib"
+  ]
 }

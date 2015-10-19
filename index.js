@@ -8,7 +8,7 @@ var used = [],
  * Library Version
  * @type {String}
  */
-exports.version = '0.8.0';
+exports.version = '0.8.2';
 
 /**
  * Support for Apps
@@ -100,4 +100,4 @@ exports.Stacks = Stacks;
  * @type {[type]}
  */
 var UserProvidedServices = require('./lib/model/UserProvidedServices');
-exports.Stacks = UserProvidedServices;
+exports.UserProvidedServices = UserProvidedServices;

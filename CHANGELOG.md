@@ -1,4 +1,11 @@
-## Version 0.8.0 2015-10-01
+## Version 0.8.2 2015-10-19
+
+- Minor fix in index.js to export UserProvidedServices in the right way.
+
+  39 passing (2m)
+  14 pending
+
+## Version 0.8.1 2015-10-01
 
 - Adding adding method in the whole project: setEndPoint
 
