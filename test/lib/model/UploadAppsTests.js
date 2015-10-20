@@ -35,7 +35,7 @@ var fs = require('fs');
 var ZipGenerator = require('../../utils/ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
-describe("Cloud Foundry Upload App process", function () {
+describe.only("Cloud Foundry Upload App process", function () {
 
     var token_endpoint = null;
     var token_type = null;
@@ -203,6 +203,43 @@ describe("Cloud Foundry Upload App process", function () {
 
     }
 
+    it("Create a Static App, Update the App & Remove app", function () {
+        this.timeout(40000);
+
+        var app_guid = null;
+        var appName = "app2" + randomWords() + randomInt(1, 100);
+        var staticBuildPack = BuildPacks.get("static");
+        var nodeBuildPack = BuildPacks.get("nodejs");
+        var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };
+
+        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).is.a("string");
+            expect(result.entity.buildpack).to.equal(staticBuildPack);
+
+            //Update an App
+            appOptions = {
+                "buildpack" : nodeBuildPack
+            };
+            return CloudFoundryApps.update(token_type, access_token, app_guid, appOptions);
+        }).then(function (result) {
+            expect(result.entity.buildpack).to.equal(nodeBuildPack);
+            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
+        }).then(function (result) {
+            route_guid = result.resources[0].metadata.guid;
+            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+        }).then(function () {
+            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+        }).then(function () {
+            expect(true).to.equal(true);
+        });
+    });
+
     it("Create a Static App, Upload 1MB zip & Remove app", function () {
         this.timeout(40000);
 
@@ -249,7 +286,7 @@ describe("Cloud Foundry Upload App process", function () {
     });
 
     it("Create a Static App, Upload 1MB zip, Start the App & Remove", function () {
-        this.timeout(40000);
+        this.timeout(50000);
 
         var app_guid = null;
         var appName = "app2" + randomWords() + randomInt(1, 100);
