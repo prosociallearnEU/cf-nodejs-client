@@ -98,12 +98,37 @@ describe("Cloud foundry User Provided Services", function () {
             password : "123456"
         };
         return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials).then(function (result) {
-            var service_guid = result.metadata.guid;
+            service_guid = result.metadata.guid;
             expect(service_guid).is.a("string");
             return CloudFoundryUserProvidedServices.delete(token_type, access_token, service_guid);
         }).then(function (result) {
             expect(true).to.equal(true);
         });
     });
+
+    it("Create, Search & Delete an User Provided Service", function () {
+        this.timeout(3000);
+
+        var serviceName = "s" + randomWords() + randomInt(1, 100);
+        var service_guid = null;
+        var credentials = {
+            dbname : "demo",
+            host : "8.8.8.8",
+            port : "3306", 
+            username : "root",
+            password : "123456"
+        };
+        return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials).then(function (result) {
+            service_guid = result.metadata.guid;
+            expect(service_guid).is.a("string");
+            return CloudFoundryUserProvidedServices.getServiceBindings(token_type, access_token, service_guid);
+        }).then(function (result) {   
+            expect(result.total_results).is.a("number"); 
+            expect(result.total_results).to.equal(0);     
+            return CloudFoundryUserProvidedServices.delete(token_type, access_token, service_guid);
+        }).then(function (result) {
+            expect(true).to.equal(true);
+        });
+    });    
 
 });

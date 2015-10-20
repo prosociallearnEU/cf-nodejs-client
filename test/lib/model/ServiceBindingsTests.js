@@ -26,7 +26,7 @@ CloudFoundryServiceBindings = new CloudFoundryServiceBindings(cf_api_url);
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
 BuildPacks = new BuildPacks();
 
-describe("Cloud foundry Service Bindings", function () {
+describe.only("Cloud foundry Service Bindings", function () {
 
     var token_endpoint = null;
     var token_type = null;
@@ -63,21 +63,6 @@ describe("Cloud foundry Service Bindings", function () {
         });
     });
 
-    it.skip("The platform returns a list of Service Bindings with a filter", function () {
-        this.timeout(3000);
-
-        var filter = {
-            'q': 'app_guid:' + "65be2a2d-a643-4e01-b33d-8755d5934ae6"
-        };
-        return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token, filter).then(function (result) {
-            //console.log(result.resources);
-            //console.log(result.resources[0].metadata.guid);
-            //console.log(result.resources[0].entity.credentials);
-            expect(result.total_results).is.a("number");
-        });
-    });
-
-
     it("The platform returns the first Service Bindings", function () {
         this.timeout(3000);
 
@@ -88,6 +73,63 @@ describe("Cloud foundry Service Bindings", function () {
         }).then(function (result) {
             //console.log(result);
             expect(result.metadata.guid).is.a("string");
+        });
+    });
+
+    it("The platform returns a list of Service Bindings filtering by app_guid", function () {
+        this.timeout(3000);
+
+        var app_guid = null;
+
+        return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
+            return new Promise(function (resolve, reject) {
+                expect(result.total_results).to.be.a('number');
+                if (result.total_results > 0) {
+                    app_guid = result.resources[0].metadata.guid;
+                    return resolve();
+                } else {
+                    return reject("Not found App.");
+                }
+            });
+        }).then(function (result) {
+            //app_guid
+            var filter = {
+                'q': 'app_guid:' + app_guid
+            };            
+            return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token, filter);
+        }).then(function (result) {
+            //console.log(result.resources);
+            //console.log(result.resources[0].metadata.guid);
+            //console.log(result.resources[0].entity.credentials);
+            expect(result.total_results).is.a("number");
+        });
+    });
+
+    it("The platform returns a list of Service Bindings filtering by service_instance", function () {
+        this.timeout(3000);
+
+        var service_guid = null;
+
+        return CloudFoundryUserProvidedServices.getServices(token_type, access_token).then(function (result) {
+            return new Promise(function (resolve, reject) {
+                expect(result.total_results).to.be.a('number');
+                if (result.total_results > 0) {
+                    service_guid = result.resources[0].metadata.guid;
+                    return resolve();
+                } else {
+                    return reject("Not found App.");
+                }
+            });
+        }).then(function (result) {
+            //service_instance_guid
+            var filter = {
+                'q': 'service_instance_guid:' + service_guid
+            };            
+            return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token, filter);
+        }).then(function (result) {
+            //console.log(result.resources[0].metadata.guid);
+            //console.log(result.resources[0].entity.credentials);
+            expect(result.total_results).is.a("number");
         });
     });
 
@@ -193,6 +235,23 @@ describe("Cloud foundry Service Bindings", function () {
                 });
             });
 
+        //Search
+        }).then(function (result) {
+            var filter = {
+                'q': 'service_instance_guid:' + service_guid
+            };            
+            return CloudFoundryApps.getServiceBindings(token_type, access_token, app_guid, filter);
+        }).then(function (result) {
+            expect(result.total_results).to.equal(1);
+            var filter = {
+                'q': 'app_guid:' + app_guid
+            };             
+            return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token, filter);
+        }).then(function (result) {
+            expect(result.total_results).to.equal(1); 
+            return new Promise(function (resolve) {
+                return resolve();
+            });          
         //Removing the Service Binding, Service & App (Cleaning process)
         }).then(function (result) {
             return CloudFoundryServiceBindings.removeServiceBinding(token_type, access_token, serviceBinding_guid);
