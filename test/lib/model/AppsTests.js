@@ -275,4 +275,57 @@ describe("Cloud Foundry Apps", function () {
         });
     });
 
+    it("The platform returns Service Bindings from an App", function () {
+        this.timeout(3500);
+
+        var app_guid = null;
+
+        return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
+            return new Promise(function (resolve, reject) {
+                expect(result.total_results).to.be.a('number');
+                if (result.total_results > 0) {
+                    app_guid = result.resources[0].metadata.guid;
+                    return resolve();
+                }else {
+                    return reject("Not found App.");
+                }
+            });
+        }).then(function () {
+            return CloudFoundryApps.getServiceBindings(token_type, access_token, app_guid);
+        }).then(function (result) {
+            expect(result.total_results).to.be.a('number');
+        }).catch(function (reason) {
+            expect(reason).to.equal("Not found App.");
+        });
+    });
+
+    it("The platform returns Service Bindings from an App with a filter", function () {
+        this.timeout(3500);
+
+        var app_guid = null;
+
+        var filter = {
+            'q': 'service_instance_guid:' + "850c8006-d046-483f-b9a5-056d25e8ca0b"
+        };
+
+        return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
+            return new Promise(function (resolve, reject) {
+                expect(result.total_results).to.be.a('number');
+                if (result.total_results > 0) {
+                    app_guid = result.resources[0].metadata.guid;
+                    return resolve();
+                }else {
+                    return reject("Not found App.");
+                }
+            });
+        }).then(function () {
+            return CloudFoundryApps.getServiceBindings(token_type, access_token, app_guid, filter);
+        }).then(function (result) {
+            console.log(result);
+            expect(result.total_results).to.be.a('number');
+        }).catch(function (reason) {
+            expect(reason).to.equal("Not found App.");
+        });
+    });    
+
 });
