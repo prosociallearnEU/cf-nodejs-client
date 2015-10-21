@@ -92,9 +92,9 @@ This project has a test suite to ensure the reability of this project. Take a lo
 
 The development has been tested with:
 
-[Commercial Pivotal PaaS platform](https://console.run.pivotal.io)
-[Commercial IBM Bluemix PaaS platform](https://console.ng.bluemix.net/)
-[Local Cloud floundry instance](https://github.com/yudai/cf_nise_installer)
+* [Commercial Pivotal PaaS platform](https://console.run.pivotal.io)
+* [Commercial IBM Bluemix PaaS platform](https://console.ng.bluemix.net/)
+* [Local Cloud floundry instance](https://github.com/yudai/cf_nise_installer)
 
 **Test suite:**
 
