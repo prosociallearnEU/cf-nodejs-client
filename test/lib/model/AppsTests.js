@@ -7,33 +7,42 @@ var chai = require("chai"),
     expect = require("chai").expect;
 chai.use(chaiAsPromised);
 
+var argv = require('optimist').demand('config').argv
+var environment = argv.config
+console.log(environment);
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
-var cf_api_url = nconf.get('CF_API_URL'),
-    username = nconf.get('username'),
-    password = nconf.get('password');
+var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
+    username = nconf.get(environment + "_" + 'username'),
+    password = nconf.get(environment + "_" + 'password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
 var CloudFoundryApps = require("../../../lib/model/Apps");
 var CloudFoundrySpaces = require("../../../lib/model/Spaces");
-CloudFoundry = new CloudFoundry(cf_api_url);
-CloudFoundryApps = new CloudFoundryApps(cf_api_url);
-CloudFoundrySpaces = new CloudFoundrySpaces(cf_api_url);
+CloudFoundry = new CloudFoundry();
+CloudFoundryApps = new CloudFoundryApps();
+CloudFoundrySpaces = new CloudFoundrySpaces();
 
-describe("Cloud Foundry Apps", function () {
+describe.only("Cloud Foundry Apps", function () {
 
+    var authorization_endpoint = null;
     var token_endpoint = null;
     var token_type = null;
     var access_token = null;
     var space_guid = null;
 
     before(function () {
-        this.timeout(5000);
+        this.timeout(10000);
+
+        CloudFoundry.setEndPoint(cf_api_url);
+        CloudFoundryApps.setEndPoint(cf_api_url);
+        CloudFoundrySpaces.setEndPoint(cf_api_url);
 
         return CloudFoundry.getInfo().then(function (result) {
+            authorization_endpoint = result.authorization_endpoint;
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password);
+            return CloudFoundry.login(authorization_endpoint, username, password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
@@ -211,7 +220,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it("The platform returns Routes from an App", function () {
-        this.timeout(15000);
+        this.timeout(20000);
 
         function recursiveGetAppRoutes(token_type, access_token, appRouteGuidList) {
 
@@ -321,7 +330,7 @@ describe("Cloud Foundry Apps", function () {
         }).then(function () {
             return CloudFoundryApps.getServiceBindings(token_type, access_token, app_guid, filter);
         }).then(function (result) {
-            console.log(result);
+            //console.log(result);
             expect(result.total_results).to.be.a('number');
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");

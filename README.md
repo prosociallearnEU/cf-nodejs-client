@@ -29,8 +29,8 @@ The development doesn't cover the whole API. This library puts the focus in the 
 * Create an User Provided Services
 * Associate Apps with an User Provided Services
 * Start | Stop an App
-* Logs management
-* Scale Apps (Pending)
+* Scale Apps
+* Simple Logs management
 * Remove Apps
 * Remove User Provided Services
 
@@ -46,9 +46,10 @@ Once you have installed the package define in a isolated config file the credent
 
 **config.json**
 
+Interacting with Pivotal or Bluemix
 ``` Javascript
 {
-    "endpoint" : "https://api.run.pivotal.io",
+    "endpoint" : "https://api.run.pivotal.io", || "endpoint" : "https://api.eu-gb.bluemix.net",
     "username" : "xxx",
     "password" : "yyy"
 }
@@ -88,6 +89,12 @@ node example.js
 # Testing
 
 This project has a test suite to ensure the reability of this project. Take a look the [Tests cases](https://github.com/jabrena/cf-nodejs-client/tree/master/test/) developed with [Mocha](https://mochajs.org/) & [Chai](http://chaijs.com/api/bdd/) to understand some stuff about [Cloud Foundry](https://www.cloudfoundry.org/)  and the usage of this client. Besides, the project has invested some amount of time in testing phase to be the code with a nice coverage level.
+
+The development has been tested with:
+
+[Commercial Pivotal PaaS platform](https://console.run.pivotal.io)
+[Commercial IBM Bluemix PaaS platform](https://console.ng.bluemix.net/)
+[Local Cloud floundry instance](https://github.com/yudai/cf_nise_installer)
 
 **Test suite:**
 
