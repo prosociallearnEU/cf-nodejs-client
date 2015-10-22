@@ -21,7 +21,7 @@ CloudFoundry = new CloudFoundry();
 CloudFoundryOrg = new CloudFoundryOrg();
 CloudFoundryOrgQuota = new CloudFoundryOrgQuota();
 
-describe.only("Cloud foundry Organizations Quota", function () {
+describe("Cloud foundry Organizations Quota", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;

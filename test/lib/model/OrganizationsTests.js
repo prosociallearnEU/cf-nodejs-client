@@ -19,7 +19,7 @@ var CloudFoundryOrg = require("../../../lib/model/Organizations");
 CloudFoundry = new CloudFoundry();
 CloudFoundryOrg = new CloudFoundryOrg();
 
-describe.only("Cloud foundry Organizations", function () {
+describe("Cloud foundry Organizations", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
