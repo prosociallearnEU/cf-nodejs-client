@@ -28,7 +28,7 @@ This project provides a simple client library to interact with the [Cloud Foundr
 The development doesn't cover the whole API. This library puts the focus in the Application life cycle to handle the following tasks:
 
 * Create an App
-* Upload zip with source code
+* Upload source code in .zip or .war (Support for Static, Node.js & JEE)
 * Create an User Provided Services
 * Associate Apps with an User Provided Services
 * Start | Stop an App
