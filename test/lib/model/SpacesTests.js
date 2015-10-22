@@ -21,7 +21,7 @@ CloudFoundry = new CloudFoundry();
 CloudFoundrySpaces = new CloudFoundrySpaces();
 CloudFoundryApps = new CloudFoundryApps();
 
-describe.only("Cloud foundry Spaces", function () {
+describe("Cloud foundry Spaces", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -151,14 +151,6 @@ describe.only("Cloud foundry Spaces", function () {
         }).then(function () {
             return CloudFoundrySpaces.userRoles(token_type, access_token, space_guid);
         }).then(function (result) {
-            expect(result.total_results).to.be.a('number');
-        });
-    });
-
-    it("The platform returns Space Quota Defininitions", function () {
-        this.timeout(3000);
-
-        return CloudFoundrySpaces.quotaDefinitions(token_type, access_token).then(function (result) {
             expect(result.total_results).to.be.a('number');
         });
     });
