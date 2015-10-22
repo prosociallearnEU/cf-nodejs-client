@@ -335,6 +335,31 @@ describe("Cloud Foundry Apps", function () {
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
         });
-    });    
+    }); 
+
+    it("The platform returns Environment Variables from an App", function () {
+        this.timeout(3500);
+
+        var app_guid = null;
+
+        return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
+            return new Promise(function (resolve, reject) {
+                expect(result.total_results).to.be.a('number');
+                if (result.total_results > 0) {
+                    app_guid = result.resources[0].metadata.guid;
+                    return resolve();
+                }else {
+                    return reject("Not found App.");
+                }
+            });
+        }).then(function () {
+            return CloudFoundryApps.environmentVariables(token_type, access_token, app_guid);
+        }).then(function (result) {
+            //console.log(result);
+            expect(true).to.be.a('boolean');
+        }).catch(function (reason) {
+            expect(reason).to.equal("Not found App.");
+        });
+    });       
 
 });
