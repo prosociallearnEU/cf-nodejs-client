@@ -21,7 +21,7 @@ CloudFoundry = new CloudFoundry();
 CloudFoundrySpaces = new CloudFoundrySpaces();
 CloudFoundryApps = new CloudFoundryApps();
 
-describe("Cloud foundry Spaces", function () {
+describe.only("Cloud foundry Spaces", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -81,6 +81,84 @@ describe("Cloud foundry Spaces", function () {
             };
             return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter);
         }).then(function (result) {
+            expect(result.total_results).to.be.a('number');
+        });
+    });
+
+    it("The platform returns Summary from a Space.", function () {
+        this.timeout(4000);
+
+        var space_guid = null;
+
+        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+            space_guid = result.resources[0].metadata.guid;
+        }).then(function () {
+            return CloudFoundrySpaces.summary(token_type, access_token, space_guid);
+        }).then(function (result) {
+            expect(true).to.be.a('boolean');
+        });
+    });
+
+    it("[TOOL] The platform returns Services used in the Space.", function () {
+        this.timeout(4000);
+
+        var space_guid = null;
+
+        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+            space_guid = result.resources[0].metadata.guid;
+        }).then(function () {
+            return CloudFoundrySpaces.summary(token_type, access_token, space_guid);
+        }).then(function (result) {
+
+            var usedServices = [];
+            result.services.forEach(function(service) {
+                if(service.bound_app_count > 0){
+                    usedServices.push(service);                   
+                }
+            });
+            expect(true).to.be.a('boolean');
+        });
+    });
+
+    it("[TOOL] The platform returns Services Services without usage in the Space.", function () {
+        this.timeout(4000);
+
+        var space_guid = null;
+
+        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+            space_guid = result.resources[0].metadata.guid;
+        }).then(function () {
+            return CloudFoundrySpaces.summary(token_type, access_token, space_guid);
+        }).then(function (result) {
+
+            var servicesWithoutUsage = [];
+            result.services.forEach(function(service) {
+                if(service.bound_app_count === 0){
+                    servicesWithoutUsage.push(service);                   
+                }
+            });
+            expect(true).to.be.a('boolean');
+        });
+    });
+
+    it("The platform returns User roles from a Space.", function () {
+        this.timeout(4000);
+
+        var space_guid = null;
+
+        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+            space_guid = result.resources[0].metadata.guid;
+        }).then(function () {
+            return CloudFoundrySpaces.userRoles(token_type, access_token, space_guid);
+        }).then(function (result) {
+            expect(result.total_results).to.be.a('number');
+        });
+    });
+
+    it("The platform returns Space Quota Defininitions", function () {
+        this.timeout(3000);
+
+        return CloudFoundrySpaces.quotaDefinitions(token_type, access_token).then(function (result) {
             expect(result.total_results).to.be.a('number');
         });
     });

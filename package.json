@@ -13,13 +13,13 @@
   "scripts": {
     "preversion": "mocha test",
     "start": "node index.js",
-    "test": "mocha test --config=LOCAL_INSTANCE_1 && mocha test --config=PIVOTAL && mocha test --config=BLUEMIX"
+    "test": "mocha test --config=LOCAL_INSTANCE_1 ",
+    "localTests": "mocha test --config=LOCAL_INSTANCE_1 && mocha test --config=PIVOTAL && mocha test --config=BLUEMIX"
   },
   "keywords": [
     "cloud foundry",
     "cloudfoundry",
     "cloud-foundry",
-    "cf",
     "vcap",
     "pivotal",
     "pivotalcf",
@@ -28,6 +28,7 @@
     "cloud",
     "api",
     "REST",
+    "cf",
     "cf client"
   ],
   "bugs": {
