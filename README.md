@@ -4,7 +4,8 @@
 
 #### Note: This package is not ready for a production App yet.
 
-This project provides a simple client library to interact with the [Cloud Foundry REST API](http://apidocs.cloudfoundry.org/) using [Node.js](https://nodejs.org/). The client provides objects to retrieve information about the following concepts:
+This project provides a simple client library to interact with the [Cloud Foundry REST API](http://apidocs.cloudfoundry.org/) platform installed in [Pivotal](https://console.run.pivotal.io)
+, [IBM Bluemix](https://console.ng.bluemix.net/) or a [Local Cloud floundry instance](https://github.com/yudai/cf_nise_installer) using [Node.js](https://nodejs.org/). The client provides objects to retrieve information about the following concepts:
 
 * Apps
 * BuildPacks

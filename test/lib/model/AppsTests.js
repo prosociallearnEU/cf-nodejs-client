@@ -7,9 +7,9 @@ var chai = require("chai"),
     expect = require("chai").expect;
 chai.use(chaiAsPromised);
 
-var argv = require('optimist').demand('config').argv
-var environment = argv.config
-console.log(environment);
+var argv = require('optimist').demand('config').argv;
+var environment = argv.config;
+console.log("Environment: " + environment);
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
@@ -24,7 +24,7 @@ CloudFoundry = new CloudFoundry();
 CloudFoundryApps = new CloudFoundryApps();
 CloudFoundrySpaces = new CloudFoundrySpaces();
 
-describe.only("Cloud Foundry Apps", function () {
+describe("Cloud Foundry Apps", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;

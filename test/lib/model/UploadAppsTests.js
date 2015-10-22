@@ -7,12 +7,14 @@ var chai = require("chai"),
     expect = require("chai").expect;
 var randomWords = require('random-words');
 
+var argv = require('optimist').demand('config').argv;
+var environment = argv.config;
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
-var cf_api_url = nconf.get('CF_API_URL'),
-    username = nconf.get('username'),
-    password = nconf.get('password');
+var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
+    username = nconf.get(environment + "_" + 'username'),
+    password = nconf.get(environment + "_" + 'password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
 var CloudFoundryApps = require("../../../lib/model/Apps");
@@ -21,12 +23,12 @@ var CloudFoundryDomains = require("../../../lib/model/Domains");
 var CloudFoundryRoutes = require("../../../lib/model/Routes");
 var CloudFoundryJobs = require("../../../lib/model/Jobs");
 var BuildPacks = require("../../../lib/model/BuildPacks");
-CloudFoundry = new CloudFoundry(cf_api_url);
-CloudFoundryApps = new CloudFoundryApps(cf_api_url);
-CloudFoundrySpaces = new CloudFoundrySpaces(cf_api_url);
-CloudFoundryDomains = new CloudFoundryDomains(cf_api_url);
-CloudFoundryRoutes = new CloudFoundryRoutes(cf_api_url);
-CloudFoundryJobs = new CloudFoundryJobs(cf_api_url);
+CloudFoundry = new CloudFoundry();
+CloudFoundryApps = new CloudFoundryApps();
+CloudFoundrySpaces = new CloudFoundrySpaces();
+CloudFoundryDomains = new CloudFoundryDomains();
+CloudFoundryRoutes = new CloudFoundryRoutes();
+CloudFoundryJobs = new CloudFoundryJobs();
 BuildPacks = new BuildPacks();
 var HttpUtils = require('../../../lib/utils/HttpUtils');
 HttpUtils = new HttpUtils();
@@ -35,8 +37,9 @@ var fs = require('fs');
 var ZipGenerator = require('../../utils/ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
-describe.only("Cloud Foundry Upload App process", function () {
+describe("Cloud Foundry Upload App process", function () {
 
+    var authorization_endpoint = null;
     var token_endpoint = null;
     var token_type = null;
     var access_token = null;
@@ -44,11 +47,19 @@ describe.only("Cloud Foundry Upload App process", function () {
     var space_guid = null;
 
     before(function () {
-        this.timeout(5000);
+        this.timeout(10000);
+
+        CloudFoundry.setEndPoint(cf_api_url);
+        CloudFoundryApps.setEndPoint(cf_api_url);
+        CloudFoundrySpaces.setEndPoint(cf_api_url);
+        CloudFoundryDomains.setEndPoint(cf_api_url);
+        CloudFoundryRoutes.setEndPoint(cf_api_url);
+        CloudFoundryJobs.setEndPoint(cf_api_url);
 
         return CloudFoundry.getInfo().then(function (result) {
+            authorization_endpoint = result.authorization_endpoint;            
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password);
+            return CloudFoundry.login(authorization_endpoint, username, password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
@@ -285,8 +296,8 @@ describe.only("Cloud Foundry Upload App process", function () {
         });
     });
 
-    it("Create a Static App, Upload 1MB zip, Start the App & Remove", function () {
-        this.timeout(50000);
+    it.skip("Create a Static App, Upload 1MB zip, Start the App & Remove", function () {
+        this.timeout(100000);
 
         var app_guid = null;
         var appName = "app2" + randomWords() + randomInt(1, 100);

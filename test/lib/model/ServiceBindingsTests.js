@@ -6,12 +6,14 @@ var chai = require("chai"),
     expect = require("chai").expect;
 var randomWords = require('random-words');
 
+var argv = require('optimist').demand('config').argv;
+var environment = argv.config;
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
-var cf_api_url = nconf.get('CF_API_URL'),
-    username = nconf.get('username'),
-    password = nconf.get('password');
+var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
+    username = nconf.get(environment + "_" + 'username'),
+    password = nconf.get(environment + "_" + 'password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
 var CloudFoundryApps = require("../../../lib/model/Apps");
@@ -19,15 +21,16 @@ var CloudFoundrySpaces = require("../../../lib/model/Spaces");
 var CloudFoundryUserProvidedServices = require("../../../lib/model/UserProvidedServices");
 var CloudFoundryServiceBindings = require("../../../lib/model/ServiceBindings");
 var BuildPacks = require("../../../lib/model/BuildPacks");
-CloudFoundry = new CloudFoundry(cf_api_url);
-CloudFoundryApps = new CloudFoundryApps(cf_api_url);
-CloudFoundrySpaces = new CloudFoundrySpaces(cf_api_url);
-CloudFoundryServiceBindings = new CloudFoundryServiceBindings(cf_api_url);
-CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
+CloudFoundry = new CloudFoundry();
+CloudFoundryApps = new CloudFoundryApps();
+CloudFoundrySpaces = new CloudFoundrySpaces();
+CloudFoundryServiceBindings = new CloudFoundryServiceBindings();
+CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices();
 BuildPacks = new BuildPacks();
 
-describe.only("Cloud foundry Service Bindings", function () {
+describe("Cloud foundry Service Bindings", function () {
 
+    var authorization_endpoint = null;
     var token_endpoint = null;
     var token_type = null;
     var access_token = null;
@@ -36,9 +39,16 @@ describe.only("Cloud foundry Service Bindings", function () {
     before(function () {
         this.timeout(10000);
 
+        CloudFoundry.setEndPoint(cf_api_url);
+        CloudFoundryApps.setEndPoint(cf_api_url);
+        CloudFoundrySpaces.setEndPoint(cf_api_url);
+        CloudFoundryServiceBindings.setEndPoint(cf_api_url);
+        CloudFoundryUserProvidedServices.setEndPoint(cf_api_url);
+
         return CloudFoundry.getInfo().then(function (result) {
+            authorization_endpoint = result.authorization_endpoint;            
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password);
+            return CloudFoundry.login(authorization_endpoint, username, password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
@@ -68,11 +78,20 @@ describe.only("Cloud foundry Service Bindings", function () {
 
         var serviceBinding_guid = null;
         return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token).then(function (result) {
+            //console.log(result.total_results)
+            if(result.total_results === 0){
+                return new Promise(function (resolve, reject) {
+                    return reject("No Service Binding");
+                });                
+            }
             serviceBinding_guid = result.resources[0].metadata.guid;
             return CloudFoundryServiceBindings.getServiceBinding(token_type, access_token, serviceBinding_guid);
         }).then(function (result) {
             //console.log(result);
             expect(result.metadata.guid).is.a("string");
+        }).catch(function (reason) {
+            //console.error("Error: " + reason);
+            expect(reason).to.equal("No Service Binding");
         });
     });
 
@@ -130,6 +149,9 @@ describe.only("Cloud foundry Service Bindings", function () {
             //console.log(result.resources[0].metadata.guid);
             //console.log(result.resources[0].entity.credentials);
             expect(result.total_results).is.a("number");
+        }).catch(function (reason) {
+            //console.error("Error: " + reason);
+            expect(reason).to.equal("Not found App.");
         });
     });
 

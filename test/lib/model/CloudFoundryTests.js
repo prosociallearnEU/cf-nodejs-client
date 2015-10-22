@@ -7,31 +7,37 @@ var chai = require("chai"),
     expect = require("chai").expect;
 chai.use(chaiAsPromised);
 
+var argv = require('optimist').demand('config').argv;
+var environment = argv.config;
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
-var endPoint = nconf.get('CF_API_URL'),
-    username = nconf.get('username'),
-    password = nconf.get('password');
+var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
+    username = nconf.get(environment + "_" + 'username'),
+    password = nconf.get(environment + "_" + 'password');
 
 var CloudFoundry = require("../../../lib/model/CloudFoundry");
 var CloudFoundryApps = require("../../../lib/model/Apps");
 CloudFoundry = new CloudFoundry();
-CloudFoundry.setEndPoint(endPoint);
-CloudFoundryApps = new CloudFoundryApps(endPoint);
+CloudFoundryApps = new CloudFoundryApps();
 
 describe("Cloud Foundry", function () {
 
+    var authorization_endpoint = null;
     var token_endpoint = null;
     var token_type = null;
     var access_token = null;
 
     before(function () {
-        this.timeout(5000);
+        this.timeout(10000);
+
+        CloudFoundry.setEndPoint(cf_api_url);
+        CloudFoundryApps.setEndPoint(cf_api_url);
 
         return CloudFoundry.getInfo().then(function (result) {
+            authorization_endpoint = result.authorization_endpoint;
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, username, password);
+            return CloudFoundry.login(authorization_endpoint, username, password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
@@ -39,7 +45,7 @@ describe("Cloud Foundry", function () {
     });
 
     it("The connection with the PaaS is OK", function () {
-        return expect(CloudFoundry.getInfo()).eventually.property("name", "vcap");
+        return expect(CloudFoundry.getInfo()).eventually.property("version", 2);
     });
 
     it("The authentication with the PaaS is OK", function () {
@@ -47,7 +53,7 @@ describe("Cloud Foundry", function () {
     });
 
     it("Using an unique Login, it is possible to execute several REST operations", function () {
-        this.timeout(2500);
+        this.timeout(5000);
 
         return CloudFoundryApps.getApps(token_type, access_token).then(function () {
             return CloudFoundryApps.getApps(token_type, access_token);
