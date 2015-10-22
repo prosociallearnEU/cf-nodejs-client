@@ -8,7 +8,7 @@ var used = [],
  * Library Version
  * @type {String}
  */
-exports.version = '0.8.2';
+exports.version = '0.9.0';
 
 /**
  * Support for Apps
@@ -68,6 +68,13 @@ var Organizations = require('./lib/model/Organizations');
 exports.Organizations = Organizations;
 
 /**
+ * Support for Organizations Quota
+ * @type {[type]}
+ */
+var OrganizationsQuota = require('./lib/model/OrganizationsQuota');
+exports.OrganizationsQuota = OrganizationsQuota;
+
+/**
  * Support for Routes
  * @type {[type]}
  */
@@ -87,6 +94,13 @@ exports.ServiceBindings = ServiceBindings;
  */
 var Spaces = require('./lib/model/Spaces');
 exports.Spaces = Spaces;
+
+/**
+ * Support for Spaces Quota
+ * @type {[type]}
+ */
+var SpacesQuota = require('./lib/model/SpacesQuota');
+exports.SpacesQuota = SpacesQuota;
 
 /**
  * Support for Stacks

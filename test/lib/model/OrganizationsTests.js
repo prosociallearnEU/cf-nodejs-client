@@ -19,7 +19,7 @@ var CloudFoundryOrg = require("../../../lib/model/Organizations");
 CloudFoundry = new CloudFoundry();
 CloudFoundryOrg = new CloudFoundryOrg();
 
-describe("Cloud foundry Organizations", function () {
+describe.only("Cloud foundry Organizations", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -47,6 +47,45 @@ describe("Cloud foundry Organizations", function () {
 
         return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
             expect(result.total_results).is.a("number");
+        });
+    });
+
+    it("The platform returns the first organization", function () {
+        this.timeout(3000);
+
+        var org_guid = null;
+
+        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+            org_guid = result.resources[0].metadata.guid;
+            expect(result.total_results).is.a("number");
+        });
+    });
+
+    it("The platform returns the memory usage of an Organization", function () {
+        this.timeout(3000);
+
+        var org_guid = null;
+
+        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+            org_guid = result.resources[0].metadata.guid;
+            return CloudFoundryOrg.memoryUsage(token_type, access_token, org_guid);
+        }).then(function (result) {
+            //console.log(result);
+            expect(true).is.a("boolean");
+        });
+    });
+
+    it("The platform returns the summary from an Organization", function () {
+        this.timeout(3000);
+
+        var org_guid = null;
+
+        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+            org_guid = result.resources[0].metadata.guid;
+            return CloudFoundryOrg.summary(token_type, access_token, org_guid);
+        }).then(function (result) {
+            //console.log(result);
+            expect(true).is.a("boolean");
         });
     });
 
