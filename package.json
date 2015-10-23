@@ -35,6 +35,7 @@
     "url": "https://github.com/prosociallearnEU/cf-nodejs-client/issues"
   },
   "dependencies": {
+    "bluebird": "2.10.2",
     "request": "2.65.0",
     "restler": "3.4.0"
   },

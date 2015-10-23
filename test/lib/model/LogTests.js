@@ -2,6 +2,7 @@
 /*global describe: true, before: true, it: true */
 "use strict";
 
+var Promise = require('bluebird');
 var chai = require("chai"),
     expect = require("chai").expect;
 
@@ -30,7 +31,7 @@ describe("Cloud foundry Logs", function () {
     var access_token = null;
 
     before(function () {
-        this.timeout(15000);
+        this.timeout(20000);
 
         CloudFoundry.setEndPoint(cf_api_url);
         CloudFoundryApps.setEndPoint(cf_api_url);

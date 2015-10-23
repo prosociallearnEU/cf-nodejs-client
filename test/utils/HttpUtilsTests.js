@@ -11,6 +11,7 @@ HttpUtils = new HttpUtils();
 describe("HttpUtils", function () {
 
     it("HTML 200 Test", function () {
+        this.timeout(5000);
 
         var url = "http://www.google.com/";
         var options = {
@@ -24,6 +25,7 @@ describe("HttpUtils", function () {
     });
 
     it("HTML 404 Test", function () {
+        this.timeout(5000);
 
         var url = "https://github.com/jabrena/cf-nodejs-client" + "xxx";
         var options = {

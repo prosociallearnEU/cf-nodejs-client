@@ -2,6 +2,7 @@
 /*global Promise:true, describe: true, before:true, it: true*/
 "use strict";
 
+var Promise = require('bluebird');
 var chai = require("chai"),
     chaiAsPromised = require("chai-as-promised"),
     expect = require("chai").expect;

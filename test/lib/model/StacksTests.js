@@ -1,5 +1,6 @@
 /*jslint node: true*/
 
+var Promise = require('bluebird');
 var chai = require("chai"),
     expect = require("chai").expect;
 
