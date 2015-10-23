@@ -352,6 +352,10 @@ describe("Cloud Foundry Upload Static Apps", function () {
         }).then(function (result) {
             expect(result["0"].state).to.equal("RUNNING");
 
+            sleep(5000, function () {
+                console.log("5 second");
+            });
+
             var url = "http://" + result["0"].stats.uris[0];
             var options = {
                 method: 'GET',
