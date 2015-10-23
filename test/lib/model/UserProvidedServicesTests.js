@@ -31,7 +31,7 @@ describe("Cloud foundry User Provided Services", function () {
     var space_guid = null;
 
     before(function () {
-        this.timeout(10000);
+        this.timeout(15000);
 
         CloudFoundry.setEndPoint(cf_api_url);
         CloudFoundrySpaces.setEndPoint(cf_api_url);

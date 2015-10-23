@@ -29,7 +29,7 @@ describe("Cloud foundry Organizations Quota", function () {
     var access_token = null;
 
     before(function () {
-        this.timeout(10000);
+        this.timeout(15000);
 
         CloudFoundry.setEndPoint(cf_api_url);
         CloudFoundryOrg.setEndPoint(cf_api_url);
@@ -46,7 +46,7 @@ describe("Cloud foundry Organizations Quota", function () {
     });
 
     it("The platform returns Quota Definitions from Organizations", function () {
-        this.timeout(3000);
+        this.timeout(5000);
 
         var org_guid = null;
 

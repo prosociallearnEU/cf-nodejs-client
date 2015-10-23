@@ -27,7 +27,7 @@ describe("Cloud foundry Organizations", function () {
     var access_token = null;
 
     before(function () {
-        this.timeout(10000);
+        this.timeout(15000);
 
         CloudFoundry.setEndPoint(cf_api_url);
         CloudFoundryOrg.setEndPoint(cf_api_url);

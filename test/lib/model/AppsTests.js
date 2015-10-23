@@ -33,7 +33,7 @@ describe("Cloud Foundry Apps", function () {
     var space_guid = null;
 
     before(function () {
-        this.timeout(10000);
+        this.timeout(15000);
 
         CloudFoundry.setEndPoint(cf_api_url);
         CloudFoundryApps.setEndPoint(cf_api_url);

@@ -225,6 +225,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 32,
+            "disk_quota" : 32,
             "buildpack" : staticBuildPack
         };
 
@@ -264,6 +267,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 32,
+            "disk_quota" : 32,
             "buildpack" : staticBuildPack
         };
 
@@ -296,8 +302,8 @@ describe("Cloud Foundry Upload Static Apps", function () {
         });
     });
 
-    it.skip("Create a Static App, Upload 1MB zip, Start the App & Remove", function () {
-        this.timeout(100000);
+    it("Create a Static App, Upload 1MB zip, Start the App & Remove", function () {
+        this.timeout(150000);
 
         var app_guid = null;
         var appName = "app2" + randomWords() + randomInt(1, 100);
@@ -309,8 +315,11 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 64,
+            "disk_quota" : 64,
             "buildpack" : staticBuildPack
-        };        
+        };      
 
         return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
@@ -382,8 +391,11 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 32,
+            "disk_quota" : 32,
             "buildpack" : staticBuildPack
-        };         
+        };       
 
         return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
@@ -511,8 +523,11 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 32,
+            "disk_quota" : 32,
             "buildpack" : staticBuildPack
-        };           
+        };        
 
         return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
@@ -558,8 +573,11 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 64,
+            "disk_quota" : 64,
             "buildpack" : staticBuildPack
-        };           
+        };          
 
         return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
@@ -605,8 +623,11 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 64,
+            "disk_quota" : 64,
             "buildpack" : staticBuildPack
-        };           
+        };          
 
         return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
@@ -652,8 +673,11 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 128,
+            "disk_quota" : 128,
             "buildpack" : staticBuildPack
-        };           
+        };          
 
         return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
@@ -699,8 +723,11 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 256,
+            "disk_quota" : 256,
             "buildpack" : staticBuildPack
-        };           
+        };          
 
         return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
             app_guid = result.metadata.guid;

@@ -27,7 +27,7 @@ describe("Cloud foundry Spaces Quotas", function () {
     var access_token = null;
 
     before(function () {
-        this.timeout(10000);
+        this.timeout(15000);
 
         CloudFoundry.setEndPoint(cf_api_url);
         CloudFoundrySpacesQuota.setEndPoint(cf_api_url);
