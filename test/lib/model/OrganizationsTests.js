@@ -43,7 +43,7 @@ describe("Cloud foundry Organizations", function () {
     });
 
     it("The platform returns the Organizations defined", function () {
-        this.timeout(3000);
+        this.timeout(5000);
 
         return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
             expect(result.total_results).is.a("number");
@@ -51,7 +51,7 @@ describe("Cloud foundry Organizations", function () {
     });
 
     it("The platform returns the first organization", function () {
-        this.timeout(3000);
+        this.timeout(5000);
 
         var org_guid = null;
 
@@ -62,7 +62,7 @@ describe("Cloud foundry Organizations", function () {
     });
 
     it("The platform returns the memory usage of an Organization", function () {
-        this.timeout(3000);
+        this.timeout(5000);
 
         var org_guid = null;
 
@@ -76,7 +76,7 @@ describe("Cloud foundry Organizations", function () {
     });
 
     it("The platform returns the summary from an Organization", function () {
-        this.timeout(3000);
+        this.timeout(5000);
 
         var org_guid = null;
 
