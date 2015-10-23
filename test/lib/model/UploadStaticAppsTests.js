@@ -37,7 +37,7 @@ var fs = require('fs');
 var ZipGenerator = require('../../utils/ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
-describe("Cloud Foundry Upload App process", function () {
+describe("Cloud Foundry Upload Static Apps", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -240,76 +240,6 @@ describe("Cloud Foundry Upload App process", function () {
             return CloudFoundryApps.update(token_type, access_token, app_guid, appOptions);
         }).then(function (result) {
             expect(result.entity.buildpack).to.equal(nodeBuildPack);
-            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
-        }).then(function (result) {
-            route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
-        }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
-        }).then(function () {
-            expect(true).to.equal(true);
-        });
-    });
-
-    it("Create a Spring MVC 4 App, Upload the App & Remove app", function () {
-        this.timeout(40000);
-
-        var app_guid = null;
-        var appName = "app2" + randomWords() + randomInt(1, 100);
-        var zipPath = "./resources/SpringMVC_v4_AppExample.war";
-        var javaBuildPack = BuildPacks.get("java");
-        var route_guid = null;
-        var appOptions = {
-            "name": appName,
-            "space_guid": space_guid,
-            "instances" : 1,
-            "memory" : 256,
-            "disk_quota" : 256,
-            "buildpack" : javaBuildPack
-        };
-
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
-            app_guid = result.metadata.guid;
-            expect(app_guid).is.a("string");
-            expect(result.entity.buildpack).to.equal(javaBuildPack);
-
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
-        }).then(function (result) {
-            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
-        }).then(function (result) {
-            route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
-        }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
-        }).then(function () {
-            expect(true).to.equal(true);
-        });
-    });
-
-    it("Create a Spring MVC 3 App, Upload the App & Remove app", function () {
-        this.timeout(40000);
-
-        var app_guid = null;
-        var appName = "app2" + randomWords() + randomInt(1, 100);
-        var zipPath = "./resources/SpringMVC_v3_AppExample.war";
-        var javaBuildPack = BuildPacks.get("java");
-        var route_guid = null;
-        var appOptions = {
-            "name": appName,
-            "space_guid": space_guid,
-            "instances" : 1,
-            "memory" : 256,
-            "disk_quota" : 256,
-            "buildpack" : javaBuildPack
-        };
-
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
-            app_guid = result.metadata.guid;
-            expect(app_guid).is.a("string");
-            expect(result.entity.buildpack).to.equal(javaBuildPack);
-
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
-        }).then(function (result) {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
