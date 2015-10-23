@@ -666,7 +666,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
     });
 
     it("Create a Static App, Upload 50MB zip & Remove app", function () {
-        this.timeout(80000);
+        this.timeout(100000);
 
         var app_guid = null;
         var appName = "app2" + randomWords() + randomInt(1, 100);
