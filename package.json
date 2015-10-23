@@ -13,7 +13,7 @@
   "scripts": {
     "preversion": "mocha test",
     "start": "node index.js",
-    "test": "mocha test --config=PIVOTAL && mocha test --config=BLUEMIX",
+    "test": "mocha test --config=LOCAL_INSTANCE_1 && mocha test --config=PIVOTAL && mocha test --config=BLUEMIX",
     "localTests": "mocha test --config=LOCAL_INSTANCE_1 && mocha test --config=PIVOTAL && mocha test --config=BLUEMIX"
   },
   "keywords": [
