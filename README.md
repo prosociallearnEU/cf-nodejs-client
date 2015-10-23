@@ -49,7 +49,8 @@ Once you have installed the package define in a isolated config file the credent
 
 **config.json**
 
-Interacting with Pivotal or Bluemix
+Interacting with Pivotal or Bluemix:
+
 ``` Javascript
 {
     "endpoint" : "https://api.run.pivotal.io", || "endpoint" : "https://api.eu-gb.bluemix.net",
