@@ -24,7 +24,7 @@ CloudFoundryOrg = new CloudFoundryOrg();
 CloudFoundryOrgQuota = new CloudFoundryOrgQuota();
 CloudFoundrySpaces = new CloudFoundrySpaces();
 
-describe.only("Cloud foundry Organizations", function () {
+describe("Cloud foundry Organizations", function () {
 
     function randomInt(low, high) {
         return Math.floor(Math.random() * (high - low) + low);
