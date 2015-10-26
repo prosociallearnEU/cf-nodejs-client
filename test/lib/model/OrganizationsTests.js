@@ -20,7 +20,11 @@ var CloudFoundryOrg = require("../../../lib/model/Organizations");
 CloudFoundry = new CloudFoundry();
 CloudFoundryOrg = new CloudFoundryOrg();
 
-describe("Cloud foundry Organizations", function () {
+describe.only("Cloud foundry Organizations", function () {
+
+    function randomInt(low, high) {
+        return Math.floor(Math.random() * (high - low) + low);
+    }
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -90,7 +94,7 @@ describe("Cloud foundry Organizations", function () {
         });
     });
 
-    it("The platform returns the private domains from a Organization", function () {
+    it("The platform returns the private domains from an Organization", function () {
         this.timeout(5000);
 
         var org_guid = null;
@@ -101,5 +105,40 @@ describe("Cloud foundry Organizations", function () {
             expect(result.total_results).is.a("number");
         });
     });
+
+    it.skip("The platform creates an Organization", function () {
+        this.timeout(5000);
+
+        var org_guid = null;
+        var orgOptions = {
+            'name': "demo"             
+        };
+        //"quota_definition_guid"
+        return CloudFoundryOrg.add(token_type, access_token, orgOptions).then(function (result) {
+            console.log(result);
+            expect(true).is.a("boolean");
+        });
+    });
+
+    it("The platform Creates & Remove an Organization", function () {
+        this.timeout(5000);
+
+        var org_guid = null;
+        var orgOptions = {
+            'name': "demo" + randomInt(1, 100)             
+        };
+        //"quota_definition_guid"
+        return CloudFoundryOrg.add(token_type, access_token, orgOptions).then(function (result) {
+            console.log(result);
+            org_guid  = result.metadata.guid;
+            orgOptions = {
+                'recursive': true, 
+                'async': false                      
+            };
+            return CloudFoundryOrg.remove(token_type, access_token, org_guid, orgOptions)
+        }).then(function (result) {            
+            expect(true).is.a("boolean");
+        });
+    });    
 
 });
