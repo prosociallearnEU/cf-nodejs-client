@@ -72,4 +72,61 @@ describe("Cloud foundry Organizations Quota", function () {
         });
     });  
 
+    it.skip("Create a Quota Definitions", function () {
+        this.timeout(3000);
+
+        var quotaOptions = {
+            'name': "demo",
+            'non_basic_services_allowed': true,
+            'total_services': 100,
+            'total_routes': 1000,
+            'total_private_domains': 1,     
+            'memory_limit': 2048,     
+            'instance_memory_limit': 1024                
+        };
+
+        return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+            console.log(result);
+            expect(true).is.a("boolean");
+        });
+    });
+
+    it.skip("Remove a Quota Definitions", function () {
+        this.timeout(3000);
+
+        var quota_guid = "d87d903f-e7ee-4ae8-8840-413c6afc3616";
+        var async = {
+            'async': false
+        };
+
+        return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async).then(function (result) {
+            console.log(result);
+            expect(true).is.a("boolean");
+        });
+    });
+
+    it("Add & Remove a Quota Definitions", function () {
+        this.timeout(3000);
+
+        var quota_guid = null;
+        var quotaOptions = {
+            'name': "demo",
+            'non_basic_services_allowed': true,
+            'total_services': 100,
+            'total_routes': 1000,
+            'total_private_domains': 1,     
+            'memory_limit': 2048,     
+            'instance_memory_limit': 1024                
+        };
+        var async = {
+            'async': false
+        };
+        return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+            quota_guid = result.metadata.guid;
+            return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async);
+        }).then(function (result) {
+            expect(true).is.a("boolean");
+        });
+    });
+
 });
