@@ -78,6 +78,7 @@ describe("Cloud foundry Organizations", function () {
         var org_guid = null;
 
         return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+            //console.log(result.resources[0]);
             org_guid = result.resources[0].metadata.guid;
             return CloudFoundryOrg.memoryUsage(token_type, access_token, org_guid);
         }).then(function (result) {
@@ -85,6 +86,20 @@ describe("Cloud foundry Organizations", function () {
             expect(true).is.a("boolean");
         });
     });
+
+    it("The platform returns users from the first Organization", function () {
+        this.timeout(5000);
+
+        var org_guid = null;
+
+        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+            org_guid = result.resources[0].metadata.guid;
+            return CloudFoundryOrg.getUsers(token_type, access_token, org_guid);
+        }).then(function (result) {
+            //console.log(result.resources);
+            expect(true).is.a("boolean");
+        });
+    });    
 
     it("The platform returns the summary from an Organization", function () {
         this.timeout(5000);
