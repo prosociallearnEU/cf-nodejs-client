@@ -105,28 +105,33 @@ describe("Cloud foundry Organizations Quota", function () {
         });
     });
 
-    it("Add & Remove a Quota Definitions", function () {
-        this.timeout(3000);
+    //Testing users doesn't have permissions
+    if(environment === "LOCAL_INSTANCE_1") {
 
-        var quota_guid = null;
-        var quotaOptions = {
-            'name': "demo",
-            'non_basic_services_allowed': true,
-            'total_services': 100,
-            'total_routes': 1000,
-            'total_private_domains': 1,     
-            'memory_limit': 2048,     
-            'instance_memory_limit': 1024                
-        };
-        var async = {
-            'async': false
-        };
-        return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
-            quota_guid = result.metadata.guid;
-            return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async);
-        }).then(function (result) {
-            expect(true).is.a("boolean");
+        it("Add & Remove a Quota Definitions", function () {
+            this.timeout(3000);
+
+            var quota_guid = null;
+            var quotaOptions = {
+                'name': "demo",
+                'non_basic_services_allowed': true,
+                'total_services': 100,
+                'total_routes': 1000,
+                'total_private_domains': 1,     
+                'memory_limit': 2048,     
+                'instance_memory_limit': 1024                
+            };
+            var async = {
+                'async': false
+            };
+            return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+                quota_guid = result.metadata.guid;
+                return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async);
+            }).then(function (result) {
+                expect(true).is.a("boolean");
+            });
         });
-    });
+
+    }
 
 });

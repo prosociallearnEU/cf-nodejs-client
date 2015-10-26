@@ -27,7 +27,7 @@ This project provides a simple client library to interact with the [Cloud Foundr
 
 The development doesn't cover the whole API. This library puts the focus in the Application life cycle to handle the following tasks:
 
-** App life cycle: **
+**App life cycle:**
 
 * Create an App
 * Upload source code in .zip or .war (Support for Static, Node.js & JEE)
@@ -39,11 +39,11 @@ The development doesn't cover the whole API. This library puts the focus in the 
 * Remove Apps
 * Remove User Provided Services
 
-** PaaS Hosting: **
+**PaaS Hosting:**
 
 * Organization quota CRUD
 * Organization CRUD
-* Space CRUD (In progress)
+* Space CRUD
 * Users CRUD (In progress)
 
 Using this library, any Web developer could create WebApp to manage some aspects about Apps life cycle deployed on a Cloud Foundry Instance but in the other hand, the library offers capabilities to develop the [Continous Delivery](https://en.wikipedia.org/wiki/Continuous_delivery)  concept on this PaaS.
