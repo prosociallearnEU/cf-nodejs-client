@@ -20,6 +20,8 @@ This project provides a simple client library to interact with the [Cloud Foundr
 * Spaces Quota
 * Stacks
 * User Provided Services
+* UAA Users
+* Users
 
 # Applications
 
@@ -44,7 +46,8 @@ The development doesn't cover the whole API. This library puts the focus in the 
 * Organization quota CRUD
 * Organization CRUD
 * Space CRUD
-* Users CRUD (In progress)
+* UAA Users CRUD
+* Users CRUD
 
 Using this library, any Web developer could create WebApp to manage some aspects about Apps life cycle deployed on a Cloud Foundry Instance but in the other hand, the library offers capabilities to develop the [Continous Delivery](https://en.wikipedia.org/wiki/Continuous_delivery)  concept on this PaaS.
 
