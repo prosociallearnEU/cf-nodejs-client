@@ -51,8 +51,19 @@ describe.only("Cloud Foundry Users", function () {
     it.skip("The platform creates an User", function () {
         this.timeout(5000);
 
-        return CloudFoundryUsers.add(token_type, access_token).then(function (result) {
-            console.log(result)
+        var uaa_options = {
+            "schemas":["urn:scim:schemas:core:1.0"],
+            "userName":"demo4",
+            "emails":[
+                {
+                  "value":"demo@example.com",
+                  "type":"work"
+                }
+              ]
+        };
+
+        return CloudFoundryUsers.add(token_type, access_token, uaa_options).then(function (result) {
+            //console.log(result)
             expect(true).to.be.a('boolean');
         });
     });
@@ -61,7 +72,7 @@ describe.only("Cloud Foundry Users", function () {
         this.timeout(5000);
 
         return CloudFoundryUsers.getUsers(token_type, access_token).then(function (result) {
-            console.log(result)
+            //console.log(result)
             expect(true).to.be.a('boolean');
         });
     });
