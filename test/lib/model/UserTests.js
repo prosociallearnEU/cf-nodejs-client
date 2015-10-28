@@ -86,7 +86,7 @@ describe.only("Cloud Foundry Users UAA", function () {
             });
         });
 
-        it("The platform retrieves Users from UAA", function () {
+        it("The platform retrieves Users from CC", function () {
             this.timeout(5000);
 
             return CloudFoundryUsers.getUsers(token_type, access_token).then(function (result) {
