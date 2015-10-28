@@ -250,7 +250,8 @@ describe.only("Cloud foundry Organizations", function () {
                       "value":"demo@example.com",
                       "type":"work"
                     }
-                  ]
+                  ],
+                "password": "123456",
             }; 
             var searchOptions = "?filter=userName eq '" + username + "'";
             var user_guid = null;         
@@ -322,6 +323,88 @@ describe.only("Cloud foundry Organizations", function () {
                 };                
                 return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async);           
             }).then(function (result) {     
+                expect(true).is.a("boolean");
+            });
+        });
+
+        it("[TOOL] The platform Creates a Quota for Organization, Organization, Space & user.", function () {
+            this.timeout(5000);
+
+            var name = "demo35";
+            var quota_guid = null;
+            var quotaOptions = {
+                'name': name,
+                'non_basic_services_allowed': true,
+                'total_services': 100,
+                'total_routes': 1000,
+                'total_private_domains': 1,     
+                'memory_limit': 2048,     
+                'instance_memory_limit': 1024                
+            };
+            var org_guid = null;        
+            var space_guid = null;
+            var uaa_guid = null;
+            var username = name;
+            var uaa_options = {
+                "schemas":["urn:scim:schemas:core:1.0"],
+                "userName":username,
+                "emails":[
+                    {
+                      "value":"demo@example.com",
+                      "type":"work"
+                    }
+                  ],
+                "password": "123456",
+            };
+            //cf login -a https://api.MY_IP.xip.io -u USERNAME -p PASSWORD --skip-ssl-validation
+            var searchOptions = "?filter=userName eq '" + username + "'";
+            var user_guid = null;         
+
+            return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+                quota_guid = result.metadata.guid;
+                var orgOptions = {
+                    'name': name,
+                    "quota_definition_guid" : quota_guid     
+                };
+                return CloudFoundryOrg.add(token_type, access_token, orgOptions);
+            }).then(function (result) {                
+                //console.log(result);
+                org_guid  = result.metadata.guid;
+                var spaceOptions = {
+                    'name': name,
+                    'organization_guid': org_guid      
+                };           
+                return CloudFoundrySpaces.add(token_type, access_token, spaceOptions);
+            }).then(function (result) {
+                space_guid = result.metadata.guid;
+                return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options);
+            }).then(function (result) {                
+                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+            }).then(function (result) {
+                if(result.resources.length !== 1){
+                    return new Promise(function (resolve, reject) {
+                        return reject("No Users");
+                    });
+                }
+                uaa_guid = result.resources[0].id;
+                //console.log(uaa_guid)
+                /*
+                var userOptions = {
+                    "guid": uaa_guid,
+                    "default_space_guid":space_guid
+                }
+                */
+                var userOptions = {
+                    "guid": uaa_guid
+                }                
+                return CloudFoundryUsers.add(token_type, access_token, userOptions);
+            }).then(function (result) {
+                user_guid = result.metadata.guid;
+                return CloudFoundryUsers.associateOrganization(token_type, access_token, user_guid, org_guid);
+            }).then(function (result) {
+                return CloudFoundryUsers.associateSpace(token_type, access_token, user_guid, space_guid);               
+            }).then(function (result) {
+                console.log(result)
                 expect(true).is.a("boolean");
             });
         });

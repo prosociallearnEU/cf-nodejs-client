@@ -25,7 +25,7 @@ CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryUsers = new CloudFoundryUsers();
 
 
-describe.only("Cloud Foundry Users UAA", function () {
+describe("Cloud Foundry Users UAA", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
