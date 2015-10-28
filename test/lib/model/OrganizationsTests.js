@@ -19,12 +19,16 @@ var CloudFoundry = require("../../../lib/model/CloudFoundry");
 var CloudFoundryOrg = require("../../../lib/model/Organizations");
 var CloudFoundryOrgQuota = require("../../../lib/model/OrganizationsQuota");
 var CloudFoundrySpaces = require("../../../lib/model/Spaces");
+var CloudFoundryUsersUAA = require("../../../lib/model/UsersUAA");
+var CloudFoundryUsers = require("../../../lib/model/Users");
 CloudFoundry = new CloudFoundry();
 CloudFoundryOrg = new CloudFoundryOrg();
 CloudFoundryOrgQuota = new CloudFoundryOrgQuota();
 CloudFoundrySpaces = new CloudFoundrySpaces();
+CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
+CloudFoundryUsers = new CloudFoundryUsers();
 
-describe("Cloud foundry Organizations", function () {
+describe.only("Cloud foundry Organizations", function () {
 
     function randomInt(low, high) {
         return Math.floor(Math.random() * (high - low) + low);
@@ -42,10 +46,12 @@ describe("Cloud foundry Organizations", function () {
         CloudFoundryOrg.setEndPoint(cf_api_url);
         CloudFoundryOrgQuota.setEndPoint(cf_api_url);
         CloudFoundrySpaces.setEndPoint(cf_api_url);
+        CloudFoundryUsers.setEndPoint(cf_api_url);
 
         return CloudFoundry.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;
             token_endpoint = result.token_endpoint;
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundry.login(authorization_endpoint, username, password);
         }).then(function (result) {
             token_type = result.token_type;
@@ -218,6 +224,107 @@ describe("Cloud foundry Organizations", function () {
                 expect(true).is.a("boolean");
             });
         });           
+
+        it("The platform Creates a Quota for Organization, Organization, Space & user. After they are removed.", function () {
+            this.timeout(5000);
+
+            var quota_guid = null;
+            var quotaOptions = {
+                'name': "demo" + randomInt(1, 1000),
+                'non_basic_services_allowed': true,
+                'total_services': 100,
+                'total_routes': 1000,
+                'total_private_domains': 1,     
+                'memory_limit': 2048,     
+                'instance_memory_limit': 1024                
+            };
+            var org_guid = null;
+            var space_guid = null;
+            var uaa_guid = null;
+            var username = "user" + randomInt(1, 1000);
+            var uaa_options = {
+                "schemas":["urn:scim:schemas:core:1.0"],
+                "userName":username,
+                "emails":[
+                    {
+                      "value":"demo@example.com",
+                      "type":"work"
+                    }
+                  ]
+            }; 
+            var searchOptions = "?filter=userName eq '" + username + "'";
+            var user_guid = null;         
+
+            return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+                quota_guid = result.metadata.guid;
+                var orgOptions = {
+                    'name': "demo" + randomInt(1, 1000),
+                    "quota_definition_guid" : quota_guid     
+                };
+                return CloudFoundryOrg.add(token_type, access_token, orgOptions);
+            }).then(function (result) {                
+                //console.log(result);
+                org_guid  = result.metadata.guid;
+                var spaceOptions = {
+                    'name': "demo" + randomInt(1, 1000),
+                    'organization_guid': org_guid      
+                };           
+                return CloudFoundrySpaces.add(token_type, access_token, spaceOptions);
+            }).then(function (result) {
+                space_guid = result.metadata.guid;
+                return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options);
+            }).then(function (result) {                
+                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+            }).then(function (result) {
+                if(result.resources.length !== 1){
+                    return new Promise(function (resolve, reject) {
+                        return reject("No Users");
+                    });
+                }
+                uaa_guid = result.resources[0].id;
+                //console.log(uaa_guid)
+                var userOptions = {
+                    "guid": uaa_guid,
+                    "default_space_guid":space_guid
+                }
+                return CloudFoundryUsers.add(token_type, access_token, userOptions);
+            //Remove elements  
+            }).then(function (result) {
+                //console.log(result);
+                user_guid = result.metadata.guid;
+                return CloudFoundryUsers.remove(token_type, access_token, user_guid);
+            }).then(function (result) {
+                return CloudFoundryUsersUAA.remove(token_type, access_token, uaa_guid);
+            }).then(function (result) {
+                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+            }).then(function (result) {
+                if(result.resources.length !== 0){
+                    return new Promise(function (resolve, reject) {
+                        return reject("Rare output");
+                    });
+                }
+            }).then(function (result) {
+
+                var spaceOptions = {
+                    'recursive': true, 
+                    'async': false                      
+                };
+                return CloudFoundrySpaces.remove(token_type, access_token, space_guid, spaceOptions);
+            }).then(function (result) { 
+                var orgOptions = {
+                    'recursive': true, 
+                    'async': false                      
+                };                           
+                return CloudFoundryOrg.remove(token_type, access_token, org_guid, orgOptions)
+            }).then(function (result) { 
+                var async = {
+                    'async': false
+                };                
+                return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async);           
+            }).then(function (result) {     
+                expect(true).is.a("boolean");
+            });
+        });
 
     }
 

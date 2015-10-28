@@ -10,7 +10,6 @@ chai.use(chaiAsPromised);
 
 var argv = require('optimist').demand('config').argv;
 var environment = argv.config;
-console.log("Environment: " + environment);
 var nconf = require('nconf');
 nconf.argv().env().file({ file: 'config.json' });
 
@@ -26,7 +25,7 @@ CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryUsers = new CloudFoundryUsers();
 
 
-describe.only("Cloud Foundry Users UAA", function () {
+describe("Cloud Foundry Users UAA", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
