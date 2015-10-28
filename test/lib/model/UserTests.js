@@ -25,7 +25,7 @@ CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryUsers = new CloudFoundryUsers();
 
 
-describe("Cloud Foundry Users UAA", function () {
+describe.only("Cloud Foundry Users UAA", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -81,6 +81,16 @@ describe("Cloud Foundry Users UAA", function () {
             this.timeout(5000);
 
             return CloudFoundryUsersUAA.getUsers(token_type, access_token).then(function (result) {
+                //console.log(result)
+                expect(result.resources).to.be.a('array');
+            });
+        });
+
+        it("The platform retrieves Users from UAA", function () {
+            this.timeout(5000);
+
+            return CloudFoundryUsers.getUsers(token_type, access_token).then(function (result) {
+                //console.log(result)
                 expect(result.resources).to.be.a('array');
             });
         });
