@@ -81,7 +81,7 @@ CloudFoundry.getInfo().then(function (result) {
 
 ```
 
-Explore the library and if you like the features, use it in your App:
+Explore the library and if you like the features, use it on your App:
 
 ``` Javascript
 
