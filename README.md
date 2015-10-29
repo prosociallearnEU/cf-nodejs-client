@@ -8,7 +8,7 @@ This project provides a simple client library to interact with some components u
 
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-client/master/docs/cf_architecture_block.png)
 
-The features implemented for the following components are:
+The features implemented are:
 
 **[Cloud Controller Layer](http://apidocs.cloudfoundry.org/):**
 
