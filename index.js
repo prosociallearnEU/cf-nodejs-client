@@ -8,7 +8,7 @@ var used = [],
  * Library Version
  * @type {String}
  */
-exports.version = '0.9.0';
+exports.version = '0.9.1';
 
 /**
  * Support for Apps
@@ -115,3 +115,17 @@ exports.Stacks = Stacks;
  */
 var UserProvidedServices = require('./lib/model/UserProvidedServices');
 exports.UserProvidedServices = UserProvidedServices;
+
+/**
+ * Support for Users
+ * @type {[type]}
+ */
+var Users = require('./lib/model/Users');
+exports.Users = Users;
+
+/**
+ * Support for Users UAA
+ * @type {[type]}
+ */
+var UsersUAA = require('./lib/model/UsersUAA');
+exports.UsersUAA = UsersUAA;
