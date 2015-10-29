@@ -4,7 +4,7 @@
 
 #### Note: This package is not ready for a production App yet.
 
-This project provides a simple client library to interact with some components used on the [Cloud Foundry Architecture](http://apidocs.cloudfoundry.org/):
+This project provides a simple client library to interact with some components used on the [Cloud Foundry Architecture](https://docs.pivotal.io/pivotalcf/concepts/architecture/):
 
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-client/master/docs/cf_architecture_block.png)
 
