@@ -327,13 +327,14 @@ describe.only("Cloud foundry Organizations", function () {
             });
         });
 
-        it("[TOOL] The platform Creates a Quota for Organization, Organization, Space & user.", function () {
+        it.skip("[TOOL] The platform Creates a Quota for Organization, Organization, Space & user.", function () {
             this.timeout(5000);
 
-            var name = "demo35";
+            var accountName = "demo38";
+            var accountPassword = "123456";
             var quota_guid = null;
             var quotaOptions = {
-                'name': name,
+                'name': accountName,
                 'non_basic_services_allowed': true,
                 'total_services': 100,
                 'total_routes': 1000,
@@ -344,26 +345,25 @@ describe.only("Cloud foundry Organizations", function () {
             var org_guid = null;        
             var space_guid = null;
             var uaa_guid = null;
-            var username = name;
             var uaa_options = {
                 "schemas":["urn:scim:schemas:core:1.0"],
-                "userName":username,
+                "userName":accountName,
                 "emails":[
                     {
                       "value":"demo@example.com",
                       "type":"work"
                     }
                   ],
-                "password": "123456",
+                "password": accountPassword,
             };
             //cf login -a https://api.MY_IP.xip.io -u USERNAME -p PASSWORD --skip-ssl-validation
-            var searchOptions = "?filter=userName eq '" + username + "'";
+            var searchOptions = "?filter=userName eq '" + accountName + "'";
             var user_guid = null;         
 
             return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
                 quota_guid = result.metadata.guid;
                 var orgOptions = {
-                    'name': name,
+                    'name': accountName,
                     "quota_definition_guid" : quota_guid     
                 };
                 return CloudFoundryOrg.add(token_type, access_token, orgOptions);
@@ -371,7 +371,7 @@ describe.only("Cloud foundry Organizations", function () {
                 //console.log(result);
                 org_guid  = result.metadata.guid;
                 var spaceOptions = {
-                    'name': name,
+                    'name': accountName,
                     'organization_guid': org_guid      
                 };           
                 return CloudFoundrySpaces.add(token_type, access_token, spaceOptions);
@@ -403,9 +403,11 @@ describe.only("Cloud foundry Organizations", function () {
                 return CloudFoundryUsers.associateOrganization(token_type, access_token, user_guid, org_guid);
             }).then(function (result) {
                 return CloudFoundryUsers.associateSpace(token_type, access_token, user_guid, space_guid);               
+            //Test Login with new account
             }).then(function (result) {
-                console.log(result)
-                expect(true).is.a("boolean");
+                return CloudFoundry.login(authorization_endpoint, accountName, accountPassword);
+            }).then(function (result) {
+                expect(result.token_type).to.equal("bearer");
             });
         });
 
