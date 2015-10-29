@@ -45,6 +45,13 @@ describe("Cloud Foundry", function () {
         });
     });
 
+    it("The connection show API Version", function () {
+        return CloudFoundry.getInfo().then(function (result) {
+            console.log(result.api_version);
+            return expect(result.api_version).to.be.a('string');
+        });
+    });
+
     it("The connection with the PaaS is OK", function () {
         return expect(CloudFoundry.getInfo()).eventually.property("version", 2);
     });
