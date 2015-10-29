@@ -1,3 +1,45 @@
+## Version 0.9.1 2015-10-29
+
+- Adding the dependency Bluebird to improve the performance
+- Adding support for Quotas (Org/Space)
+- It is possible to create users in the system. (Quota/Org/Space/User)
+
+Environment: LOCAL_INSTANCE_1
+
+  65 passing (2m)
+  23 pending
+
+Environment: PIVOTAL
+
+  58 passing (3m)
+  19 pending
+
+Environment: BLUEMIX
+
+  58 passing (3m)
+  19 pending
+
+## Version 0.9.0 2015-10-23
+
+- Adding support for Java Buildpack
+- Testing development in 3 environments: Local Instance (Yudai), PSW & Bluemix
+- Initial support for Organizations & Spaces
+
+Environment: LOCAL_INSTANCE_1
+
+  57 passing (1m)
+  16 pending
+
+Environment: PIVOTAL
+
+  57 passing (1m)
+  16 pending
+
+Environment: BLUEMIX
+
+  57 passing (4m)
+  16 pending  
+
 ## Version 0.8.3 2015-10-19
 
 - Adding the capability to add filters in a Service Binding Search.
