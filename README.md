@@ -65,43 +65,15 @@ The development doesn't cover the whole CC API. Main areas of development are:
 
 # Getting Started
 
-If you need to interact with a Cloud Foundry platform, install the package in your [Node.js](https://nodejs.org/) development:
+If you need to interact with a Cloud Foundry platform try this [online tool](https://tonicdev.com/npm/cf-nodejs-client) and use this example:
 
 ``` Javascript
-npm install cf-nodejs-client --save
-```
-
-Once you have installed the package define in a isolated config file the credentials to operate with the platform:
-
-**config.json**
-
-Interacting with Pivotal or Bluemix:
-
-``` Javascript
-{
-    "endpoint" : "https://api.run.pivotal.io", || "endpoint" : "https://api.eu-gb.bluemix.net",
-    "username" : "xxx",
-    "password" : "yyy"
-}
-```
-
-With the credentials defined, create a new file to paste this code to authenticate with the platform.
-
-**example.js**
-
-``` Javascript
-
-"use strict";
-
-var config = require('./config.json');//Load CF configuration
 
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 CloudFoundry = new CloudFoundry();
-CloudFoundry.setEndPoint(config.endpoint);
-
+CloudFoundry.setEndPoint("https://api.run.pivotal.io");
+ 
 CloudFoundry.getInfo().then(function (result) {
-    return CloudFoundry.login(result.token_endpoint,config.username,config.password);
-}).then(function (result) {
     console.log(result);   
 }).catch(function (reason) {
     console.error("Error: " + reason);
@@ -109,10 +81,11 @@ CloudFoundry.getInfo().then(function (result) {
 
 ```
 
-Save the file and test:
+Explore the library and if you like the features, use it in your App:
 
-``` shell
-node example.js
+``` Javascript
+
+npm install cf-nodejs-client --save
 
 ```
 
