@@ -155,7 +155,7 @@ describe("Cloud foundry Organizations", function () {
 
             var org_guid = null;
             var orgOptions = {
-                'name': "demo" + randomInt(1, 100)             
+                'name': "demo" + randomInt(1, 10000)             
             };
             //"quota_definition_guid"
             return CloudFoundryOrg.add(token_type, access_token, orgOptions).then(function (result) {
@@ -176,7 +176,7 @@ describe("Cloud foundry Organizations", function () {
 
             var quota_guid = null;
             var quotaOptions = {
-                'name': "demo" + randomInt(1, 1000),
+                'name': "demo" + randomInt(1, 10000),
                 'non_basic_services_allowed': true,
                 'total_services': 100,
                 'total_routes': 1000,
@@ -190,7 +190,7 @@ describe("Cloud foundry Organizations", function () {
             return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
                 quota_guid = result.metadata.guid;
                 var orgOptions = {
-                    'name': "demo" + randomInt(1, 1000),
+                    'name': "demo" + randomInt(1, 10000),
                     "quota_definition_guid" : quota_guid     
                 };
                 return CloudFoundryOrg.add(token_type, access_token, orgOptions);
@@ -198,7 +198,7 @@ describe("Cloud foundry Organizations", function () {
                 //console.log(result);
                 org_guid  = result.metadata.guid;
                 var spaceOptions = {
-                    'name': "demo" + randomInt(1, 1000),
+                    'name': "demo" + randomInt(1, 10000),
                     'organization_guid': org_guid      
                 };           
                 return CloudFoundrySpaces.add(token_type, access_token, spaceOptions);
@@ -230,7 +230,7 @@ describe("Cloud foundry Organizations", function () {
 
             var quota_guid = null;
             var quotaOptions = {
-                'name': "demo" + randomInt(1, 1000),
+                'name': "demo" + randomInt(1, 10000),
                 'non_basic_services_allowed': true,
                 'total_services': 100,
                 'total_routes': 1000,
@@ -241,7 +241,7 @@ describe("Cloud foundry Organizations", function () {
             var org_guid = null;
             var space_guid = null;
             var uaa_guid = null;
-            var username = "user" + randomInt(1, 1000);
+            var username = "user" + randomInt(1, 10000);
             var uaa_options = {
                 "schemas":["urn:scim:schemas:core:1.0"],
                 "userName":username,
@@ -259,7 +259,7 @@ describe("Cloud foundry Organizations", function () {
             return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
                 quota_guid = result.metadata.guid;
                 var orgOptions = {
-                    'name': "demo" + randomInt(1, 1000),
+                    'name': "demo" + randomInt(1, 10000),
                     "quota_definition_guid" : quota_guid     
                 };
                 return CloudFoundryOrg.add(token_type, access_token, orgOptions);
@@ -267,7 +267,7 @@ describe("Cloud foundry Organizations", function () {
                 //console.log(result);
                 org_guid  = result.metadata.guid;
                 var spaceOptions = {
-                    'name': "demo" + randomInt(1, 1000),
+                    'name': "demo" + randomInt(1, 10000),
                     'organization_guid': org_guid      
                 };           
                 return CloudFoundrySpaces.add(token_type, access_token, spaceOptions);
