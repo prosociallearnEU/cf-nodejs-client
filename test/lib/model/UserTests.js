@@ -25,7 +25,7 @@ CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryUsers = new CloudFoundryUsers();
 
 
-describe("Cloud Foundry Users UAA", function () {
+describe("Cloud Foundry Users", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -57,35 +57,6 @@ describe("Cloud Foundry Users UAA", function () {
     //Testing users doesn't have permissions
     if(environment === "LOCAL_INSTANCE_1") {
 
-        it.skip("The platform creates an User", function () {
-            this.timeout(5000);
-
-            var uaa_options = {
-                "schemas":["urn:scim:schemas:core:1.0"],
-                "userName":"user" + randomInt(1, 1000),
-                "emails":[
-                    {
-                      "value":"demo@example.com",
-                      "type":"work"
-                    }
-                  ]
-            };
-
-            return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
-                //console.log(result)
-                expect(true).to.be.a('boolean');
-            });
-        });
-
-        it("The platform retrieves Users from UAA", function () {
-            this.timeout(5000);
-
-            return CloudFoundryUsersUAA.getUsers(token_type, access_token).then(function (result) {
-                //console.log(result)
-                expect(result.resources).to.be.a('array');
-            });
-        });
-
         it("The platform retrieves Users from CC", function () {
             this.timeout(5000);
 
@@ -94,19 +65,6 @@ describe("Cloud Foundry Users UAA", function () {
                 expect(result.resources).to.be.a('array');
             });
         });
-
-        it.skip("The platform retrieves Users from UAA with a filter", function () {
-            this.timeout(5000);
-
-            var uaa_guid = null;
-            var searchOptions = "?filter=userName eq 'demo4'";
-
-            return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions).then(function (result) {
-                uaa_guid = result.resources[0].id;
-                console.log(uaa_guid)
-                expect(result.resources).to.be.a('array');
-            });
-        });  
 
         it("The platform creates, search & remove an User from UAA", function () {
             this.timeout(5000);
@@ -158,6 +116,7 @@ describe("Cloud Foundry Users UAA", function () {
             });
         });
 
+        //TODO: This method has to be updated. Method to update password doesn't works. (20151029)
         it.skip("The platform creates, update password, search & remove an User from UAA", function () {
             this.timeout(5000);
 
@@ -217,8 +176,6 @@ describe("Cloud Foundry Users UAA", function () {
                 expect(true).to.be.a('boolean');
             });
         });
-
-
 
     }
 

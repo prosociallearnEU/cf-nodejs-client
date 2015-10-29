@@ -41,13 +41,13 @@ The development doesn't cover the whole API. This library puts the focus in the 
 * Remove Apps
 * Remove User Provided Services
 
-**PaaS Hosting:**
+**PaaS Management:**
 
-* Organization quota CRUD
-* Organization CRUD
-* Space CRUD
-* UAA Users CRUD
-* Users CRUD
+* Organization quota
+* Organization
+* Space
+* UAA Users
+* Users
 
 Using this library, any Web developer could create WebApp to manage some aspects about Apps life cycle deployed on a Cloud Foundry Instance but in the other hand, the library offers capabilities to develop the [Continous Delivery](https://en.wikipedia.org/wiki/Continuous_delivery)  concept on this PaaS.
 

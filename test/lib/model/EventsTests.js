@@ -43,8 +43,9 @@ describe("Cloud foundry Events", function () {
         });
     });
 
+    //TODO: This component has some performance problems in Pivotal systems.
     it("The platform returns the Events", function () {
-        this.timeout(50000);
+        this.timeout(100000);
 
         return CloudFoundryEvents.getEvents(token_type, access_token).then(function (result) {
             expect(result.total_results).is.a("number");

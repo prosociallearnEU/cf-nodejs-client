@@ -28,7 +28,7 @@ CloudFoundrySpaces = new CloudFoundrySpaces();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryUsers = new CloudFoundryUsers();
 
-describe.only("Cloud foundry Organizations", function () {
+describe("Cloud foundry Organizations", function () {
 
     function randomInt(low, high) {
         return Math.floor(Math.random() * (high - low) + low);
