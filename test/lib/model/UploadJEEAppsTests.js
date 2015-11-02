@@ -161,7 +161,7 @@ describe("Cloud Foundry Upload JEE Apps", function () {
 
         var app_guid = null;
         var appName = "app2" + randomWords() + randomInt(1, 100);
-        var zipPath = "./resources/SpringMVC_v4_AppExample.war";
+        var zipPath = "./test_resources/SpringMVC_v4_AppExample.war";
         var javaBuildPack = BuildPacks.get("java");
         var route_guid = null;
         var appOptions = {
@@ -196,7 +196,7 @@ describe("Cloud Foundry Upload JEE Apps", function () {
 
         var app_guid = null;
         var appName = "app2" + randomWords() + randomInt(1, 100);
-        var zipPath = "./resources/SpringMVC_v3_AppExample.war";
+        var zipPath = "./test_resources/SpringMVC_v3_AppExample.war";
         var javaBuildPack = BuildPacks.get("java");
         var route_guid = null;
         var appOptions = {

@@ -77,7 +77,6 @@ describe("Cloud Foundry Users UAA", function () {
             this.timeout(5000);
 
             return CloudFoundryUsersUAA.getUsers(token_type, access_token).then(function (result) {
-                //console.log(result)
                 expect(result.resources).to.be.a('array');
             });
         });
@@ -89,6 +88,8 @@ describe("Cloud Foundry Users UAA", function () {
             var searchOptions = "?filter=userName eq 'demo4'";
 
             return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions).then(function (result) {
+                //console.log(result.resources[0].groups)
+                //console.log(result.resources[0])
                 uaa_guid = result.resources[0].id;
                 console.log(uaa_guid)
                 expect(result.resources).to.be.a('array');

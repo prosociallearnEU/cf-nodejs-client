@@ -61,7 +61,6 @@ describe("Cloud Foundry Users", function () {
             this.timeout(5000);
 
             return CloudFoundryUsers.getUsers(token_type, access_token).then(function (result) {
-                //console.log(result)
                 expect(result.resources).to.be.a('array');
             });
         });
