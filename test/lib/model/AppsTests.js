@@ -363,4 +363,15 @@ describe("Cloud Foundry Apps", function () {
         });
     });       
 
+    it.skip("[TOOL] Remove app", function () {
+        this.timeout(40000);
+
+        var app_guid = "c3efd256-1225-4b2a-83ab-453e2f902944";
+
+        return CloudFoundryApps.deleteApp(token_type, access_token, app_guid).then(function (result) {
+            //console.log(result);
+            expect(true).to.equal(true);
+        });
+    });
+
 });
