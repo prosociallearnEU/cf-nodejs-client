@@ -13,7 +13,7 @@
   "scripts": {
     "preversion": "mocha test --config=LOCAL_INSTANCE_1",
     "start": "node index.js",
-    "test": "mocha test --config=LOCAL_INSTANCE_1 ",
+    "test": "mocha test --config=LOCAL_INSTANCE_1 && mocha test --config=PIVOTAL && mocha test --config=BLUEMIX",
     "localTests": "mocha test --config=LOCAL_INSTANCE_1 && mocha test --config=PIVOTAL && mocha test --config=BLUEMIX"
   },
   "keywords": [
@@ -35,13 +35,13 @@
     "url": "https://github.com/prosociallearnEU/cf-nodejs-client/issues"
   },
   "dependencies": {
-    "bluebird": "2.10.2",
+    "bluebird": "3.0.5",
     "request": "2.65.0",
     "restler": "3.4.0"
   },
   "devDependencies": {
     "archiver": "0.16.0",
-    "chai": "3.3.0",
+    "chai": "3.4.0",
     "chai-as-promised": "5.1.0",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
