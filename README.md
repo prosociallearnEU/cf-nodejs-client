@@ -10,7 +10,7 @@ This project provides a simple client library to interact with some components u
 
 The features implemented are:
 
-**[Cloud Controller Layer](http://apidocs.cloudfoundry.org/):**
+**[Cloud Controller](http://apidocs.cloudfoundry.org/):**
 
 * Apps
 * BuildPacks
@@ -26,11 +26,11 @@ The features implemented are:
 * User Provided Services
 * Users
 
-**Authentication layer:**
+**Authentication:**
 
 * UAA Users
 
-**Logging & Metrics layer:**
+**Logging & Metrics:**
 
 * Logs
 

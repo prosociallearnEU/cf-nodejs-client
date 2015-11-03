@@ -4,6 +4,9 @@ module.exports = function (grunt) {
     var localhost = 'http://localhost:';
     var default_port = 9000;
     var development_browser = "Google Chrome";
+    if(process.platform === "win32"){
+        development_browser = "Chrome";
+    }
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -32,7 +35,7 @@ module.exports = function (grunt) {
         },
         jsdoc : {
             dist : {
-                src: ['./lib/<utils></utils>/*.js', './test/*.js'],
+                src: ['./lib/utils/*.js'],
                 options: {
                     destination: 'doc'
                 }
@@ -48,5 +51,5 @@ module.exports = function (grunt) {
     //Task definition
     grunt.registerTask('default', 'coverage');
     grunt.registerTask('coverage', ['open:coverage', 'connect:coverage']);
-    grunt.registerTask('docs', ['jsdoc:dist','connect:docs']);
+    grunt.registerTask('docs', ['jsdoc:dist','open:coverage','connect:docs']);
 };

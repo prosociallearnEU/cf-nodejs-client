@@ -13,7 +13,7 @@ describe("HttpUtils", function () {
     it("HTML 200 Test", function () {
         this.timeout(5000);
 
-        var url = "http://www.google.com/";
+        var url = "https://api.run.pivotal.io/v2/info";
         var options = {
             method: 'GET',
             url: url
@@ -27,7 +27,7 @@ describe("HttpUtils", function () {
     it("HTML 404 Test", function () {
         this.timeout(5000);
 
-        var url = "https://github.com/jabrena/cf-nodejs-client" + "xxx";
+        var url = "https://github.com/cf-nodejs-client";
         var options = {
             method: 'GET',
             url: url
