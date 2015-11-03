@@ -4,11 +4,11 @@
 
 #### Note: This package is not ready for a production App yet.
 
-This project provides a simple client library to interact with some components used on the [Cloud Foundry Architecture](https://docs.pivotal.io/pivotalcf/concepts/architecture/):
+This project provides a simple client library to interact with the [Cloud Foundry Architecture](https://docs.pivotal.io/pivotalcf/concepts/architecture/):
 
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-client/master/docs/cf_architecture_block.png)
 
-The features implemented are:
+The library interacts with:
 
 **[Cloud Controller](http://apidocs.cloudfoundry.org/):**
 
@@ -34,8 +34,8 @@ The features implemented are:
 
 * Logs
 
-Using this library, you could interact with [PWS](https://console.run.pivotal.io)
-, [Bluemix](https://console.ng.bluemix.net/) or a [Local Cloud Foundry instance](https://github.com/yudai/cf_nise_installer) using [Node.js](https://nodejs.org/).
+Using this library, you could interact with the following platforms: [PWS](https://console.run.pivotal.io)
+, [Bluemix](https://console.ng.bluemix.net/) or a [Local Cloud Foundry instance](https://github.com/yudai/cf_nise_installer).
 
 # Applications
 
