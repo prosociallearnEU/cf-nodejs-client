@@ -31,7 +31,7 @@ function randomInt(low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-describe("Cloud Foundry Routes", function () {
+describe.only("Cloud Foundry Routes", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -86,6 +86,7 @@ describe("Cloud Foundry Routes", function () {
                 if (result.resources.length === 0) {
                     return reject();
                 }
+                //console.log(result.resources[0])
                 route_guid = result.resources[0].metadata.guid;
                 return resolve();
             });
@@ -102,8 +103,13 @@ describe("Cloud Foundry Routes", function () {
         this.timeout(3500);
 
         var routeName = randomWords() + randomInt(1, 10);
+        var routeOptions = {
+            'domain_guid' : domain_guid,
+            'space_guid' : space_guid,
+            'host' : routeName
+        };
 
-        return CloudFoundryRoutes.addRoute(token_type, access_token, domain_guid, space_guid, routeName).then(function (result) {
+        return CloudFoundryRoutes.addRoute(token_type, access_token, routeOptions).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         });
 
@@ -117,10 +123,15 @@ describe("Cloud Foundry Routes", function () {
         var initial_route_count = 0;
         var page = 1;
         var routeName = "RouteToRemove";
+        var routeOptions = {
+            'domain_guid' : domain_guid,
+            'space_guid' : space_guid,
+            'host' : routeName
+        };        
 
         return CloudFoundryRoutes.getRoutes(token_type, access_token, page).then(function (result) {
             initial_route_count = result.total_results;
-            return CloudFoundryRoutes.addRoute(token_type, access_token, domain_guid, space_guid, routeName);
+            return CloudFoundryRoutes.addRoute(token_type, access_token, routeOptions);
         }).then(function (result) {
             route_guid = result.metadata.guid;
             return CloudFoundryRoutes.getRoutes(token_type, access_token, page);
@@ -135,16 +146,40 @@ describe("Cloud Foundry Routes", function () {
 
     });
 
-    it("Check a impossible route", function () {
+    it("Search a impossible route", function () {
         this.timeout(5000);
 
         var routeName = "noroute";
+        var filter = {
+            'q': 'host:' + routeName + ';domain_guid:' + domain_guid
+        };
 
-        return CloudFoundryRoutes.checkRoute(token_type, access_token, routeName, domain_guid).then(function (result) {
+        return CloudFoundryRoutes.checkRoute(token_type, access_token, filter).then(function (result) {
             expect(result.total_results).to.equal(0);
         });
 
     });
+
+    it("Search and get several routes", function () {
+        this.timeout(5000);
+
+        var routeName = "noroute";
+        var filter = {
+            'q': 'domain_guid:' + domain_guid,
+            'results-per-page': 100
+        };
+
+        return CloudFoundryRoutes.checkRoute(token_type, access_token, filter).then(function (result) {
+
+/*
+            for(var i = 0; i < result.resources.length; i++) {
+                console.log(i, result.resources[i].entity.host);
+            }
+*/
+            expect(result.total_results).to.be.below(1001)
+        });
+
+    });    
 
     //Inner function used to check when an application run in the system.
     function recursiveGetRoutes(token_type, access_token) {
@@ -333,6 +368,6 @@ describe("Cloud Foundry Routes", function () {
             expect(result.total_results).to.be.below(1001);
         });
 
-    });
+    });   
 
 });
