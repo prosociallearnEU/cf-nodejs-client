@@ -31,7 +31,7 @@ function randomInt(low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-describe.only("Cloud Foundry Routes", function () {
+describe("Cloud Foundry Routes", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;

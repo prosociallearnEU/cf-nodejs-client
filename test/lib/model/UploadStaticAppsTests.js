@@ -86,7 +86,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
         callback();
     }
 
-    function createApp(token_type, access_token, domain_guid, appOptions) {
+    function createApp(token_type, access_token, appOptions) {
 
         var app_guid = null;
         var routeName = null;
@@ -101,11 +101,25 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 'inline-relations-depth': 1
             };
 
+            //VALIDATIONS
+            //1. Duplicated app
             return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter).then(function (result) {
 
-                //If exist the application, Reject
+                //If exist the application, REJECT
                 if (result.total_results === 1) {
-                    return reject("Exist the app:" + appName);
+                    return reject("Exist the app: " + appName);
+                }
+
+                var filter = {
+                    'q': 'host:' + appName + ';domain_guid:' + domain_guid,
+                    'inline-relations-depth': 1
+                };
+                return CloudFoundryRoutes.checkRoute(token_type, access_token, filter);
+            //2. Duplicated route
+            }).then(function (result) {
+
+                if (result.total_results === 1) {
+                    return reject("Exist the route:" + appName);
                 }
 
                 return CloudFoundryApps.create(token_type, access_token, appOptions).then(function (result) {
@@ -119,37 +133,16 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 //TODO: How to make the inference?
                 return CloudFoundryDomains.getSharedDomains(token_type, access_token);
             }).then(function () {
-                //TODO: Review if reject in case of existing route
-                return CloudFoundryRoutes.checkRoute(token_type, access_token, appName, domain_guid).then(function (result) {
+                var routeOptions = {
+                    'domain_guid' : domain_guid,
+                    'space_guid' : space_guid,
+                    'host' : appName
+                };
+                return CloudFoundryRoutes.addRoute(token_type, access_token, routeOptions).then(function (result) {
                     return new Promise(function (resolve) {
-                        if (result.total_results === 1) {
-                            console.log("Exist a Route");
-                            //console.log(result.resources);
-                            route_guid = result.resources[0].metadata.guid;
-                            console.log("Route guid: ", route_guid);
-                            return resolve(result);
-                        }
-
-                        //Add Route
-                        route_create_flag = true; //Workaround
-                        return resolve();
-
+                        route_guid = result.metadata.guid;
+                        return resolve(result);
                     });
-                });
-            }).then(function () {
-                //TODO: Refactor syntax to code in the right place
-                if (route_create_flag) {
-                    routeName = appName;
-                    return CloudFoundryRoutes.addRoute(token_type, access_token, domain_guid, space_guid, routeName).then(function (result) {
-                        return new Promise(function (resolve) {
-                            route_guid = result.metadata.guid;
-                            return resolve(result);
-                        });
-                    });
-                }
-
-                return new Promise(function (resolve) {
-                    return resolve();
                 });
             }).then(function () {
                 return CloudFoundryApps.associateRoute(token_type, access_token, appName, app_guid, domain_guid, space_guid, route_guid);
@@ -215,46 +208,6 @@ describe("Cloud Foundry Upload Static Apps", function () {
 
     }
 
-    it("Create a Static App, Update the App & Remove app", function () {
-        this.timeout(40000);
-
-        var app_guid = null;
-        var appName = "app2" + randomWords() + randomInt(1, 100);
-        var staticBuildPack = BuildPacks.get("static");
-        var nodeBuildPack = BuildPacks.get("nodejs");
-        var route_guid = null;
-        var appOptions = {
-            "name": appName,
-            "space_guid": space_guid,
-            "instances" : 1,
-            "memory" : 32,
-            "disk_quota" : 32,
-            "buildpack" : staticBuildPack
-        };
-
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
-            app_guid = result.metadata.guid;
-            expect(app_guid).is.a("string");
-            expect(result.entity.buildpack).to.equal(staticBuildPack);
-
-            //Update an App
-            appOptions = {
-                "buildpack" : nodeBuildPack
-            };
-            return CloudFoundryApps.update(token_type, access_token, app_guid, appOptions);
-        }).then(function (result) {
-            expect(result.entity.buildpack).to.equal(nodeBuildPack);
-            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
-        }).then(function (result) {
-            route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
-        }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
-        }).then(function () {
-            expect(true).to.equal(true);
-        });
-    });
-
     it("Create a Static App, Upload 1MB zip & Remove app", function () {
         this.timeout(40000);
 
@@ -274,7 +227,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             "buildpack" : staticBuildPack
         };
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -303,7 +256,47 @@ describe("Cloud Foundry Upload Static Apps", function () {
         });
     });
 
-    it.skip("Create a Static App, Upload 1MB zip, Start the App & Remove", function () {
+    it("Create a Static App, Update the App & Remove app", function () {
+        this.timeout(40000);
+
+        var app_guid = null;
+        var appName = "app2" + randomWords() + randomInt(1, 100);
+        var staticBuildPack = BuildPacks.get("static");
+        var nodeBuildPack = BuildPacks.get("nodejs");
+        var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 32,
+            "disk_quota" : 32,
+            "buildpack" : staticBuildPack
+        };
+
+        return createApp(token_type, access_token, appOptions).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).is.a("string");
+            expect(result.entity.buildpack).to.equal(staticBuildPack);
+
+            //Update an App
+            appOptions = {
+                "buildpack" : nodeBuildPack
+            };
+            return CloudFoundryApps.update(token_type, access_token, app_guid, appOptions);
+        }).then(function (result) {
+            expect(result.entity.buildpack).to.equal(nodeBuildPack);
+            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
+        }).then(function (result) {
+            route_guid = result.resources[0].metadata.guid;
+            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+        }).then(function () {
+            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+        }).then(function () {
+            expect(true).to.equal(true);
+        });
+    });
+
+    it("Create a Static App, Upload 1MB zip, Start the App & Remove", function () {
         this.timeout(200000);
 
         var app_guid = null;
@@ -313,6 +306,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
         var weight = 1;//MB
         var compressionRate = 0;//No compression
         var route_guid = null;
+
         var appOptions = {
             "name": appName,
             "space_guid": space_guid,
@@ -320,9 +314,20 @@ describe("Cloud Foundry Upload Static Apps", function () {
             "memory" : 64,
             "disk_quota" : 64,
             "buildpack" : staticBuildPack
-        };      
+        };
+        if(environment === "PIVOTAL") {
+            appOptions = {
+                "name": appName,
+                "space_guid": space_guid,
+                "instances" : 1,
+                "memory" : 64,
+                "disk_quota" : 64,
+                "buildpack" : staticBuildPack,
+                "diego": true
+            };
+        }   
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -352,10 +357,6 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return recursiveCheckRunningState(token_type, access_token, app_guid);
         }).then(function (result) {
             expect(result["0"].state).to.equal("RUNNING");
-
-            sleep(5000, function () {
-                console.log("5 second");
-            });
 
             var url = "http://" + result["0"].stats.uris[0];
             var options = {
@@ -402,7 +403,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             "buildpack" : staticBuildPack
         };       
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -534,7 +535,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             "buildpack" : staticBuildPack
         };        
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -584,7 +585,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             "buildpack" : staticBuildPack
         };          
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -634,7 +635,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             "buildpack" : staticBuildPack
         };          
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -684,7 +685,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             "buildpack" : staticBuildPack
         };          
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -734,7 +735,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             "buildpack" : staticBuildPack
         };          
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);

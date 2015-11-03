@@ -78,7 +78,7 @@ describe("Cloud Foundry Upload JEE Apps", function () {
         return Math.floor(Math.random() * (high - low) + low);
     }
 
-    function createApp(token_type, access_token, domain_guid, appOptions) {
+    function createApp(token_type, access_token, appOptions) {
 
         var app_guid = null;
         var routeName = null;
@@ -93,11 +93,25 @@ describe("Cloud Foundry Upload JEE Apps", function () {
                 'inline-relations-depth': 1
             };
 
+            //VALIDATIONS
+            //1. Duplicated app
             return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter).then(function (result) {
 
-                //If exist the application, Reject
+                //If exist the application, REJECT
                 if (result.total_results === 1) {
-                    return reject("Exist the app:" + appName);
+                    return reject("Exist the app: " + appName);
+                }
+
+                var filter = {
+                    'q': 'host:' + appName + ';domain_guid:' + domain_guid,
+                    'inline-relations-depth': 1
+                };
+                return CloudFoundryRoutes.checkRoute(token_type, access_token, filter);
+            //2. Duplicated route
+            }).then(function (result) {
+
+                if (result.total_results === 1) {
+                    return reject("Exist the route:" + appName);
                 }
 
                 return CloudFoundryApps.create(token_type, access_token, appOptions).then(function (result) {
@@ -111,37 +125,16 @@ describe("Cloud Foundry Upload JEE Apps", function () {
                 //TODO: How to make the inference?
                 return CloudFoundryDomains.getSharedDomains(token_type, access_token);
             }).then(function () {
-                //TODO: Review if reject in case of existing route
-                return CloudFoundryRoutes.checkRoute(token_type, access_token, appName, domain_guid).then(function (result) {
+                var routeOptions = {
+                    'domain_guid' : domain_guid,
+                    'space_guid' : space_guid,
+                    'host' : appName
+                };
+                return CloudFoundryRoutes.addRoute(token_type, access_token, routeOptions).then(function (result) {
                     return new Promise(function (resolve) {
-                        if (result.total_results === 1) {
-                            console.log("Exist a Route");
-                            //console.log(result.resources);
-                            route_guid = result.resources[0].metadata.guid;
-                            console.log("Route guid: ", route_guid);
-                            return resolve(result);
-                        }
-
-                        //Add Route
-                        route_create_flag = true; //Workaround
-                        return resolve();
-
+                        route_guid = result.metadata.guid;
+                        return resolve(result);
                     });
-                });
-            }).then(function () {
-                //TODO: Refactor syntax to code in the right place
-                if (route_create_flag) {
-                    routeName = appName;
-                    return CloudFoundryRoutes.addRoute(token_type, access_token, domain_guid, space_guid, routeName).then(function (result) {
-                        return new Promise(function (resolve) {
-                            route_guid = result.metadata.guid;
-                            return resolve(result);
-                        });
-                    });
-                }
-
-                return new Promise(function (resolve) {
-                    return resolve();
                 });
             }).then(function () {
                 return CloudFoundryApps.associateRoute(token_type, access_token, appName, app_guid, domain_guid, space_guid, route_guid);
@@ -173,7 +166,7 @@ describe("Cloud Foundry Upload JEE Apps", function () {
             "buildpack" : javaBuildPack
         };
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(javaBuildPack);
@@ -208,7 +201,7 @@ describe("Cloud Foundry Upload JEE Apps", function () {
             "buildpack" : javaBuildPack
         };
 
-        return createApp(token_type, access_token, domain_guid, appOptions).then(function (result) {
+        return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(javaBuildPack);
