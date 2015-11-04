@@ -137,7 +137,7 @@ describe("Cloud Foundry Upload JEE Apps", function () {
                     });
                 });
             }).then(function () {
-                return CloudFoundryApps.associateRoute(token_type, access_token, appName, app_guid, domain_guid, space_guid, route_guid);
+                return CloudFoundryApps.associateRoute(token_type, access_token, app_guid, route_guid);
             }).then(function (result) {
                 return resolve(result);
             }).catch(function (reason) {

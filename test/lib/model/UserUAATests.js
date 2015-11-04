@@ -21,7 +21,7 @@ var CloudFoundryUsersUAA = require("../../../lib/model/UsersUAA");
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 
-describe.only("Cloud Foundry Users UAA", function () {
+describe("Cloud Foundry Users UAA", function () {
     "use strict";
     var authorization_endpoint = null;
     var token_endpoint = null;

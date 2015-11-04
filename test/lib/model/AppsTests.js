@@ -62,6 +62,35 @@ describe("Cloud Foundry Apps", function () {
         });
     });
 
+    it("The platform returns Apps with Filter", function () {
+        this.timeout(2500);
+
+        var filter = {
+            'q': 'name:' + "demo1",
+            'page': 1
+        };
+
+        return CloudFoundryApps.getApps(token_type, access_token, filter).then(function (result) {
+            //console.log(result.resources);
+            expect(result.total_results).to.be.a('number');
+        });
+    });
+
+    //TODO: Open
+    it.skip("[DEBUGGING] The platform returns Apps with Filter in body", function () {
+        this.timeout(2500);
+
+        var filter = {};
+        var bodyFilter = {
+            "name": "demo1"
+        };
+
+        return CloudFoundryApps.getApps(token_type, access_token, filter, bodyFilter).then(function (result) {
+            console.log(result.total_results);
+            expect(result.total_results).to.be.a('number');
+        });
+    });
+
     it("The platform can't find an unknown app", function () {
         this.timeout(3500);
 

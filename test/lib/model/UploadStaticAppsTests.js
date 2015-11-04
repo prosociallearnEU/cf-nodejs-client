@@ -145,7 +145,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                     });
                 });
             }).then(function () {
-                return CloudFoundryApps.associateRoute(token_type, access_token, appName, app_guid, domain_guid, space_guid, route_guid);
+                return CloudFoundryApps.associateRoute(token_type, access_token, app_guid, route_guid);
             }).then(function (result) {
                 return resolve(result);
             }).catch(function (reason) {
@@ -296,7 +296,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
         });
     });
 
-    it("Create a Static App, Upload 1MB zip, Start the App & Remove", function () {
+    it("Create a Static App, Upload 1MB zip, Start the App, Stop & Remove", function () {
         this.timeout(200000);
 
         var app_guid = null;
@@ -372,6 +372,8 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
+            return CloudFoundryApps.stopApp(token_type, access_token, app_guid);
+        }).then(function (result) {            
             return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
         }).then(function () {
             return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
