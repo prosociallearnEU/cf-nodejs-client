@@ -1,5 +1,4 @@
 /*jslint node: true*/
-/*global Promise:true, describe: true, before:true, it: true*/
 "use strict";
 
 var Promise = require('bluebird');
@@ -22,8 +21,8 @@ var CloudFoundryUsersUAA = require("../../../lib/model/UsersUAA");
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 
-describe("Cloud Foundry Users UAA", function () {
-
+describe.only("Cloud Foundry Users UAA", function () {
+    "use strict";
     var authorization_endpoint = null;
     var token_endpoint = null;
     var token_type = null;
@@ -56,16 +55,19 @@ describe("Cloud Foundry Users UAA", function () {
         it.skip("The platform creates an User", function () {
             this.timeout(5000);
 
+            var accountName = "user" + randomInt(1, 1000);
+            var accountPassword = "123456";
             var uaa_options = {
-                "schemas":["urn:scim:schemas:core:1.0"],
-                "userName":"user" + randomInt(1, 1000),
-                "emails":[
+                schemas:["urn:scim:schemas:core:1.0"],
+                userName:accountName,
+                emails:[
                     {
-                      "value":"demo@example.com",
-                      "type":"work"
+                      value:"demo@example.com",
+                      type:"work"
                     }
-                  ]
-            };
+                  ],
+                password: accountPassword,
+            }
 
             return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
                 //console.log(result)
@@ -94,8 +96,102 @@ describe("Cloud Foundry Users UAA", function () {
                 console.log(uaa_guid)
                 expect(result.resources).to.be.a('array');
             });
-        });  
+        });
+
+        it("The platform creates & remove an User", function () {
+            this.timeout(5000);
+
+            var accountName = "user" + randomInt(1, 1000);
+            var accountPassword = "123456";
+            var uaa_guid = null;
+            var uaa_options = {
+                "schemas":["urn:scim:schemas:core:1.0"],
+                "userName":accountName,
+                "emails":[
+                    {
+                      "value":"demo@example.com",
+                      "type":"work"
+                    }
+                  ],
+                "password": accountPassword,
+            };
+            var searchOptions = "?filter=userName eq '" + accountName + "'";
+
+            return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
+                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+            }).then(function (result) {
+                if(result.resources.length !== 1){
+                    return new Promise(function (resolve, reject) {
+                        return reject("No Users");
+                    });
+                }
+                uaa_guid = result.resources[0].id;
+                return CloudFoundryUsersUAA.remove(token_type, access_token, uaa_guid);
+            }).then(function (result) {
+                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+            }).then(function (result) {
+                if(result.resources.length !== 0){
+                    return new Promise(function (resolve, reject) {
+                        return reject("Rare output");
+                    });
+                }
+                expect(true).to.be.a('boolean');
+            });
+        });
+
+        it.skip("[DEBUGGING] The platform creates, update Password & remove an User", function () {
+            this.timeout(5000);
+
+            var accountName = "user" + randomInt(1, 1000);
+            var accountPassword = "123456";
+            var uaa_guid = null;
+            var uaa_options = {
+                "schemas":["urn:scim:schemas:core:1.0"],
+                "userName":accountName,
+                "emails":[
+                    {
+                      "value":"user@example.com",
+                      "type":"work"
+                    }
+                  ],
+                "password": accountPassword,
+            };
+            var searchOptions = "?filter=userName eq '" + accountName + "'";
+
+            return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
+                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+            }).then(function (result) {
+                if(result.resources.length !== 1){
+                    return new Promise(function (resolve, reject) {
+                        return reject("No Users");
+                    });
+                }
+                uaa_guid = result.resources[0].id;
+            }).then(function (result) {
+
+                uaa_options = {
+                    "schemas":["urn:scim:schemas:core:1.0"],
+                    "password": accountPassword,
+                    "oldPassword": accountPassword
+                };
+
+                return CloudFoundryUsersUAA.updatePassword(token_type, access_token, uaa_guid, uaa_options);
+            }).then(function (result) {
+                return CloudFoundryUsersUAA.remove(token_type, access_token, uaa_guid);
+            }).then(function (result) {
+                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+            }).then(function (result) {
+                if(result.resources.length !== 0){
+                    return new Promise(function (resolve, reject) {
+                        return reject("Rare output");
+                    });
+                }
+                expect(true).to.be.a('boolean');
+            });
+        });
 
     }
+
+
 
 });
