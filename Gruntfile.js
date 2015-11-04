@@ -51,5 +51,5 @@ module.exports = function (grunt) {
     //Task definition
     grunt.registerTask('default', 'coverage');
     grunt.registerTask('coverage', ['open:coverage', 'connect:coverage']);
-    grunt.registerTask('docs', ['jsdoc:dist','open:coverage','connect:docs']);
+    grunt.registerTask('docs', ['jsdoc:dist','open:docs','connect:docs']);
 };
