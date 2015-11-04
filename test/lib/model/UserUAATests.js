@@ -171,8 +171,7 @@ describe("Cloud Foundry Users UAA", function () {
 
                 uaa_options = {
                     "schemas":["urn:scim:schemas:core:1.0"],
-                    "password": accountPassword,
-                    "oldPassword": accountPassword
+                    "password": accountPassword
                 };
 
                 return CloudFoundryUsersUAA.updatePassword(token_type, access_token, uaa_guid, uaa_options);
