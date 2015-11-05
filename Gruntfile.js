@@ -44,7 +44,9 @@ module.exports = function (grunt) {
                     './lib/model/Events.js',
                     './lib/model/Jobs.js',
                     './lib/model/Logs.js',                   
-                    './lib/model/Organizations.js'
+                    './lib/model/Organizations.js',
+                    './lib/model/OrganizationsQuota.js',
+                    './lib/model/Routes.js'                    
                     ],
                 options: {
                     destination: 'doc'
