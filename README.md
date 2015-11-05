@@ -126,6 +126,11 @@ https://travis-ci.org/jabrena/cf-nodejs-client/
 
 Take a look this [doc](https://github.com/jabrena/cf-nodejs-client/blob/master/CHANGELOG.md) to check the evolution of this Client for Cloud foundry.
 
+# References
+
+* Developer list: https://lists.cloudfoundry.org/archives/list/cf-dev@lists.cloudfoundry.org/
+* Issue management: https://overv.io
+
 # Issues
 
 If you have any question or doubt, please [create an issue](https://github.com/jabrena/cf-nodejs-client/issues). 
