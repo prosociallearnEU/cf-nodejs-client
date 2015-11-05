@@ -114,7 +114,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                     'q': 'host:' + appName + ';domain_guid:' + domain_guid,
                     'inline-relations-depth': 1
                 };
-                return CloudFoundryRoutes.checkRoute(token_type, access_token, filter);
+                return CloudFoundryRoutes.getRoutes(token_type, access_token, filter);
             //2. Duplicated route
             }).then(function (result) {
 

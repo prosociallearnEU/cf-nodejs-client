@@ -79,9 +79,12 @@ describe("Cloud Foundry Routes", function () {
     it("The platform returns an unique Route", function () {
         this.timeout(5000);
 
-        var page = 1;
+        var filter = {
+             'page': 1,
+             'results-per-page': 50
+        }        
         var route_guid = null;
-        return CloudFoundryRoutes.getRoutes(token_type, access_token, page).then(function (result) {
+        return CloudFoundryRoutes.getRoutes(token_type, access_token, filter).then(function (result) {
             return new Promise(function (resolve, reject) {
                 if (result.resources.length === 0) {
                     return reject();
@@ -121,7 +124,10 @@ describe("Cloud Foundry Routes", function () {
 
         var route_guid = null;
         var initial_route_count = 0;
-        var page = 1;
+        var filter = {
+             'page': 1,
+             'results-per-page': 50
+        }  
         var routeName = "RouteToRemove";
         var routeOptions = {
             'domain_guid' : domain_guid,
@@ -129,17 +135,17 @@ describe("Cloud Foundry Routes", function () {
             'host' : routeName
         };        
 
-        return CloudFoundryRoutes.getRoutes(token_type, access_token, page).then(function (result) {
+        return CloudFoundryRoutes.getRoutes(token_type, access_token, filter).then(function (result) {
             initial_route_count = result.total_results;
             return CloudFoundryRoutes.addRoute(token_type, access_token, routeOptions);
         }).then(function (result) {
             route_guid = result.metadata.guid;
-            return CloudFoundryRoutes.getRoutes(token_type, access_token, page);
+            return CloudFoundryRoutes.getRoutes(token_type, access_token, filter);
         }).then(function (result) {
             expect(result.total_results).to.equal(initial_route_count + 1);
             return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
         }).then(function () {
-            return CloudFoundryRoutes.getRoutes(token_type, access_token, page);
+            return CloudFoundryRoutes.getRoutes(token_type, access_token, filter);
         }).then(function (result) {
             expect(result.total_results).to.equal(initial_route_count);
         });
@@ -154,7 +160,7 @@ describe("Cloud Foundry Routes", function () {
             'q': 'host:' + routeName + ';domain_guid:' + domain_guid
         };
 
-        return CloudFoundryRoutes.checkRoute(token_type, access_token, filter).then(function (result) {
+        return CloudFoundryRoutes.getRoutes(token_type, access_token, filter).then(function (result) {
             expect(result.total_results).to.equal(0);
         });
 
@@ -169,7 +175,7 @@ describe("Cloud Foundry Routes", function () {
             'results-per-page': 100
         };
 
-        return CloudFoundryRoutes.checkRoute(token_type, access_token, filter).then(function (result) {
+        return CloudFoundryRoutes.getRoutes(token_type, access_token, filter).then(function (result) {
 
 /*
             for(var i = 0; i < result.resources.length; i++) {
