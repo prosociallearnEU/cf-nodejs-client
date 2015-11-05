@@ -22,7 +22,7 @@ var CloudFoundryApps = require("../../../lib/model/Apps");
 CloudFoundry = new CloudFoundry();
 CloudFoundryApps = new CloudFoundryApps();
 
-describe("Cloud Foundry", function () {
+describe("Cloud Foundry Authentication", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
