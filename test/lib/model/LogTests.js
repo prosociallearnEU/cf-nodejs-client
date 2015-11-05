@@ -35,7 +35,6 @@ describe("Cloud foundry Logs", function () {
 
         CloudFoundry.setEndPoint(cf_api_url);
         CloudFoundryApps.setEndPoint(cf_api_url);
-        CloudFoundryLogs.setEndPoint(cf_api_url);
 
         return CloudFoundry.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;
@@ -61,8 +60,7 @@ describe("Cloud foundry Logs", function () {
             logging_endpoint = logging_endpoint.replace(":4443", "");
             logging_endpoint = logging_endpoint.replace(":443", "");//Bluemix support
             //console.log(logging_endpoint);
-            CloudFoundryLogs.setEndpoint(logging_endpoint);
-            return CloudFoundryLogs.getRecent(token_type, access_token, app_guid);
+            return CloudFoundryLogs.getRecent(logging_endpoint,token_type, access_token, app_guid);
         }).then(function () {
             //console.log(result);
             expect(true).is.equal(true);
