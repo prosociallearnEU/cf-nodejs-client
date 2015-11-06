@@ -221,6 +221,11 @@ describe("Cloud foundry Service Bindings", function () {
             username : "root",
             password : "123456"
         };
+        var user_provided_service_options ={
+            "space_guid" : space_guid,
+            "name" : serviceName,
+            "credentials" : credentials
+        };        
         //Service binding
         var serviceBinding_guid = null;
 
@@ -241,7 +246,7 @@ describe("Cloud foundry Service Bindings", function () {
                 });
             });
         }).then(function (result) {
-            return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials).then(function (result) {
+            return CloudFoundryUserProvidedServices.create(token_type, access_token, user_provided_service_options).then(function (result) {
                 return new Promise(function (resolve) {
                     //console.log(result);
                     service_guid = result.metadata.guid;

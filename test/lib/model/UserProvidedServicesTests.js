@@ -97,7 +97,13 @@ describe("Cloud foundry User Provided Services", function () {
             username : "root",
             password : "123456"
         };
-        return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials).then(function (result) {
+        var user_provided_service_options ={
+            "space_guid" : space_guid,
+            "name" : serviceName,
+            "credentials" : credentials
+        };
+
+        return CloudFoundryUserProvidedServices.create(token_type, access_token, user_provided_service_options).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         });
     });
@@ -114,7 +120,12 @@ describe("Cloud foundry User Provided Services", function () {
             username : "root",
             password : "123456"
         };
-        return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials).then(function (result) {
+        var user_provided_service_options ={
+            "space_guid" : space_guid,
+            "name" : serviceName,
+            "credentials" : credentials
+        };        
+        return CloudFoundryUserProvidedServices.create(token_type, access_token, user_provided_service_options).then(function (result) {
             service_guid = result.metadata.guid;
             expect(service_guid).is.a("string");
             return CloudFoundryUserProvidedServices.delete(token_type, access_token, service_guid);
@@ -135,7 +146,12 @@ describe("Cloud foundry User Provided Services", function () {
             username : "root",
             password : "123456"
         };
-        return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials).then(function (result) {
+        var user_provided_service_options ={
+            "space_guid" : space_guid,
+            "name" : serviceName,
+            "credentials" : credentials
+        };         
+        return CloudFoundryUserProvidedServices.create(token_type, access_token, user_provided_service_options).then(function (result) {
             service_guid = result.metadata.guid;
             expect(service_guid).is.a("string");
             return CloudFoundryUserProvidedServices.getServiceBindings(token_type, access_token, service_guid);
