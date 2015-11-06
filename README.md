@@ -50,6 +50,7 @@ The development doesn't cover the whole CC API. Main areas of development are:
 * Create an User Provided Services
 * Associate Apps with an User Provided Services
 * Start | Stop an App
+* Restage Apps
 * Scale Apps
 * Simple Logs management
 * Remove Apps

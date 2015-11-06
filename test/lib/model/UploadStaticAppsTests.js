@@ -384,6 +384,96 @@ describe("Cloud Foundry Upload Static Apps", function () {
 
     });
 
+    it("Create a Static App, Upload 1MB zip, Start the App, Stop, Restage & Remove", function () {
+        this.timeout(200000);
+
+        var app_guid = null;
+        var appName = "app2" + randomWords() + randomInt(1, 100);
+        var staticBuildPack = BuildPacks.get("static");
+        var zipPath = "./staticApp.zip";
+        var weight = 1;//MB
+        var compressionRate = 0;//No compression
+        var route_guid = null;
+
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 64,
+            "disk_quota" : 64,
+            "buildpack" : staticBuildPack
+        };
+        if(environment === "PIVOTAL") {
+            appOptions = {
+                "name": appName,
+                "space_guid": space_guid,
+                "instances" : 1,
+                "memory" : 64,
+                "disk_quota" : 64,
+                "buildpack" : staticBuildPack,
+                "diego": true
+            };
+        }   
+
+        return createApp(token_type, access_token, appOptions).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).is.a("string");
+            expect(result.entity.buildpack).to.equal(staticBuildPack);
+            return ZipGenerator.generate(zipPath, weight, compressionRate);
+        }).then(function () {
+            //Does exist the zip?   
+            fs.exists(zipPath, function (result) {
+                expect(result).to.equal(true);
+            });
+
+            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+        }).then(function (result) {
+            expect(JSON.stringify(result)).to.equal("{}");
+            return ZipGenerator.remove(zipPath);
+        }).then(function () {
+            fs.exists(zipPath, function (result) {
+                expect(result).be.equal(false);
+            });
+
+            return CloudFoundryApps.startApp(token_type, access_token, app_guid);
+        //STAGING
+        }).then(function () {
+            console.log(appName);
+            return recursiveStageApp(token_type, access_token, appName, space_guid);
+        //RUNNING
+        }).then(function () {
+            return recursiveCheckRunningState(token_type, access_token, app_guid);
+        }).then(function (result) {
+            expect(result["0"].state).to.equal("RUNNING");
+
+            var url = "http://" + result["0"].stats.uris[0];
+            var options = {
+                method: 'GET',
+                url: url
+            };
+
+            return HttpUtils.request(options, "200", false).then(function (result) {
+                console.log(result);
+                expect(result).is.a("string");
+            });
+        }).then(function () {
+            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
+        }).then(function (result) {
+            route_guid = result.resources[0].metadata.guid;
+            return CloudFoundryApps.stopApp(token_type, access_token, app_guid);
+        }).then(function (result) {        
+            return CloudFoundryApps.restage(token_type, access_token, app_guid);
+        }).then(function (result) {               
+            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+        }).then(function () {
+            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+        }).then(function () {
+            //console.log(result);
+            expect(true).to.equal(true);
+        });
+
+    });
+
     it("Create a Static App, Upload 1MB (async = false) zip & Remove app", function () {
         this.timeout(40000);
 
@@ -735,7 +825,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             "memory" : 256,
             "disk_quota" : 256,
             "buildpack" : staticBuildPack
-        };          
+        };  
 
         return createApp(token_type, access_token, appOptions).then(function (result) {
             app_guid = result.metadata.guid;
@@ -743,7 +833,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             expect(result.entity.buildpack).to.equal(staticBuildPack);
             return ZipGenerator.generate(zipPath, weight, compressionRate);
         }).then(function () {
-            //Does exist the zip?   
+            //Does exist the zip?
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
