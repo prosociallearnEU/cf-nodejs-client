@@ -1,3 +1,36 @@
+## Version 0.10.0 2015-11-06
+
+- Adding Online documentation: http://prosociallearneu.github.io/cf-nodejs-client-docs/
+- Add method to restage Apps
+- Refactor methods:
+UserProvidedServices.prototype.create
+Routes.prototype.checkRoute & Routes.prototype.getRoutes
+Logs.prototype.getRecent
+CloudFoundry.prototype.login
+Apps.prototype.associateRoute
+Apps.prototype.associateRoute
+Apps.prototype.stopApp & Apps.prototype.startApp
+Apps.prototype.getAppByName
+Apps.prototype.getApps
+Routes.prototype.addRoute
+Routes.prototype.checkRoute
+
+Environment: LOCAL_INSTANCE_1
+
+  71 passing (2m)
+  25 pending
+
+Environment: PIVOTAL
+
+  63 passing (4m)
+  20 pending
+
+Environment: BLUEMIX
+
+  63 passing (4m)
+  20 pending
+
+
 ## Version 0.9.1 2015-10-29
 
 - Adding the dependency Bluebird to improve the performance
