@@ -69,7 +69,7 @@ describe("Cloud Foundry Users", function () {
             this.timeout(5000);
 
             var uaa_guid = null;
-            var username = "user" + randomInt(1, 1000);
+            var username = "user" + randomInt(1, 10000);
             var uaa_options = {
                 "schemas":["urn:scim:schemas:core:1.0"],
                 "userName":username,

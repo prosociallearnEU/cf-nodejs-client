@@ -37,16 +37,7 @@ module.exports = function (grunt) {
             dist : {
                 src: [
                     './lib/utils/*.js',
-                    './lib/model/Apps.js', 
-                    './lib/model/Buildpacks.js', 
-                    './lib/model/CloudFoundry.js',
-                    './lib/model/Domains.js',
-                    './lib/model/Events.js',
-                    './lib/model/Jobs.js',
-                    './lib/model/Logs.js',                   
-                    './lib/model/Organizations.js',
-                    './lib/model/OrganizationsQuota.js',
-                    './lib/model/Routes.js'                    
+                    './lib/model/*.js'
                     ],
                 options: {
                     destination: 'doc'
