@@ -60,7 +60,6 @@ describe("Cloud foundry Events", function () {
             'results-per-page': 20
         };
         return CloudFoundryEvents.getEvents(token_type, access_token, filter).then(function (result) {
-            console.log(result.resources)
             expect(result.total_results).is.a("number");
             expect(result.resources.length).to.equal(20);
         });
