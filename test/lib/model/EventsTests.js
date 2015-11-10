@@ -20,7 +20,7 @@ var CloudFoundryEvents = require("../../../lib/model/Events");
 CloudFoundry = new CloudFoundry();
 CloudFoundryEvents = new CloudFoundryEvents();
 
-describe("Cloud foundry Events", function () {
+describe.only("Cloud foundry Events", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -49,20 +49,18 @@ describe("Cloud foundry Events", function () {
 
         return CloudFoundryEvents.getEvents(token_type, access_token).then(function (result) {
             expect(result.total_results).is.a("number");
-            expect(result.resources.length).to.equal(10);
         });
     });
 
     it("The platform returns the Events With Optional Query String Parameters", function () {
-      this.timeout(100000);
+        this.timeout(100000);
 
-      var event_options = {
-        'results-per-page': 20
-      };
-
-      return CloudFoundryEvents.getEvents(token_type, access_token, event_options).then(function (result) {
-        expect(result.total_results).is.a("number");
-        expect(result.resources.length).to.equal(20);
-      });
+        var filter = {
+            'results-per-page': 20
+        };
+        return CloudFoundryEvents.getEvents(token_type, access_token, filter).then(function (result) {
+            expect(result.total_results).is.a("number");
+            expect(result.resources.length).to.equal(20);
+        });
     });
 });
