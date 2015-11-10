@@ -54,11 +54,16 @@ describe("Cloud foundry Events", function () {
 
     it("The platform returns the Events With Optional Query String Parameters", function () {
         this.timeout(100000);
-
+        /*
         var filter = {
-            'q': 'timestamp>=' + "2015-10-16T00:00:00Z",
+            'q': ['timestamp>=' + "2015-10-16T00:00:00Z", 'actee:' + "7eddcf88-aba8-45e2-a682-0b6a00c8b93c"],
             'results-per-page': 20
         };
+        */
+        var filter = {
+            'q': ['timestamp>=' + "2015-10-16T00:00:00Z"],
+            'results-per-page': 20
+        };       
         return CloudFoundryEvents.getEvents(token_type, access_token, filter).then(function (result) {
             expect(result.total_results).is.a("number");
             expect(result.resources.length).to.equal(20);
