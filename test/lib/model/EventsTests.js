@@ -20,7 +20,7 @@ var CloudFoundryEvents = require("../../../lib/model/Events");
 CloudFoundry = new CloudFoundry();
 CloudFoundryEvents = new CloudFoundryEvents();
 
-describe.only("Cloud foundry Events", function () {
+describe("Cloud foundry Events", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
