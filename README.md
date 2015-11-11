@@ -65,6 +65,8 @@ If you need to interact with a Cloud Foundry platform try this [online tool](htt
 var username = "PWS_USERNAME";
 var password = "PWS_PASSWORD";
 var authorization_endpoint = "";
+var token_type = "";
+var access_token = "";
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryUsersUAA = require("cf-nodejs-client").UsersUAA;
 CloudFoundry = new CloudFoundry();
