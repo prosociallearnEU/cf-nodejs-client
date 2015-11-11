@@ -1,5 +1,6 @@
 /*jslint node: true*/
 /*global describe: true, before: true, it: true*/
+/*globals Promise:true*/
 "use strict";
 
 var Promise = require('bluebird');
@@ -15,14 +16,14 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     username = nconf.get(environment + "_" + 'username'),
     password = nconf.get(environment + "_" + 'password');
 
-var CloudFoundry = require("../../../lib/model/cloudcontroller/CloudFoundry");
-var CloudFoundryUsersUAA = require("../../../lib/model/uaa/UsersUAA");
-var CloudFoundryEvents = require("../../../lib/model/cloudcontroller/Events");
+var CloudFoundry = require("../../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudFoundryUsersUAA = require("../../../../lib/model/uaa/UsersUAA");
+var CloudFoundryDomains = require("../../../../lib/model/cloudcontroller/Domains");
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
-CloudFoundryEvents = new CloudFoundryEvents();
+CloudFoundryDomains = new CloudFoundryDomains();
 
-describe("Cloud foundry Events", function () {
+describe("Cloud foundry Domains", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -33,7 +34,7 @@ describe("Cloud foundry Events", function () {
         this.timeout(15000);
 
         CloudFoundry.setEndPoint(cf_api_url);
-        CloudFoundryEvents.setEndPoint(cf_api_url);
+        CloudFoundryDomains.setEndPoint(cf_api_url);
 
         return CloudFoundry.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;
@@ -46,30 +47,28 @@ describe("Cloud foundry Events", function () {
         });
     });
 
-    //TODO: This component has some performance problems in Pivotal systems.
-    it("The platform returns the Events", function () {
-        this.timeout(100000);
+    it("The platform returns Domains defined", function () {
+        this.timeout(3000);
 
-        return CloudFoundryEvents.getEvents(token_type, access_token).then(function (result) {
+        var domain = null;
+        return CloudFoundryDomains.getDomains(token_type, access_token).then(function (result) {
+            domain = result.resources[0].entity.name;
+            expect(domain).is.a("string");
+            expect(result.resources.length).to.be.above(0);
             expect(result.total_results).is.a("number");
         });
     });
 
-    it("The platform returns the Events With Optional Query String Parameters", function () {
-        this.timeout(100000);
-        /*
-        var filter = {
-            'q': ['timestamp>=' + "2015-10-16T00:00:00Z", 'actee:' + "7eddcf88-aba8-45e2-a682-0b6a00c8b93c"],
-            'results-per-page': 20
-        };
-        */
-        var filter = {
-            'q': ['timestamp>=' + "2015-10-16T00:00:00Z"],
-            'results-per-page': 20
-        };       
-        return CloudFoundryEvents.getEvents(token_type, access_token, filter).then(function (result) {
+    it("The platform returns Shared domains defined", function () {
+        this.timeout(5000);
+
+        var domain = null;
+        return CloudFoundryDomains.getSharedDomains(token_type, access_token).then(function (result) {
+            domain = result.resources[0].entity.name;
+            expect(domain).is.a("string");
+            expect(result.resources.length).to.be.above(0);
             expect(result.total_results).is.a("number");
-            expect(result.resources.length).to.equal(20);
         });
     });
+
 });

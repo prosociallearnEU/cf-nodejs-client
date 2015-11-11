@@ -17,14 +17,14 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     username = nconf.get(environment + "_" + 'username'),
     password = nconf.get(environment + "_" + 'password');
 
-var CloudFoundry = require("../../../lib/model/cloudcontroller/CloudFoundry");
-var CloudFoundryUsersUAA = require("../../../lib/model/uaa/UsersUAA");
-var CloudFoundryApps = require("../../../lib/model/cloudcontroller/Apps");
-var CloudFoundrySpaces = require("../../../lib/model/cloudcontroller/Spaces");
-var CloudFoundryDomains = require("../../../lib/model/cloudcontroller/Domains");
-var CloudFoundryRoutes = require("../../../lib/model/cloudcontroller/Routes");
-var CloudFoundryJobs = require("../../../lib/model/cloudcontroller/Jobs");
-var BuildPacks = require("../../../lib/model/cloudcontroller/BuildPacks");
+var CloudFoundry = require("../../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudFoundryUsersUAA = require("../../../../lib/model/uaa/UsersUAA");
+var CloudFoundryApps = require("../../../../lib/model/cloudcontroller/Apps");
+var CloudFoundrySpaces = require("../../../../lib/model/cloudcontroller/Spaces");
+var CloudFoundryDomains = require("../../../../lib/model/cloudcontroller/Domains");
+var CloudFoundryRoutes = require("../../../../lib/model/cloudcontroller/Routes");
+var CloudFoundryJobs = require("../../../../lib/model/cloudcontroller/Jobs");
+var BuildPacks = require("../../../../lib/model/cloudcontroller/BuildPacks");
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryApps = new CloudFoundryApps();
@@ -33,11 +33,11 @@ CloudFoundryDomains = new CloudFoundryDomains();
 CloudFoundryRoutes = new CloudFoundryRoutes();
 CloudFoundryJobs = new CloudFoundryJobs();
 BuildPacks = new BuildPacks();
-var HttpUtils = require('../../../lib/utils/HttpUtils');
+var HttpUtils = require('../../../../lib/utils/HttpUtils');
 HttpUtils = new HttpUtils();
 
 var fs = require('fs');
-var ZipGenerator = require('../../utils/ZipGenerator');
+var ZipGenerator = require('../../../utils/ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
 describe("Cloud Foundry Upload Static Apps", function () {

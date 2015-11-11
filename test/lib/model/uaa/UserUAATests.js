@@ -1,5 +1,4 @@
 /*jslint node: true*/
-/*global Promise:true, describe: true, before:true, it: true*/
 "use strict";
 
 var Promise = require('bluebird');
@@ -17,16 +16,13 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     username = nconf.get(environment + "_" + 'username'),
     password = nconf.get(environment + "_" + 'password');
 
-var CloudFoundry = require("../../../lib/model/cloudcontroller/CloudFoundry");
-var CloudFoundryUsersUAA = require("../../../lib/model/uaa/UsersUAA");
-var CloudFoundryUsers = require("../../../lib/model/cloudcontroller/Users");
+var CloudFoundry = require("../../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudFoundryUsersUAA = require("../../../../lib/model/uaa/UsersUAA");
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
-CloudFoundryUsers = new CloudFoundryUsers();
 
-
-describe("Cloud Foundry Users", function () {
-
+describe("Cloud Foundry Users UAA", function () {
+    "use strict";
     var authorization_endpoint = null;
     var token_endpoint = null;
     var token_type = null;
@@ -36,7 +32,6 @@ describe("Cloud Foundry Users", function () {
         this.timeout(15000);
 
         CloudFoundry.setEndPoint(cf_api_url);
-        CloudFoundryUsers.setEndPoint(cf_api_url);
 
         return CloudFoundry.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;
@@ -57,31 +52,70 @@ describe("Cloud Foundry Users", function () {
     //Testing users doesn't have permissions
     if(environment === "LOCAL_INSTANCE_1") {
 
-        it("The platform retrieves Users from CC", function () {
+        it.skip("The platform creates an User", function () {
             this.timeout(5000);
 
-            return CloudFoundryUsers.getUsers(token_type, access_token).then(function (result) {
+            var accountName = "user" + randomInt(1, 1000);
+            var accountPassword = "123456";
+            var uaa_options = {
+                schemas:["urn:scim:schemas:core:1.0"],
+                userName:accountName,
+                emails:[
+                    {
+                      value:"demo@example.com",
+                      type:"work"
+                    }
+                  ],
+                password: accountPassword,
+            }
+
+            return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
+                //console.log(result)
+                expect(true).to.be.a('boolean');
+            });
+        });
+
+        it("The platform retrieves Users from UAA", function () {
+            this.timeout(5000);
+
+            return CloudFoundryUsersUAA.getUsers(token_type, access_token).then(function (result) {
                 expect(result.resources).to.be.a('array');
             });
         });
 
-        it("The platform creates, search & remove an User from UAA", function () {
+        it.skip("The platform retrieves Users from UAA with a filter", function () {
             this.timeout(5000);
 
             var uaa_guid = null;
-            var username = "user" + randomInt(1, 10000);
+            var searchOptions = "?filter=userName eq 'demo4'";
+
+            return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions).then(function (result) {
+                //console.log(result.resources[0].groups)
+                //console.log(result.resources[0])
+                uaa_guid = result.resources[0].id;
+                console.log(uaa_guid)
+                expect(result.resources).to.be.a('array');
+            });
+        });
+
+        it("The platform creates & remove an User", function () {
+            this.timeout(5000);
+
+            var accountName = "user" + randomInt(1, 1000);
+            var accountPassword = "123456";
+            var uaa_guid = null;
             var uaa_options = {
                 "schemas":["urn:scim:schemas:core:1.0"],
-                "userName":username,
+                "userName":accountName,
                 "emails":[
                     {
                       "value":"demo@example.com",
                       "type":"work"
                     }
-                  ]
+                  ],
+                "password": accountPassword,
             };
-            var searchOptions = "?filter=userName eq '" + username + "'";
-            var user_guid = null;
+            var searchOptions = "?filter=userName eq '" + accountName + "'";
 
             return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
                 return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
@@ -92,16 +126,6 @@ describe("Cloud Foundry Users", function () {
                     });
                 }
                 uaa_guid = result.resources[0].id;
-                //console.log(uaa_guid)
-                var userOptions = {
-                    "guid": uaa_guid
-                }
-                return CloudFoundryUsers.add(token_type, access_token, userOptions);
-            }).then(function (result) {
-                //console.log(result);
-                user_guid = result.metadata.guid;
-                return CloudFoundryUsers.remove(token_type, access_token, user_guid);
-            }).then(function (result) {
                 return CloudFoundryUsersUAA.remove(token_type, access_token, uaa_guid);
             }).then(function (result) {
                 return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
@@ -115,53 +139,42 @@ describe("Cloud Foundry Users", function () {
             });
         });
 
-        //TODO: This method has to be updated. Method to update password doesn't works. (20151029)
-        it.skip("The platform creates, update password, search & remove an User from UAA", function () {
+        it.skip("[DEBUGGING] The platform creates, update Password & remove an User", function () {
             this.timeout(5000);
 
+            var accountName = "user" + randomInt(1, 1000);
+            var accountPassword = "123456";
             var uaa_guid = null;
-            var username = "user" + randomInt(1, 1000);
             var uaa_options = {
                 "schemas":["urn:scim:schemas:core:1.0"],
-                "userName":username,
+                "userName":accountName,
                 "emails":[
                     {
-                      "value":"demo@example.com",
+                      "value":"user@example.com",
                       "type":"work"
                     }
                   ],
-                "password": "123456",
+                "password": accountPassword,
             };
-            var searchOptions = "?filter=userName eq '" + username + "'";
-            var user_guid = null;
+            var searchOptions = "?filter=userName eq '" + accountName + "'";
 
             return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
                 return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
             }).then(function (result) {
-                console.log(result);
                 if(result.resources.length !== 1){
                     return new Promise(function (resolve, reject) {
                         return reject("No Users");
                     });
                 }
                 uaa_guid = result.resources[0].id;
+            }).then(function (result) {
+
                 uaa_options = {
                     "schemas":["urn:scim:schemas:core:1.0"],
-                    "password": "abc123456",
-                    "oldPassword": "oldpassword"
-                }
+                    "password": accountPassword
+                };
+
                 return CloudFoundryUsersUAA.updatePassword(token_type, access_token, uaa_guid, uaa_options);
-            }).then(function (result) {
-                console.log(result);
-                //console.log(uaa_guid)
-                var userOptions = {
-                    "guid": uaa_guid
-                }
-                return CloudFoundryUsers.add(token_type, access_token, userOptions);
-            }).then(function (result) {
-                //console.log(result);
-                user_guid = result.metadata.guid;
-                return CloudFoundryUsers.remove(token_type, access_token, user_guid);
             }).then(function (result) {
                 return CloudFoundryUsersUAA.remove(token_type, access_token, uaa_guid);
             }).then(function (result) {
@@ -177,5 +190,7 @@ describe("Cloud Foundry Users", function () {
         });
 
     }
+
+
 
 });

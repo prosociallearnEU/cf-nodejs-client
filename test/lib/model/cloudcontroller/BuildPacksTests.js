@@ -6,7 +6,7 @@ var Promise = require('bluebird');
 var chai = require("chai"),
     expect = require("chai").expect;
 
-var Buildpacks = require("../../../lib/model/cloudcontroller/BuildPacks");
+var Buildpacks = require("../../../../lib/model/cloudcontroller/BuildPacks");
 Buildpacks = new Buildpacks();
 
 describe("Cloud Foundry Buildpacks", function () {
