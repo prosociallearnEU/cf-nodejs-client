@@ -1,4 +1,6 @@
-# cf-nodejs-client [![Build Status](https://travis-ci.org/prosociallearnEU/cf-nodejs-client.svg)](https://travis-ci.org/prosociallearnEU/cf-nodejs-client) [![Dependency Status](https://david-dm.org/prosociallearnEU/cf-nodejs-client.svg)](https://david-dm.org/prosociallearnEU/cf-nodejs-client) [![devDependency Status](https://david-dm.org/prosociallearnEU/cf-nodejs-client/dev-status.svg)](https://david-dm.org/prosociallearnEU/cf-nodejs-client#info=devDependencies)
+# cf-nodejs-client 
+
+[![Build Status](https://travis-ci.org/prosociallearnEU/cf-nodejs-client.svg)](https://travis-ci.org/prosociallearnEU/cf-nodejs-client) [![Dependency Status](https://david-dm.org/prosociallearnEU/cf-nodejs-client.svg)](https://david-dm.org/prosociallearnEU/cf-nodejs-client) [![devDependency Status](https://david-dm.org/prosociallearnEU/cf-nodejs-client/dev-status.svg)](https://david-dm.org/prosociallearnEU/cf-nodejs-client#info=devDependencies)
 
 [![NPM](https://nodei.co/npm/cf-nodejs-client.png?stars=true)](https://nodei.co/npm/cf-nodejs-client/)
 
@@ -8,34 +10,24 @@ This project provides a simple client library to interact with the [Cloud Foundr
 
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-client/master/docs/cf_architecture_block.png)
 
-The library interacts with:
+Using this library, you could interact the following components on [PWS](https://console.run.pivotal.io)
+, [Bluemix](https://console.ng.bluemix.net/) or a [Local Cloud Foundry instance](https://github.com/yudai/cf_nise_installer):
 
-**[Cloud Controller](http://apidocs.cloudfoundry.org/):**
-
-* Apps
-* BuildPacks
-* Domains
-* Jobs
-* Organizations
-* Organizations Quota
-* Routes
-* Service Bindings
-* Spaces
-* Spaces Quota
-* Stacks
-* User Provided Services
-* Users
-
-**Authentication:**
-
-* UAA Users
-
-**Logging & Metrics:**
-
-* Logs
-
-Using this library, you could interact with the following platforms: [PWS](https://console.run.pivotal.io)
-, [Bluemix](https://console.ng.bluemix.net/) or a [Local Cloud Foundry instance](https://github.com/yudai/cf_nise_installer).
+| **[Cloud Controller](http://apidocs.cloudfoundry.org/)**  	| **[UAA](https://github.com/cloudfoundry/uaa)**   	| **Logging & Metrics** 	|
+|------------------------ |-----------------------	|------------------------	|
+| Apps                    | Users             	    | Logs                   	|
+| BuildPacks              |                    	    |                       	|
+| Domains                 |                    	    |                       	|
+| Jobs                    |                    	    |                       	|
+| Organizations           |                    	    |                       	|
+| Organizations Quota     |                    	    |                       	|
+| Routes                  |                    	    |                       	|
+| Service Bindings        |                    	    |                       	|
+| Spaces                  |                    	    |                       	|
+| Spaces Quota            |                    	    |                       	|
+| Stacks                  |                    	    |                       	|
+| User Provided Services  |                    	    |                       	|
+| Users                   |                    	    |                       	|
 
 # Applications
 
