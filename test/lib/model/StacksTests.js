@@ -13,8 +13,8 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     username = nconf.get(environment + "_" + 'username'),
     password = nconf.get(environment + "_" + 'password');
 
-var CloudFoundry = require("../../../lib/model/CloudFoundry");
-var CloudFoundryStacks = require("../../../lib/model/Stacks");
+var CloudFoundry = require("../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudFoundryStacks = require("../../../lib/model/cloudcontroller/Stacks");
 CloudFoundry = new CloudFoundry();
 CloudFoundryStacks = new CloudFoundryStacks();
 

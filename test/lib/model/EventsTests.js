@@ -15,8 +15,8 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     username = nconf.get(environment + "_" + 'username'),
     password = nconf.get(environment + "_" + 'password');
 
-var CloudFoundry = require("../../../lib/model/CloudFoundry");
-var CloudFoundryEvents = require("../../../lib/model/Events");
+var CloudFoundry = require("../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudFoundryEvents = require("../../../lib/model/cloudcontroller/Events");
 CloudFoundry = new CloudFoundry();
 CloudFoundryEvents = new CloudFoundryEvents();
 
