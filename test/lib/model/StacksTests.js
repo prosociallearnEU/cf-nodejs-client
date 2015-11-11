@@ -14,8 +14,10 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     password = nconf.get(environment + "_" + 'password');
 
 var CloudFoundry = require("../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudFoundryUsersUAA = require("../../../lib/model/uaa/UsersUAA");
 var CloudFoundryStacks = require("../../../lib/model/cloudcontroller/Stacks");
 CloudFoundry = new CloudFoundry();
+CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryStacks = new CloudFoundryStacks();
 
 describe("Cloud foundry Stacks", function () {
@@ -35,7 +37,8 @@ describe("Cloud foundry Stacks", function () {
         return CloudFoundry.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;            
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(authorization_endpoint, username, password);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;

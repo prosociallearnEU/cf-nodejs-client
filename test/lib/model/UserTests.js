@@ -42,7 +42,7 @@ describe("Cloud Foundry Users", function () {
             authorization_endpoint = result.authorization_endpoint;
             token_endpoint = result.token_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
-            return CloudFoundry.login(authorization_endpoint, username, password);
+            return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;

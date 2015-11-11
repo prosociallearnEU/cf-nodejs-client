@@ -17,9 +17,11 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     password = nconf.get(environment + "_" + 'password');
 
 var CloudFoundry = require("../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudFoundryUsersUAA = require("../../../lib/model/uaa/UsersUAA");
 var CloudFoundrySpaces = require("../../../lib/model/cloudcontroller/Spaces");
 var CloudFoundryUserProvidedServices = require("../../../lib/model/cloudcontroller/UserProvidedServices");
 CloudFoundry = new CloudFoundry(cf_api_url);
+CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundrySpaces = new CloudFoundrySpaces(cf_api_url);
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices(cf_api_url);
 
@@ -41,7 +43,8 @@ describe("Cloud foundry User Provided Services", function () {
         return CloudFoundry.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;             
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(authorization_endpoint, username, password);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
