@@ -62,16 +62,15 @@ If you need to interact with a Cloud Foundry platform try this [online tool](htt
 
 ``` Javascript
 
+var endpoint = "https://api.run.pivotal.io";
 var username = "PWS_USERNAME";
 var password = "PWS_PASSWORD";
 var authorization_endpoint = "";
-var token_type = "";
-var access_token = "";
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryUsersUAA = require("cf-nodejs-client").UsersUAA;
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
-CloudFoundry.setEndPoint("https://api.run.pivotal.io");
+CloudFoundry.setEndPoint(endpoint);
  
 CloudFoundry.getInfo().then(function (result) {
     console.log(result);
@@ -80,8 +79,7 @@ CloudFoundry.getInfo().then(function (result) {
     CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
     return CloudFoundryUsersUAA.login(username, password);
 }).then(function (result) {
-    token_type = result.token_type;
-    access_token = result.access_token;
+    console.log(result);
 }).catch(function (reason) {
     console.error("Error: " + reason);
 });
