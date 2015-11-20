@@ -78,7 +78,7 @@ CloudFoundry.getInfo().then(function (result) {
     authorization_endpoint = result.authorization_endpoint;
     token_endpoint = result.token_endpoint;
     CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
-    return CloudFoundryUsersUAA.login(username, password);//New with v0.11.0
+    return CloudFoundryUsersUAA.login(username, password);
 }).then(function (result) {
     token_type = result.token_type;
     access_token = result.access_token;
@@ -108,9 +108,9 @@ The development has been tested with:
 
 | [Local Instance](https://github.com/yudai/cf_nise_installer) | [PWS](https://console.run.pivotal.io)           | [Bluemix](https://console.ng.bluemix.net/) |
 | -------------- |:-------------:| -------:|
-| 2.25.0         | 2.41.0        | 2.27.0  |
+| 2.25.0         | 2.43.0        | 2.27.0  |
 
-Note: Last test: 2015/10/29
+Note: Last test: 2015/11/20
 
 **Test suite:**
 

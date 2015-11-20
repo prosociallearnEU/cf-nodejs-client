@@ -1,3 +1,80 @@
+## Version 0.11.0 2015-11-20
+
+- Refactor some methods:
+
+``` js
+Apps.prototype.create = function (token_type, access_token, appOptions) {
+Apps.prototype.add = function (token_type, access_token, appOptions) {
+
+Apps.prototype.stopApp = function (token_type, access_token, app_guid) {
+Apps.prototype.stop = function (token_type, access_token, app_guid) {
+
+Apps.prototype.startApp = function (token_type, access_token, app_guid) {
+Apps.prototype.start = function (token_type, access_token, app_guid) {
+
+Apps.prototype.deleteApp = function (token_type, access_token, app_guid) {
+Apps.prototype.remove = function (token_type, access_token, app_guid) {
+
+Apps.prototype.uploadApp = function (token_type, access_token, app_guid, filePath, async) {
+Apps.prototype.upload = function (token_type, access_token, app_guid, filePath, async) {
+
+Apps.prototype.environmentVariables = function (token_type, access_token, app_guid) {
+Apps.prototype.getEnvironmentVariables = function (token_type, access_token, app_guid) {
+
+Organizations.prototype.memoryUsage = function (token_type, access_token, org_guid) {
+Organizations.prototype.getMemoryUsage = function (token_type, access_token, org_guid) {
+
+Organizations.prototype.summary = function (token_type, access_token, org_guid) {
+Organizations.prototype.getSummary = function (token_type, access_token, org_guid) {
+
+OrganizationsQuota.prototype.quotaDefinitions = function (token_type, access_token) {
+OrganizationsQuota.prototype.getQuotaDefinitions = function (token_type, access_token) {
+
+OrganizationsQuota.prototype.quotaDefinition = function (token_type, access_token, org_guid) {
+OrganizationsQuota.prototype.getQuotaDefinition = function (token_type, access_token, org_guid) {
+
+Routes.prototype.addRoute = function (token_type, access_token, routeOptions) {
+Routes.prototype.add = function (token_type, access_token, routeOptions) {
+
+Routes.prototype.deleteRoute = function (token_type, access_token, route_guid) {
+Routes.prototype.remove = function (token_type, access_token, route_guid) {
+
+ServiceBindings.prototype.removeServiceBinding = function (token_type, access_token, service_guid){
+ServiceBindings.prototype.remove = function (token_type, access_token, service_guid) {
+
+Spaces.prototype.summary = function (token_type, access_token, space_guid) {
+Spaces.prototype.getSummary = function (token_type, access_token, space_guid) {
+
+Spaces.prototype.userRoles = function (token_type, access_token, space_guid) {
+Spaces.prototype.getUserRoles = function (token_type, access_token, space_guid) {
+
+SpacesQuota.prototype.quotaDefinitions = function (token_type, access_token) {
+SpacesQuota.prototype.getQuotaDefinitions = function (token_type, access_token) {
+
+UserProvidedServices.prototype.create = function (token_type, access_token, user_provided_service_options) {
+UserProvidedServices.prototype.add = function (token_type, access_token, user_provided_service_options) {
+
+UserProvidedServices.prototype.delete = function (token_type, access_token, service_guid) {
+UserProvidedServices.prototype.remove = function (token_type, access_token, service_guid) {
+
+Users.prototype.getUsers = function (token_type, access_token, user_guid) {
+Users.prototype.getUsers = function (token_type, access_token) {
+```
+Environment: LOCAL_INSTANCE_1
+
+  72 passing (2m)
+  26 pending
+
+Environment: PIVOTAL
+
+  64 passing (5m)
+  21 pending
+
+Environment: BLUEMIX
+
+  64 passing (5m)
+  21 pending
+
 ## Version 0.10.0 2015-11-06
 
 - Adding Online documentation: http://prosociallearneu.github.io/cf-nodejs-client-docs/
