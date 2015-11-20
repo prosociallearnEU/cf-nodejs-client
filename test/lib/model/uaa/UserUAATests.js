@@ -191,6 +191,4 @@ describe("Cloud Foundry Users UAA", function () {
 
     }
 
-
-
 });

@@ -117,7 +117,7 @@ describe("Cloud Foundry Upload JEE Apps", function () {
                     return reject("Exist the route:" + appName);
                 }
 
-                return CloudFoundryApps.create(token_type, access_token, appOptions).then(function (result) {
+                return CloudFoundryApps.add(token_type, access_token, appOptions).then(function (result) {
                     return new Promise(function (resolve) {
                         //console.log(result);
                         app_guid = result.metadata.guid;
@@ -133,7 +133,7 @@ describe("Cloud Foundry Upload JEE Apps", function () {
                     'space_guid' : space_guid,
                     'host' : appName
                 };
-                return CloudFoundryRoutes.addRoute(token_type, access_token, routeOptions).then(function (result) {
+                return CloudFoundryRoutes.add(token_type, access_token, routeOptions).then(function (result) {
                     return new Promise(function (resolve) {
                         route_guid = result.metadata.guid;
                         return resolve(result);
@@ -174,14 +174,14 @@ describe("Cloud Foundry Upload JEE Apps", function () {
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(javaBuildPack);
 
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             expect(true).to.equal(true);
         });
@@ -209,15 +209,46 @@ describe("Cloud Foundry Upload JEE Apps", function () {
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(javaBuildPack);
 
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
+            expect(true).to.equal(true);
+        });
+    });
+
+    it.skip("[Tool] Create & deploy a JEE App", function () {
+        this.timeout(40000);
+
+        var app_guid = null;
+        var appName = "apptest" + randomWords() + randomInt(1, 100);
+        var zipPath = "./test_resources/helloController.war";
+        var javaBuildPack = BuildPacks.get("java");
+        var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 512,
+            "disk_quota" : 512,
+            "buildpack" : javaBuildPack
+        };
+
+        return createApp(token_type, access_token, appOptions).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).is.a("string");
+            expect(result.entity.buildpack).to.equal(javaBuildPack);
+
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
+        }).then(function (result) {
+            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
+        }).then(function (result) {
+            route_guid = result.resources[0].metadata.guid;
             expect(true).to.equal(true);
         });
     });

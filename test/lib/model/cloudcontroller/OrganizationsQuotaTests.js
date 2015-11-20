@@ -5,6 +5,7 @@
 var Promise = require('bluebird');
 var chai = require("chai"),
     expect = require("chai").expect;
+var randomWords = require('random-words');
 
 var argv = require('optimist').demand('config').argv;
 var environment = argv.config;
@@ -49,12 +50,16 @@ describe("Cloud foundry Organizations Quota", function () {
         });
     });
 
+    function randomInt(low, high) {
+        return Math.floor(Math.random() * (high - low) + low);
+    }
+
     it("The platform returns Quota Definitions from Organizations", function () {
         this.timeout(5000);
 
         var org_guid = null;
 
-        return CloudFoundryOrgQuota.quotaDefinitions(token_type, access_token).then(function (result) {
+        return CloudFoundryOrgQuota.getQuotaDefinitions(token_type, access_token).then(function (result) {
             //console.log(result.resources);
             expect(true).is.a("boolean");
         });
@@ -68,7 +73,7 @@ describe("Cloud foundry Organizations Quota", function () {
         return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
             console.log(result);
             org_guid = result.resources[0].metadata.guid;
-            return CloudFoundryOrg.quotaDefinition(token_type, access_token, org_guid);
+            return CloudFoundryOrg.getQuotaDefinition(token_type, access_token, org_guid);
         }).then(function (result) {
             console.log(result.resources);
             expect(true).is.a("boolean");
@@ -115,8 +120,9 @@ describe("Cloud foundry Organizations Quota", function () {
             this.timeout(3000);
 
             var quota_guid = null;
+            var quota_name = "quota" + randomWords() + randomInt(1, 10000);
             var quotaOptions = {
-                'name': "demo",
+                'name': quota_name,
                 'non_basic_services_allowed': true,
                 'total_services': 100,
                 'total_routes': 1000,

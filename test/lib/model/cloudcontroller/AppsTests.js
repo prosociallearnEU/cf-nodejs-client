@@ -238,12 +238,12 @@ describe("Cloud Foundry Apps", function () {
             app_guid = result.resources[0].metadata.guid;
             //console.log(app_guid);
             console.log(result.resources[0].entity.state);
-            return CloudFoundryApps.startApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.start(token_type, access_token, app_guid);
         }).then(function () {
             return recursiveCheckApp(token_type, access_token, app_guid);
         //RESET STATE
         }).then(function () {
-            return CloudFoundryApps.stopApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.stop(token_type, access_token, app_guid);
         }).then(function (result) {
             console.log(result.entity.state);
             expect(true).to.equal(true);
@@ -386,7 +386,7 @@ describe("Cloud Foundry Apps", function () {
                 }
             });
         }).then(function () {
-            return CloudFoundryApps.environmentVariables(token_type, access_token, app_guid);
+            return CloudFoundryApps.getEnvironmentVariables(token_type, access_token, app_guid);
         }).then(function (result) {
             //console.log(result);
             expect(true).to.be.a('boolean');
@@ -400,7 +400,7 @@ describe("Cloud Foundry Apps", function () {
 
         var app_guid = "c3efd256-1225-4b2a-83ab-453e2f902944";
 
-        return CloudFoundryApps.deleteApp(token_type, access_token, app_guid).then(function (result) {
+        return CloudFoundryApps.remove(token_type, access_token, app_guid).then(function (result) {
             //console.log(result);
             expect(true).to.equal(true);
         });

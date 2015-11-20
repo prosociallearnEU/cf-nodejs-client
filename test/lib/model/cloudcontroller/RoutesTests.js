@@ -115,14 +115,14 @@ describe("Cloud Foundry Routes", function () {
             'host' : routeName
         };
 
-        return CloudFoundryRoutes.addRoute(token_type, access_token, routeOptions).then(function (result) {
+        return CloudFoundryRoutes.add(token_type, access_token, routeOptions).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         });
 
     });
 
 
-    it("Remove a Route (Create & Remove)", function () {
+    it("Create & Remove a Route", function () {
         this.timeout(25000);
 
         var route_guid = null;
@@ -140,13 +140,13 @@ describe("Cloud Foundry Routes", function () {
 
         return CloudFoundryRoutes.getRoutes(token_type, access_token, filter).then(function (result) {
             initial_route_count = result.total_results;
-            return CloudFoundryRoutes.addRoute(token_type, access_token, routeOptions);
+            return CloudFoundryRoutes.add(token_type, access_token, routeOptions);
         }).then(function (result) {
             route_guid = result.metadata.guid;
             return CloudFoundryRoutes.getRoutes(token_type, access_token, filter);
         }).then(function (result) {
             expect(result.total_results).to.equal(initial_route_count + 1);
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             return CloudFoundryRoutes.getRoutes(token_type, access_token, filter);
         }).then(function (result) {
@@ -299,7 +299,7 @@ describe("Cloud Foundry Routes", function () {
                 inferenceBlock(appRouteGuidMap, route_guid).then(function (result) {
                     isApp = result;
                     if (isApp === false) {
-                        return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+                        return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
                     }
 
                     return new Promise(function check(resolve, reject) {

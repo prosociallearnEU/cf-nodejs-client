@@ -97,7 +97,7 @@ describe("Cloud foundry Spaces", function () {
         return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundrySpaces.summary(token_type, access_token, space_guid);
+            return CloudFoundrySpaces.getSummary(token_type, access_token, space_guid);
         }).then(function (result) {
             expect(true).to.be.a('boolean');
         });
@@ -111,7 +111,7 @@ describe("Cloud foundry Spaces", function () {
         return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundrySpaces.summary(token_type, access_token, space_guid);
+            return CloudFoundrySpaces.getSummary(token_type, access_token, space_guid);
         }).then(function (result) {
 
             var usedServices = [];
@@ -132,7 +132,7 @@ describe("Cloud foundry Spaces", function () {
         return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundrySpaces.summary(token_type, access_token, space_guid);
+            return CloudFoundrySpaces.getSummary(token_type, access_token, space_guid);
         }).then(function (result) {
 
             var servicesWithoutUsage = [];
@@ -153,7 +153,7 @@ describe("Cloud foundry Spaces", function () {
         return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundrySpaces.userRoles(token_type, access_token, space_guid);
+            return CloudFoundrySpaces.getUserRoles(token_type, access_token, space_guid);
         }).then(function (result) {
             expect(result.total_results).to.be.a('number');
         });

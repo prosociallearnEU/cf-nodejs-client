@@ -11,7 +11,7 @@ HttpUtils = new HttpUtils();
 describe("HttpUtils", function () {
 
     it("HTML 200 Test", function () {
-        this.timeout(5000);
+        this.timeout(15000);
 
         var url = "https://api.run.pivotal.io/v2/info";
         var options = {
@@ -25,9 +25,9 @@ describe("HttpUtils", function () {
     });
 
     it("HTML 404 Test", function () {
-        this.timeout(5000);
+        this.timeout(15000);
 
-        var url = "https://github.com/cf-nodejs-client";
+        var url = "https://api.run.pivotal.io/v22/info";
         var options = {
             method: 'GET',
             url: url

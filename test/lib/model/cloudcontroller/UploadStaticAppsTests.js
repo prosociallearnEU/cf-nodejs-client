@@ -125,7 +125,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                     return reject("Exist the route:" + appName);
                 }
 
-                return CloudFoundryApps.create(token_type, access_token, appOptions).then(function (result) {
+                return CloudFoundryApps.add(token_type, access_token, appOptions).then(function (result) {
                     return new Promise(function (resolve) {
                         //console.log(result);
                         app_guid = result.metadata.guid;
@@ -141,7 +141,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                     'space_guid' : space_guid,
                     'host' : appName
                 };
-                return CloudFoundryRoutes.addRoute(token_type, access_token, routeOptions).then(function (result) {
+                return CloudFoundryRoutes.add(token_type, access_token, routeOptions).then(function (result) {
                     return new Promise(function (resolve) {
                         route_guid = result.metadata.guid;
                         return resolve(result);
@@ -240,7 +240,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return ZipGenerator.remove(zipPath);
@@ -251,9 +251,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             expect(true).to.equal(true);
         });
@@ -291,9 +291,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             expect(true).to.equal(true);
         });
@@ -341,7 +341,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).to.equal(true);
             });
 
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return ZipGenerator.remove(zipPath);
@@ -350,7 +350,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).be.equal(false);
             });
 
-            return CloudFoundryApps.startApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.start(token_type, access_token, app_guid);
         //STAGING
         }).then(function () {
             console.log(appName);
@@ -375,11 +375,11 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.stopApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.stop(token_type, access_token, app_guid);
         }).then(function (result) {            
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);
@@ -429,7 +429,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).to.equal(true);
             });
 
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return ZipGenerator.remove(zipPath);
@@ -438,7 +438,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).be.equal(false);
             });
 
-            return CloudFoundryApps.startApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.start(token_type, access_token, app_guid);
         //STAGING
         }).then(function () {
             console.log(appName);
@@ -463,13 +463,13 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.stopApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.stop(token_type, access_token, app_guid);
         }).then(function (result) {        
             return CloudFoundryApps.restage(token_type, access_token, app_guid);
         }).then(function (result) {               
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);
@@ -508,7 +508,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, true);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, true);
         }).then(function (result) {
             expect(result.metadata.guid).to.be.a('string');
 
@@ -601,9 +601,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);
@@ -641,7 +641,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).to.equal(true);
             });
 
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return ZipGenerator.remove(zipPath);
@@ -652,9 +652,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);
@@ -691,7 +691,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).to.equal(true);
             });
 
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return ZipGenerator.remove(zipPath);
@@ -702,9 +702,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);
@@ -741,7 +741,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).to.equal(true);
             });
 
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return ZipGenerator.remove(zipPath);
@@ -752,9 +752,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);
@@ -791,7 +791,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).to.equal(true);
             });
 
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return ZipGenerator.remove(zipPath);
@@ -802,9 +802,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);
@@ -841,7 +841,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).to.equal(true);
             });
 
-            return CloudFoundryApps.uploadApp(token_type, access_token, app_guid, zipPath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
         }).then(function (result) {
             expect(JSON.stringify(result)).to.equal("{}");
             return ZipGenerator.remove(zipPath);
@@ -852,9 +852,9 @@ describe("Cloud Foundry Upload Static Apps", function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);

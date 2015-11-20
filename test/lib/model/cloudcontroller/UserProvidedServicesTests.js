@@ -106,7 +106,7 @@ describe("Cloud foundry User Provided Services", function () {
             "credentials" : credentials
         };
 
-        return CloudFoundryUserProvidedServices.create(token_type, access_token, user_provided_service_options).then(function (result) {
+        return CloudFoundryUserProvidedServices.add(token_type, access_token, user_provided_service_options).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         });
     });
@@ -128,10 +128,10 @@ describe("Cloud foundry User Provided Services", function () {
             "name" : serviceName,
             "credentials" : credentials
         };        
-        return CloudFoundryUserProvidedServices.create(token_type, access_token, user_provided_service_options).then(function (result) {
+        return CloudFoundryUserProvidedServices.add(token_type, access_token, user_provided_service_options).then(function (result) {
             service_guid = result.metadata.guid;
             expect(service_guid).is.a("string");
-            return CloudFoundryUserProvidedServices.delete(token_type, access_token, service_guid);
+            return CloudFoundryUserProvidedServices.remove(token_type, access_token, service_guid);
         }).then(function (result) {
             expect(true).to.equal(true);
         });
@@ -154,14 +154,14 @@ describe("Cloud foundry User Provided Services", function () {
             "name" : serviceName,
             "credentials" : credentials
         };         
-        return CloudFoundryUserProvidedServices.create(token_type, access_token, user_provided_service_options).then(function (result) {
+        return CloudFoundryUserProvidedServices.add(token_type, access_token, user_provided_service_options).then(function (result) {
             service_guid = result.metadata.guid;
             expect(service_guid).is.a("string");
             return CloudFoundryUserProvidedServices.getServiceBindings(token_type, access_token, service_guid);
         }).then(function (result) {   
             expect(result.total_results).is.a("number"); 
             expect(result.total_results).to.equal(0);     
-            return CloudFoundryUserProvidedServices.delete(token_type, access_token, service_guid);
+            return CloudFoundryUserProvidedServices.remove(token_type, access_token, service_guid);
         }).then(function (result) {
             expect(true).to.equal(true);
         });

@@ -50,7 +50,7 @@ describe("Cloud foundry Spaces Quotas", function () {
     it("The platform returns Space Quota Defininitions", function () {
         this.timeout(3000);
 
-        return CloudFoundrySpacesQuota.quotaDefinitions(token_type, access_token).then(function (result) {
+        return CloudFoundrySpacesQuota.getQuotaDefinitions(token_type, access_token).then(function (result) {
             expect(result.total_results).to.be.a('number');
         });
     });

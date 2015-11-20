@@ -86,7 +86,7 @@ describe("Cloud foundry Organizations", function () {
         return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
             //console.log(result.resources[0]);
             org_guid = result.resources[0].metadata.guid;
-            return CloudFoundryOrg.memoryUsage(token_type, access_token, org_guid);
+            return CloudFoundryOrg.getMemoryUsage(token_type, access_token, org_guid);
         }).then(function (result) {
             //console.log(result);
             expect(true).is.a("boolean");
@@ -114,7 +114,7 @@ describe("Cloud foundry Organizations", function () {
 
         return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
             org_guid = result.resources[0].metadata.guid;
-            return CloudFoundryOrg.summary(token_type, access_token, org_guid);
+            return CloudFoundryOrg.getSummary(token_type, access_token, org_guid);
         }).then(function (result) {
             //console.log(result);
             expect(true).is.a("boolean");
