@@ -15,7 +15,7 @@ Using this library, you could interact the following components on [PWS](https:/
 
 | **[Cloud Controller](http://apidocs.cloudfoundry.org/)**  	| **[UAA](https://github.com/cloudfoundry/uaa)**   	| **Logging & Metrics** 	|
 |------------------------ |-----------------------	|------------------------	|
-| Apps                    | Users             	    | Logs                   	|
+| [Apps](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Apps.html)                    | Users             	    | Logs                   	|
 | BuildPacks              |                    	    |                       	|
 | Domains                 |                    	    |                       	|
 | Jobs                    |                    	    |                       	|
@@ -110,7 +110,7 @@ The development has been tested with:
 | -------------- |:-------------:| -------:|
 | 2.25.0         | 2.43.0        | 2.27.0  |
 
-Note: Last test: 2015/11/20
+Last test: 2015/11/20
 
 **Test suite:**
 
