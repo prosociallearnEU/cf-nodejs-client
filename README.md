@@ -15,19 +15,19 @@ Using this library, you could interact the following components on [PWS](https:/
 
 | **[Cloud Controller](http://apidocs.cloudfoundry.org/)**  	| **[UAA](https://github.com/cloudfoundry/uaa)**   	| **Logging & Metrics** 	|
 |------------------------ |-----------------------	|------------------------	|
-| [Apps](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Apps.html)                    | Users             	    | Logs                   	|
-| BuildPacks              |                    	    |                       	|
-| Domains                 |                    	    |                       	|
-| Jobs                    |                    	    |                       	|
-| Organizations           |                    	    |                       	|
-| Organizations Quota     |                    	    |                       	|
-| Routes                  |                    	    |                       	|
-| Service Bindings        |                    	    |                       	|
-| Spaces                  |                    	    |                       	|
-| Spaces Quota            |                    	    |                       	|
-| Stacks                  |                    	    |                       	|
-| User Provided Services  |                    	    |                       	|
-| Users                   |                    	    |                       	|
+| [Apps](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Apps.html)                    | [Users](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/UsersUAA.html)             	    | [Logs](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Logs.html)                   	|
+| [Buildpacks](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/BuildPacks.html)              |                    	    |                       	|
+| [Domains](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Domains.html)                 |                    	    |                       	|
+| [Jobs](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Jobs.html)                    |                    	    |                       	|
+| [Organizations](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Organizations.html)           |                    	    |                       	|
+| [Organizations Quotas](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/OrganizationsQuota.html)     |                    	    |                       	|
+| [Routes](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Routes.html)                  |                    	    |                       	|
+| [Service Bindings](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/ServiceBindings.html)        |                    	    |                       	|
+| [Spaces](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Spaces.html)                  |                    	    |                       	|
+| [Spaces Quotas](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/SpacesQuota.html)            |                    	    |                       	|
+| [Stacks](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Stacks.html)                  |                    	    |                       	|
+| [User provided Services](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/UserProvidedServices.html)  |                    	    |                       	|
+| [Users](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Users.html)                   |                    	    |                       	|
 
 # Applications
 
