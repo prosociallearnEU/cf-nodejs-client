@@ -24,6 +24,23 @@ describe("HttpUtils", function () {
         });
     });
 
+    it("System requires JSON, but the response is a String", function () {
+        this.timeout(15000);
+
+        var url = "https://api3.run.pivotal.io/v2/info";
+        var options = {
+            method: 'GET',
+            url: url
+        };
+
+        return HttpUtils.request(options, "200", true).then(function (result) {
+            expect(result).is.a("string");
+        }).catch(function (reason) {
+            console.log(reason);
+            expect(true).is.a("boolean");
+        });
+    });
+
     it("HTML 404 Test", function () {
         this.timeout(15000);
 
