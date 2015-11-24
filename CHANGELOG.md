@@ -1,3 +1,7 @@
+## Version 0.11.1 2015-11-23
+
+- Defensive code in HttpUtils.js (Avoid crashING in case of Server down or service not reply expected JSON)
+
 ## Version 0.11.0 2015-11-20
 
 - Refactor some methods:
