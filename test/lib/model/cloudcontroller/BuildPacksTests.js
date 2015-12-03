@@ -23,6 +23,10 @@ describe("Cloud Foundry Buildpacks", function () {
         expect(Buildpacks.get("java")).to.equal("https://github.com/cloudfoundry/java-buildpack");
     });
 
+    it("Exist a support for a PHP project", function () {
+        expect(Buildpacks.get("php")).to.equal("https://github.com/cloudfoundry/php-buildpack");
+    });
+
     it("Unknown Buildpacks handling", function () {
         expect(function () {
             Buildpacks.get("Unknown");

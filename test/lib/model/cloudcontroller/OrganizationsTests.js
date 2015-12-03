@@ -330,7 +330,6 @@ describe("Cloud foundry Organizations", function () {
         it.skip("[TOOL] The platform Creates a Quota for Organization, Organization, Space & user.", function () {
             this.timeout(5000);
 
-            var accountName = "demo38";
             var accountPassword = "123456";
             var quota_guid = null;
             var quotaOptions = {
@@ -405,7 +404,7 @@ describe("Cloud foundry Organizations", function () {
                 return CloudFoundryUsers.associateSpace(token_type, access_token, user_guid, space_guid);               
             //Test Login with new account
             }).then(function (result) {
-                return CloudFoundry.login(authorization_endpoint, accountName, accountPassword);
+                return CloudFoundryUsersUAA.login(authorization_endpoint, accountName, accountPassword);
             }).then(function (result) {
                 expect(result.token_type).to.equal("bearer");
             });
