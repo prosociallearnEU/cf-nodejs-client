@@ -9,7 +9,7 @@ var chai = require("chai"),
 var Buildpacks = require("../../../../lib/model/cloudcontroller/BuildPacks");
 Buildpacks = new Buildpacks();
 
-describe("Cloud Foundry Buildpacks", function () {
+describe.only("Cloud Foundry Buildpacks", function () {
 
     it("Exist a support for a Node.js project", function () {
         expect(Buildpacks.get("nodejs")).to.equal("https://github.com/cloudfoundry/nodejs-buildpack");
@@ -26,6 +26,12 @@ describe("Cloud Foundry Buildpacks", function () {
     it("Exist a support for a PHP project", function () {
         expect(Buildpacks.get("php")).to.equal("https://github.com/cloudfoundry/php-buildpack");
     });
+
+    it("Exist a support for a Python project", function () {
+        expect(Buildpacks.get("python")).to.equal("https://github.com/cloudfoundry/python-buildpack");
+    });
+
+
 
     it("Unknown Buildpacks handling", function () {
         expect(function () {
