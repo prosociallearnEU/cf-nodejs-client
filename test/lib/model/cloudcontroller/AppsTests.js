@@ -253,7 +253,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it("The platform returns Routes from an App", function () {
-        this.timeout(20000);
+        this.timeout(50000);
 
         function recursiveGetAppRoutes(token_type, access_token, appRouteGuidList) {
 
