@@ -25,7 +25,9 @@ Using this library, you could interact the following components on [PWS](https:/
 | [Organizations](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Organizations.html)           |                    	    |                       	|
 | [Organizations Quotas](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/OrganizationsQuota.html)     |                    	    |                       	|
 | [Routes](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Routes.html)                  |                    	    |                       	|
+| [Services](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Services.html) | | |            
 | [Service Bindings](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/ServiceBindings.html)        |                    	    |                       	|
+| [Service Plans](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/ServicePlans.html) | | |            
 | [Spaces](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Spaces.html)                  |                    	    |                       	|
 | [Spaces Quotas](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/SpacesQuota.html)            |                    	    |                       	|
 | [Stacks](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Stacks.html)                  |                    	    |                       	|
