@@ -42,6 +42,10 @@ describe("Cloud Foundry Routes", function () {
     var domain_guid = null;
     var space_guid = null;
 
+    function randomInt(low, high) {
+        return Math.floor(Math.random() * (high - low) + low);
+    }
+
     before(function () {
         this.timeout(25000);
 
@@ -131,7 +135,7 @@ describe("Cloud Foundry Routes", function () {
              'page': 1,
              'results-per-page': 50
         }  
-        var routeName = "RouteToRemove";
+        var routeName = "RouteToRemove" +  + randomInt(1, 100000);
         var routeOptions = {
             'domain_guid' : domain_guid,
             'space_guid' : space_guid,

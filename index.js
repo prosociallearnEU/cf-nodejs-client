@@ -82,11 +82,25 @@ var Routes = require('./lib/model/cloudcontroller/Routes');
 exports.Routes = Routes;
 
 /**
+ * Support for Services
+ * @type {[type]}
+ */
+var Services = require('./lib/model/cloudcontroller/Services');
+exports.Services = Services;
+
+/**
  * Support for ServiceBindings
  * @type {[type]}
  */
 var ServiceBindings = require('./lib/model/cloudcontroller/ServiceBindings');
 exports.ServiceBindings = ServiceBindings;
+
+/**
+ * Support for ServicePlans
+ * @type {[type]}
+ */
+var ServicePlans = require('./lib/model/cloudcontroller/ServicePlans');
+exports.ServicePlans = ServicePlans;
 
 /**
  * Support for Spaces

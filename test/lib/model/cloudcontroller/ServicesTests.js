@@ -1,6 +1,5 @@
 /*jslint node: true*/
 /*global describe: true, before:true, it: true*/
-"use strict";
 
 var Promise = require('bluebird');
 var chai = require("chai"),
@@ -32,7 +31,7 @@ CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices();
 BuildPacks = new BuildPacks();
 
 describe("Cloud foundry Services", function () {
-
+    "use strict";
     var authorization_endpoint = null;
     var token_endpoint = null;
     var token_type = null;
@@ -49,8 +48,7 @@ describe("Cloud foundry Services", function () {
         CloudFoundryUserProvidedServices.setEndPoint(cf_api_url);
 
         return CloudFoundry.getInfo().then(function (result) {
-            authorization_endpoint = result.authorization_endpoint;            
-            token_endpoint = result.token_endpoint;
+            authorization_endpoint = result.authorization_endpoint;
             token_endpoint = result.token_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
@@ -68,8 +66,19 @@ describe("Cloud foundry Services", function () {
         return Math.floor(Math.random() * (high - low) + low);
     }
 
+    it.skip("Show a list of Services available", function () {
+        this.timeout(5000);
+
+        return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
+            for(var i = 0; i < result.resources.length; i++){
+                console.log(i + " | " + result.resources[i].entity.label + " | " + result.resources[i].entity.description);
+            }
+            expect(result.total_results).is.a("number");
+        });
+    });
+
     it("The platform returns a list of Services available", function () {
-        this.timeout(3000);
+        this.timeout(5000);
 
         return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
             expect(result.total_results).is.a("number");
@@ -77,14 +86,14 @@ describe("Cloud foundry Services", function () {
     });
 
     it("The platform returns the first Service", function () {
-        this.timeout(3000);
+        this.timeout(5000);
 
         var service_guid = null;
         return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
             if(result.total_results === 0){
                 return new Promise(function (resolve, reject) {
                     return reject("No Service");
-                });                
+                });
             }
             service_guid = result.resources[0].metadata.guid;
             return CloudFoundryServices.getService(token_type, access_token, service_guid);
@@ -96,31 +105,35 @@ describe("Cloud foundry Services", function () {
     });
 
     it("The platform returns a list of active Services available", function () {
-        this.timeout(3000);
+        this.timeout(5000);
 
         var filter = {
-          'q': 'active:' + true
-        };            
+          q: 'active:' + true
+        };
         return CloudFoundryServices.getServices(token_type, access_token, filter).then(function (result) {
             expect(result.total_results).is.a("number");
         });
     });
 
-    it("The platform returns a list of Service Plans for the first Service", function () {
-        this.timeout(3000);
+    //cf_nise_installer doesn't provide Services by default.
+    if(environment !== "LOCAL_INSTANCE_1") {
 
-        var service_guid = null;
-        return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
-            service_guid = result.resources[0].metadata.guid;
-            return CloudFoundryServices.getServicePlans(token_type, access_token, service_guid);
-        }).then(function (result) {
-            //console.log(result.entity.credentials);
-            expect(result.total_results).is.a("number");
-        })
-    });
+        it("The platform returns a list of Service Plans for the first Service", function () {
+            this.timeout(5000);
+
+            var service_guid = null;
+            return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
+                service_guid = result.resources[0].metadata.guid;
+                return CloudFoundryServices.getServicePlans(token_type, access_token, service_guid);
+            }).then(function (result) {
+                expect(result.total_results).is.a("number");
+            })
+        });
+
+    }
 
     it.skip("The platform removes a Service", function () {
-        this.timeout(3000);
+        this.timeout(5000);
 
         var service_guid = null;
         return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {

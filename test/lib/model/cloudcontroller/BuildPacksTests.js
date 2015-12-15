@@ -9,7 +9,7 @@ var chai = require("chai"),
 var Buildpacks = require("../../../../lib/model/cloudcontroller/BuildPacks");
 Buildpacks = new Buildpacks();
 
-describe.only("Cloud Foundry Buildpacks", function () {
+describe("Cloud Foundry Buildpacks", function () {
 
     it("Exist a support for a Node.js project", function () {
         expect(Buildpacks.get("nodejs")).to.equal("https://github.com/cloudfoundry/nodejs-buildpack");

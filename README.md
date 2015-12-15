@@ -25,9 +25,9 @@ Using this library, you could interact the following components on [PWS](https:/
 | [Organizations](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Organizations.html)           |                    	    |                       	|
 | [Organizations Quotas](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/OrganizationsQuota.html)     |                    	    |                       	|
 | [Routes](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Routes.html)                  |                    	    |                       	|
-| [Services](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Services.html) | | |            
+| [Services](#) | | |            
 | [Service Bindings](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/ServiceBindings.html)        |                    	    |                       	|
-| [Service Plans](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/ServicePlans.html) | | |            
+| [Service Plans](#) | | |            
 | [Spaces](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Spaces.html)                  |                    	    |                       	|
 | [Spaces Quotas](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/SpacesQuota.html)            |                    	    |                       	|
 | [Stacks](http://prosociallearneu.github.io/cf-nodejs-client-docs/docs/v0.11.0/Stacks.html)                  |                    	    |                       	|
@@ -111,9 +111,9 @@ The development has been tested with:
 
 | [Local Instance](https://github.com/yudai/cf_nise_installer) | [PWS](https://console.run.pivotal.io)           | [Bluemix](https://console.ng.bluemix.net/) |
 | -------------- |:-------------:| -------:|
-| 2.25.0         | 2.43.0        | 2.27.0  |
+| 2.25.0         | 2.44.0        | 2.27.0  |
 
-Last test: 2015/11/20
+Last test: 2015/12/15
 
 **Test suite:**
 
