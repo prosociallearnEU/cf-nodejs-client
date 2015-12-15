@@ -175,8 +175,8 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 //console.log(counter);
                 if (result.resources[0].entity.package_state === "STAGED") {
                     resolve(result);
-                } else if (counter === 15) {
-                    reject(new Error("Timeout"));
+                } else if (counter === 25) {
+                    reject(new Error("Timeout // recursiveStageApp"));
                 } else {
                     //console.log("next try");
                     counter += 1;
