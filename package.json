@@ -18,7 +18,7 @@
   "scripts": {
     "start": "node index.js",
 
-    "test": "npm run test_local && npm run test_pws",
+    "test": "npm run test_local",
     "test_local": "mocha test --config=LOCAL_INSTANCE_1",
     "test_pws": "mocha test --config=PIVOTAL",
     "test_bluemix": "mocha test --config=BLUEMIX",

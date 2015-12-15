@@ -115,67 +115,6 @@ describe("Cloud Foundry Users", function () {
             });
         });
 
-        //TODO: This method has to be updated. Method to update password doesn't works. (20151029)
-        it.skip("The platform creates, update password, search & remove an User from UAA", function () {
-            this.timeout(5000);
-
-            var uaa_guid = null;
-            var username = "user" + randomInt(1, 1000);
-            var uaa_options = {
-                "schemas":["urn:scim:schemas:core:1.0"],
-                "userName":username,
-                "emails":[
-                    {
-                      "value":"demo@example.com",
-                      "type":"work"
-                    }
-                  ],
-                "password": "123456",
-            };
-            var searchOptions = "?filter=userName eq '" + username + "'";
-            var user_guid = null;
-
-            return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
-                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
-            }).then(function (result) {
-                console.log(result);
-                if(result.resources.length !== 1){
-                    return new Promise(function (resolve, reject) {
-                        return reject("No Users");
-                    });
-                }
-                uaa_guid = result.resources[0].id;
-                uaa_options = {
-                    "schemas":["urn:scim:schemas:core:1.0"],
-                    "password": "abc123456",
-                    "oldPassword": "oldpassword"
-                }
-                return CloudFoundryUsersUAA.updatePassword(token_type, access_token, uaa_guid, uaa_options);
-            }).then(function (result) {
-                console.log(result);
-                //console.log(uaa_guid)
-                var userOptions = {
-                    "guid": uaa_guid
-                }
-                return CloudFoundryUsers.add(token_type, access_token, userOptions);
-            }).then(function (result) {
-                //console.log(result);
-                user_guid = result.metadata.guid;
-                return CloudFoundryUsers.remove(token_type, access_token, user_guid);
-            }).then(function (result) {
-                return CloudFoundryUsersUAA.remove(token_type, access_token, uaa_guid);
-            }).then(function (result) {
-                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
-            }).then(function (result) {
-                if(result.resources.length !== 0){
-                    return new Promise(function (resolve, reject) {
-                        return reject("Rare output");
-                    });
-                }
-                expect(true).to.be.a('boolean');
-            });
-        });
-
     }
 
 });
