@@ -257,10 +257,8 @@ describe("Cloud Foundry Apps", function () {
 
         function recursiveGetAppRoutes(token_type, access_token, appRouteGuidList) {
 
-            //console.log("Get routes from current Apps");
-
             //Check maybe the limit is short
-            var iterationLimit = 20;
+            var iterationLimit = 50;
             var counter = 0;
             var app_guid = null;
             var appRouteGuidMap = {};
