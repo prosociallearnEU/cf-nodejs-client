@@ -145,6 +145,7 @@ describe("Cloud Foundry Users UAA", function () {
             var accountName = "user" + randomInt(1, 1000);
             var accountPassword = "123456";
             var uaa_guid = null;
+            var user_id = null;
             var uaa_options = {
                 schemas: ["urn:scim:schemas:core:1.0"],
                 userName: accountName,
@@ -164,7 +165,8 @@ describe("Cloud Foundry Users UAA", function () {
             var searchOptions = "?filter=userName eq '" + accountName + "'";
 
             return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
-                console.log(result)
+                console.log(result);
+                user_id = result.id;
                 return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
             }).then(function (result) {
                 if(result.resources.length !== 1){
@@ -183,7 +185,7 @@ describe("Cloud Foundry Users UAA", function () {
                     password: accountPassword,
                     oldPassword: accountPassword
                 };
-                return CloudFoundryUsersUAA.updatePassword(newuser_token_type, newuser_access_token, uaa_guid, uaa_options);
+                return CloudFoundryUsersUAA.updatePassword(newuser_token_type, newuser_access_token, user_id, uaa_options);
             }).then(function (result) {
                 console.log(result);
                 return CloudFoundryUsersUAA.remove(token_type, access_token, uaa_guid);
