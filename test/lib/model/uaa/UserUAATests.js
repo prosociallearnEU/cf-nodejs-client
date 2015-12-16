@@ -139,7 +139,7 @@ describe("Cloud Foundry Users UAA", function () {
             });
         });
 
-        it.only("[DEBUGGING] The platform creates, update Password & remove an User", function () {
+        it.skip("[DEBUGGING] The platform creates, update Password & remove an User", function () {
             this.timeout(5000);
 
             var accountName = "user" + randomInt(1, 1000);
