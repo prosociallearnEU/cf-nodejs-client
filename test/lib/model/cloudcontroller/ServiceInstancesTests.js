@@ -80,17 +80,18 @@ describe("Cloud foundry Service Instances", function () {
     it("The platform returns the first Service", function () {
         this.timeout(5000);
 
+        var messageNoService = "No service";
         var service_instance_guid = null;
         return CloudFoundryServiceInstances.getInstances(token_type, access_token).then(function (result) {
             if(result.total_results === 0){
-                return Promise.reject("No service")
+                return Promise.reject(messageNoService);
             }
             service_instance_guid = result.resources[0].metadata.guid;
             return CloudFoundryServiceInstances.getInstance(token_type, access_token, service_instance_guid);
         }).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         }).catch(function (reason) {
-            expect(reason).to.equal("No Service");
+            expect(reason).to.equal(messageNoService);
         });
     });
 
@@ -98,7 +99,7 @@ describe("Cloud foundry Service Instances", function () {
         this.timeout(5000);
 
         var filter = {
-          q: 'space_guid:' + space_guid
+            q: 'space_guid:' + space_guid
         };
         return CloudFoundryServiceInstances.getInstances(token_type, access_token, filter).then(function (result) {
             expect(result.total_results).is.a("number");
@@ -161,9 +162,9 @@ describe("Cloud foundry Service Instances", function () {
 
         return CloudFoundryServicePlans.getServicePlans(token_type, access_token).then(function (result) {
             var options = {
-              name: 'sample-test-service-instance',
-              service_plan_guid: result.resources[0].metadata.guid,
-              space_guid: space_guid
+                name: 'sample-test-service-instance',
+                service_plan_guid: result.resources[0].metadata.guid,
+                space_guid: space_guid
             }
             return CloudFoundryServiceInstances.create(token_type, access_token, options);
         }).then(function (result) {
