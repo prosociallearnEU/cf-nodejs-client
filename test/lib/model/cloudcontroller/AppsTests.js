@@ -316,7 +316,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it("The platform returns Service Bindings from an App", function () {
-        this.timeout(3500);
+        this.timeout(25000);
 
         var app_guid = null;
 
