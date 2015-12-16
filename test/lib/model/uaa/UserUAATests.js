@@ -146,9 +146,14 @@ describe("Cloud Foundry Users UAA", function () {
             var accountPassword = "123456";
             var uaa_guid = null;
             var uaa_options = {
-                schemas:["urn:scim:schemas:core:1.0"],
-                userName:accountName,
-                emails:[
+                schemas: ["urn:scim:schemas:core:1.0"],
+                userName: accountName,
+                name: {
+                    formatted: accountName,
+                    familyName: accountName,
+                    givenName: accountName
+                },
+                emails: [
                     {
                       "value":"user@example.com",
                       "type":"work"
@@ -159,7 +164,7 @@ describe("Cloud Foundry Users UAA", function () {
             var searchOptions = "?filter=userName eq '" + accountName + "'";
 
             return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
-                console.log(result);
+                console.log(result)
                 return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
             }).then(function (result) {
                 if(result.resources.length !== 1){
@@ -170,16 +175,14 @@ describe("Cloud Foundry Users UAA", function () {
                 uaa_guid = result.resources[0].id;
             }).then(function (result) {
                 return CloudFoundryUsersUAA.login(accountName, accountPassword);
-            }).then(function (result) {  
+            }).then(function (result) {
                 var newuser_token_type = result.token_type;
                 var newuser_access_token = result.access_token;
-
                 uaa_options = {
-                    "schemas":["urn:scim:schemas:core:1.0"],
-                    "password": accountPassword,
-                    "oldPassword": accountPassword
+                    schemas: ["urn:scim:schemas:core:1.0"],
+                    password: accountPassword,
+                    oldPassword: accountPassword
                 };
-
                 return CloudFoundryUsersUAA.updatePassword(newuser_token_type, newuser_access_token, uaa_guid, uaa_options);
             }).then(function (result) {
                 console.log(result);
