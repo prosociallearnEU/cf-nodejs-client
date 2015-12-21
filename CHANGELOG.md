@@ -1,3 +1,28 @@
+## Version 0.12.0 2015-12-21
+
+- Support to refresh OAuth Token.
+- Adding PHP & Python buildpacks.
+- Package.json refactoring
+
+Pull Requests:
+
+@jthomas:
+
+- Support for Service Instances
+- Support for Services
+- Support for ServicePlans
+- Support for filters in Events
+
+Environment: LOCAL_INSTANCE_1
+
+  90 passing (3m)
+  32 pending
+
+Environment: PIVOTAL
+
+Environment: BLUEMIX
+
+
 ## Version 0.11.1 2015-11-23
 
 - Defensive code in HttpUtils.js (Avoid crashing in case of Server down or service not reply expected JSON)
