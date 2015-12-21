@@ -1,5 +1,4 @@
 /*jslint node: true*/
-"use strict";
 
 var Promise = require('bluebird');
 var chai = require("chai"),
@@ -27,6 +26,7 @@ describe("Cloud Foundry Users UAA", function () {
     var token_endpoint = null;
     var token_type = null;
     var access_token = null;
+    var refresh_token = null;
 
     before(function () {
         this.timeout(15000);
@@ -41,6 +41,7 @@ describe("Cloud Foundry Users UAA", function () {
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
+            refresh_token = result.refresh_token;
         });
 
     });
@@ -48,6 +49,42 @@ describe("Cloud Foundry Users UAA", function () {
     function randomInt(low, high) {
         return Math.floor(Math.random() * (high - low) + low);
     }
+
+    function sleep(time, callback) {
+        var stop = new Date().getTime();
+        while (new Date().getTime() < stop + time) {
+            ;
+        }
+        callback();
+    }
+
+    it("Use a refresh token to renew Oauth token", function () {
+        this.timeout(25000);
+
+        var token_type_test = null;
+        var access_token_test = null;
+        var refresh_token_test = null;
+
+        return CloudFoundryUsersUAA.login(username, password).then(function (result) {
+            refresh_token_test = result.refresh_token;
+            sleep(5000, function () {
+                console.log("5 second");
+            });
+            return CloudFoundryUsersUAA.refreshToken(refresh_token_test);
+       }).then(function (result) {
+            token_type_test = result.token_type;
+            access_token_test = result.access_token;
+            return CloudFoundryUsersUAA.getUsers(token_type_test, access_token_test);
+        }).then(function (result) {
+            return CloudFoundryUsersUAA.refreshToken(refresh_token_test);
+        }).then(function (result) {
+            token_type_test = result.token_type;
+            access_token_test = result.access_token;
+            return CloudFoundryUsersUAA.getUsers(token_type_test, access_token_test);
+        }).then(function (result) {
+            expect(result.resources).to.be.a('array');
+        });
+    });
 
     //Testing users doesn't have permissions
     if(environment === "LOCAL_INSTANCE_1") {
