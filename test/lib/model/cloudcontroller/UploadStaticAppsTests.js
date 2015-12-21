@@ -211,6 +211,30 @@ describe("Cloud Foundry Upload Static Apps", function () {
 
     }
 
+    function recursiveCheckJobState(token_type, access_token, job_guid) {
+        var counter = 0;
+        var maximumLoops = 15;
+
+        return new Promise(function check(resolve, reject) {
+
+            CloudFoundryJobs.getJob(token_type, access_token, job_guid).then(function (result) {
+                console.log(result.entity.status);
+                //console.log(counter);
+                if (result.entity.status === "finished") {
+                    resolve(result);
+                } else if (counter === maximumLoops) {
+                    reject(new Error("Timeout Job"));
+                } else {
+                    //console.log("next try");
+                    counter += 1;
+                    setTimeout(check, 1000, resolve, reject);
+                }
+            });
+
+        });
+
+    }
+
     it("Create a Static App, Upload 1MB zip & Remove app", function () {
         this.timeout(40000);
 
@@ -477,7 +501,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
 
     });
 
-    it("Create a Static App, Upload 1MB (async = false) zip & Remove app", function () {
+    it.only("Create a Static App, Upload 1MB (async = false) zip & Remove app", function () {
         this.timeout(40000);
 
         var app_guid = null;
@@ -521,83 +545,10 @@ describe("Cloud Foundry Upload Static Apps", function () {
                 expect(result).be.equal(false);
             });
 
-            if (job_status === "queued") {
-
-                sleep(5000, function () {
-                    console.log("5 second");
-                });
-
-                return CloudFoundryJobs.getJob(token_type, access_token, job_guid).then(function (result) {
-                    return new Promise(function (resolve) {
-                        var status = result.entity.status;
-                        console.log(status);
-                        resolve(result);
-                    });
-                });
-
-            }
-
-            return new Promise(function (resolve) {
-                resolve(result);
-            });
-
+            return recursiveCheckJobState(token_type, access_token, job_guid);
         }).then(function (result) {
             expect(result.metadata.guid).to.be.a('string');
 
-            //console.log(result);
-            job_guid = result.metadata.guid;
-            job_status = result.entity.status;
-            //console.log(result.metadata.guid);
-            //console.log(result.entity.status);
-
-            if (job_status === "queued") {
-
-                sleep(5000, function () {
-                    console.log("5 second");
-                });
-
-                return CloudFoundryJobs.getJob(result.token_type, result.access_token, job_guid).then(function (result) {
-                    return new Promise(function (resolve) {
-                        var status = result.entity.status;
-                        console.log(status);
-                        resolve(result);
-                    });
-                });
-            }
-
-            return new Promise(function (resolve) {
-                resolve(result);
-            });
-
-        }).then(function (result) {
-            expect(result.metadata.guid).to.be.a('string');
-
-            job_guid = result.metadata.guid;
-            job_status = result.entity.status;
-            //console.log(result.metadata.guid);
-            //console.log(result.entity.status);
-
-            if (job_status === "queued") {
-
-                sleep(5000, function () {
-                    console.log("5 second");
-                });
-
-                return CloudFoundryJobs.getJob(result.token_type, result.access_token, job_guid).then(function (result) {
-                    return new Promise(function (resolve) {
-                        var status = result.entity.status;
-                        console.log(status);
-                        resolve(result);
-                    });
-                });
-
-            }
-
-            return new Promise(function (resolve) {
-                resolve(result);
-            });
-
-        }).then(function () {
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
