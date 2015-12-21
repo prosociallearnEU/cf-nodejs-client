@@ -17,8 +17,10 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
 
 var CloudFoundry = require("../../../../lib/model/cloudcontroller/CloudFoundry");
 var CloudFoundryUsersUAA = require("../../../../lib/model/uaa/UsersUAA");
+var CloudFoundryApps = require("../../../../lib/model/cloudcontroller/Apps");
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
+CloudFoundryApps = new CloudFoundryApps();
 
 describe("Cloud Foundry Users UAA", function () {
     "use strict";
@@ -32,6 +34,7 @@ describe("Cloud Foundry Users UAA", function () {
         this.timeout(15000);
 
         CloudFoundry.setEndPoint(cf_api_url);
+        CloudFoundryApps.setEndPoint(cf_api_url);        
 
         return CloudFoundry.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;
@@ -58,7 +61,7 @@ describe("Cloud Foundry Users UAA", function () {
         callback();
     }
 
-    it("Use a refresh token to renew Oauth token", function () {
+    it.only("Use a refresh token to renew Oauth token", function () {
         this.timeout(25000);
 
         var token_type_test = null;
@@ -74,13 +77,13 @@ describe("Cloud Foundry Users UAA", function () {
        }).then(function (result) {
             token_type_test = result.token_type;
             access_token_test = result.access_token;
-            return CloudFoundryUsersUAA.getUsers(token_type_test, access_token_test);
-        }).then(function (result) {
+            return CloudFoundryApps.getApps(token_type, access_token);
+        }).then(function (result) {          
             return CloudFoundryUsersUAA.refreshToken(refresh_token_test);
         }).then(function (result) {
             token_type_test = result.token_type;
             access_token_test = result.access_token;
-            return CloudFoundryUsersUAA.getUsers(token_type_test, access_token_test);
+            return CloudFoundryApps.getApps(token_type, access_token);            
         }).then(function (result) {
             expect(result.resources).to.be.a('array');
         });
