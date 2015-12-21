@@ -296,6 +296,112 @@ describe("Cloud foundry Service Bindings", function () {
         });
     });
 
+    it("The platform creates an App, User Provided Service & Service Binding. Later, the test removes all stuff 2 (Alternative to remove service binding)", function () {
+        this.timeout(5000);
+
+        //App
+        var appName = "app2" + randomWords() + randomInt(1, 100);
+        var filter = {
+            'q': 'name:' + appName,
+            'inline-relations-depth': 1
+        };
+        var staticBuildPack = BuildPacks.get("static");
+        var app_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "buildpack" : staticBuildPack
+        };      
+        //Service
+        var serviceName = "s" + randomWords() + randomInt(1, 100);
+        var service_guid = null;
+        var credentials = {
+            dbname : "demo",
+            host : "8.8.8.8",
+            port : "3306", 
+            username : "root",
+            password : "123456"
+        };
+        var user_provided_service_options ={
+            "space_guid" : space_guid,
+            "name" : serviceName,
+            "credentials" : credentials
+        };        
+        //Service binding
+        var serviceBinding_guid = null;
+
+        //Creating App, Service & Service Binding
+        return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter).then(function (result) {
+            //console.log(result);
+
+            //If exist the application, Reject
+            if (result.total_results === 1) {
+                throw new Error("Exist the app: " + appName);
+            }
+
+            return CloudFoundryApps.add(token_type, access_token, appOptions).then(function (result) {  
+                return new Promise(function (resolve) {
+                    //console.log(result);
+                    app_guid = result.metadata.guid;
+                    return resolve(app_guid);
+                });
+            });
+        }).then(function (result) {
+            return CloudFoundryUserProvidedServices.add(token_type, access_token, user_provided_service_options).then(function (result) {
+                return new Promise(function (resolve) {
+                    //console.log(result);
+                    service_guid = result.metadata.guid;
+                    return resolve(service_guid);
+                });
+            });                
+        }).then(function (result) {
+            //console.log(result);
+            return CloudFoundryServiceBindings.associateServiceWithApp(token_type, access_token, service_guid, app_guid).then(function (result) {
+                return new Promise(function (resolve) {
+                    //console.log(result);
+                    serviceBinding_guid = result.metadata.guid;
+                    return resolve(serviceBinding_guid);
+                });
+            });
+
+        //Search
+        }).then(function (result) {
+            var filter = {
+                'q': 'service_instance_guid:' + service_guid
+            };            
+            return CloudFoundryApps.getServiceBindings(token_type, access_token, app_guid, filter);
+        }).then(function (result) {
+            expect(result.total_results).to.equal(1);
+            var filter = {
+                'q': 'app_guid:' + app_guid
+            };             
+            return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token, filter);
+        }).then(function (result) {
+            expect(result.total_results).to.equal(1); 
+            return new Promise(function (resolve) {
+                return resolve();
+            });          
+        //Removing the Service Binding, Service & App (Cleaning process)
+        }).then(function (result) {
+            return CloudFoundryApps.removeServiceBindings(token_type, access_token, app_guid, serviceBinding_guid);
+        }).then(function (result) {
+            var filter = {
+                'q': 'app_guid:' + app_guid
+            };             
+            return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token, filter);
+        }).then(function (result) {
+            expect(result.total_results).to.equal(0); 
+            return new Promise(function (resolve) {
+                return resolve();
+            });            
+            return CloudFoundryUserProvidedServices.remove(token_type, access_token, service_guid);
+        }).then(function (result) {
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
+        }).then(function (result) {
+            expect(true).to.equal(true);
+        });
+    });
+
     //Note: it is necessary to stop->start to apply the change with the service.
     it.skip("[TOOL] Given an app, bind a service.", function () {
         this.timeout(3000);
