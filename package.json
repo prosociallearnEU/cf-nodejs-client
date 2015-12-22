@@ -1,22 +1,18 @@
 {
   "name": "cf-nodejs-client",
-  "version": "0.11.1",
+  "version": "0.12.0",
   "description": "A Cloud Foundry Client for Node.js",
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
   "license": "Apache-2.0",
-
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-
     "test": "npm run test_local",
     "test_local": "mocha test --config=LOCAL_INSTANCE_1",
     "test_pws": "mocha test --config=PIVOTAL",
     "test_bluemix": "mocha test --config=BLUEMIX",
-
     "preversion": "npm run test_local"
   },
-
   "homepage": "https://github.com/prosociallearnEU/cf-nodejs-client",
   "repository": {
     "type": "git",
@@ -25,22 +21,18 @@
   "bugs": {
     "url": "https://github.com/prosociallearnEU/cf-nodejs-client/issues"
   },
-
   "engines": {
     "node": ">= 0.10.0"
   },
-
   "files": [
     "index.js",
     "lib"
   ],
-
   "dependencies": {
     "bluebird": "3.0.6",
     "request": "2.67.0",
     "restler": "3.4.0"
   },
-
   "devDependencies": {
     "archiver": "0.20.0",
     "chai": "3.4.1",
@@ -56,7 +48,6 @@
     "optimist": "0.6.1",
     "random-words": "0.0.1"
   },
-
   "keywords": [
     "cloud foundry",
     "cloudfoundry",
