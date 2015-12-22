@@ -68,47 +68,25 @@ The development doesn't cover the whole CC API. Main areas of development are:
 If you need to interact with a Cloud Foundry platform try this [online tool](https://tonicdev.com/npm/cf-nodejs-client) and use this example:
 
 ``` Javascript
-
-var endpoint = "https://api.run.pivotal.io";
-var username = "PWS_USERNAME";
-var password = "PWS_PASSWORD";
-var authorization_endpoint = null;
-var token_type = null;
-var access_token = null;
-var refresh_token = null;
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryUsersUAA = require("cf-nodejs-client").UsersUAA;
 var CloudFoundryApps = require("cf-nodejs-client").Apps;
+
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryApps = new CloudFoundryApps();
 CloudFoundry.setEndPoint(endpoint);
 CloudFoundryApps.setEndPoint(endpoint);
 
-function sleep(time, callback) {
-    var stop = new Date().getTime();
-    while (new Date().getTime() < stop + time) {
-        ;
-    }
-    callback();
-}
- 
+var endpoint = "https://api.run.pivotal.io";
+var username = "PWS_USERNAME";
+var password = "PWS_PASSWORD";
+
 CloudFoundry.getInfo().then(function (result) {
-    console.log(result);
-    authorization_endpoint = result.authorization_endpoint;
-    token_endpoint = result.token_endpoint;
-    CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+    CloudFoundryUsersUAA.setEndPoint(result.authorization_endpoint);
     return CloudFoundryUsersUAA.login(username, password);
 }).then(function (result) {
-	refresh_token = result.refresh_token;
-    sleep(5000, function () {
-        console.log("5 second");
-    });	
-    return CloudFoundryUsersUAA.refreshToken(refresh_token);
-}).then(function (result) {
-    token_type = result.token_type;
-    access_token = result.access_token;
-    return CloudFoundryApps.getApps(token_type, access_token);
+    return CloudFoundryApps.getApps(result.token_type, result.access_token);
 }).then(function (result) {
     console.log(result);
 }).catch(function (reason) {
