@@ -291,12 +291,13 @@ describe("Cloud Foundry Apps", function () {
         }
 
         var appRouteGuidList = [];
+        var ERROR_MESSAGE_NO_APPS = "No App";
 
         return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
 
             if (result.total_results === 0) {
                 return new Promise(function check(resolve, reject) {
-                    reject(new Error("No App"));
+                    reject(ERROR_MESSAGE_NO_APPS);
                 });
             }
 
@@ -311,7 +312,7 @@ describe("Cloud Foundry Apps", function () {
             //expect(result).to.be.a('Array');
         }).catch(function (reason) {
             console.log(reason);
-            expect(reason).to.equal("Not found App.");
+            expect(reason).to.equal(ERROR_MESSAGE_NO_APPS);
         });
     });
 

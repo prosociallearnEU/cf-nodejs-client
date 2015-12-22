@@ -91,10 +91,11 @@ describe("Cloud Foundry Routes", function () {
              'results-per-page': 50
         }        
         var route_guid = null;
+        var ERROR_MESSAGE_NO_ROUTE = "No Route";
         return CloudFoundryRoutes.getRoutes(token_type, access_token, filter).then(function (result) {
             return new Promise(function (resolve, reject) {
                 if (result.resources.length === 0) {
-                    return reject();
+                    return reject(ERROR_MESSAGE_NO_ROUTE);
                 }
                 //console.log(result.resources[0])
                 route_guid = result.resources[0].metadata.guid;
@@ -104,6 +105,9 @@ describe("Cloud Foundry Routes", function () {
             return CloudFoundryRoutes.getRoute(token_type, access_token, route_guid);
         }).then(function (result) {
             expect(result.metadata.guid).is.a("string");
+        }).catch(function (reason) {
+            console.log(reason);
+            expect(reason).to.equal(ERROR_MESSAGE_NO_ROUTE);
         });
 
     });

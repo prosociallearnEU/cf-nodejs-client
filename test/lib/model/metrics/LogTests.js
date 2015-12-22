@@ -54,8 +54,16 @@ describe("Cloud foundry Logs", function () {
         this.timeout(6000);
 
         var app_guid = null;
+        var ERROR_MESSAGE_NO_APPS = "No App";
 
         return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
+
+            if (result.total_results === 0) {
+                return new Promise(function check(resolve, reject) {
+                    reject(ERROR_MESSAGE_NO_APPS);
+                });
+            }
+            
             app_guid = result.resources[0].metadata.guid;
             //Process URL
             //console.log(logging_endpoint);
@@ -67,6 +75,9 @@ describe("Cloud foundry Logs", function () {
         }).then(function () {
             //console.log(result);
             expect(true).is.equal(true);
+        }).catch(function (reason) {
+            console.log(reason);
+            expect(reason).to.equal(ERROR_MESSAGE_NO_APPS);
         });
     });
 
