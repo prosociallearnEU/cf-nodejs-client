@@ -158,13 +158,13 @@ istanbul cover node_modules/mocha/bin/_mocha -- -R spec
 **Continous integration:**
 
 ``` shell
-https://travis-ci.org/jabrena/cf-nodejs-client/
+https://travis-ci.org/prosociallearnEU/cf-nodejs-client/
 
 ```
 
 # Versions
 
-Take a look this [doc](https://github.com/jabrena/cf-nodejs-client/blob/master/CHANGELOG.md) to check the evolution of this Client for Cloud foundry.
+Take a look this [doc](https://github.com/prosociallearnEU/cf-nodejs-client/blob/master/CHANGELOG.md) to check the evolution of this Client for Cloud foundry.
 
 # References
 
@@ -174,6 +174,8 @@ Take a look this [doc](https://github.com/jabrena/cf-nodejs-client/blob/master/C
 
 # Issues
 
-If you have any question or doubt, please [create an issue](https://github.com/jabrena/cf-nodejs-client/issues). 
+If you have any question or doubt, please [create an issue](https://github.com/prosociallearnEU/cf-nodejs-client/issues). 
 
-Juan Antonio
+# License
+
+Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).

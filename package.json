@@ -4,6 +4,7 @@
   "description": "A Cloud Foundry Client for Node.js",
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
   "license": "Apache-2.0",
+
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -13,6 +14,7 @@
     "test_bluemix": "mocha test --config=BLUEMIX",
     "preversion": "npm run test_local"
   },
+
   "homepage": "https://github.com/prosociallearnEU/cf-nodejs-client",
   "repository": {
     "type": "git",
