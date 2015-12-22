@@ -44,7 +44,7 @@ The development doesn't cover the whole CC API. Main areas of development are:
 **App life cycle:**
 
 * Create an App
-* Upload source code in .zip or .war (Support for Static, Node.js & JEE)
+* Upload source code in .zip or .war (Support for Static, Python, PHP, Node.js & JEE)
 * Create an User Provided Services
 * Associate Apps with an User Provided Services
 * Start | Stop an App
@@ -59,6 +59,7 @@ The development doesn't cover the whole CC API. Main areas of development are:
 * Organization quota
 * Organization
 * Space
+* Services, Service Instances, Service Plans, User provided Services & Service Binding
 * UAA Users
 * Users
 
@@ -71,12 +72,23 @@ If you need to interact with a Cloud Foundry platform try this [online tool](htt
 var endpoint = "https://api.run.pivotal.io";
 var username = "PWS_USERNAME";
 var password = "PWS_PASSWORD";
-var authorization_endpoint = "";
+var authorization_endpoint = null;
+var token_type = null;
+var access_token = null;
+var refresh_token = null;
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryUsersUAA = require("cf-nodejs-client").UsersUAA;
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundry.setEndPoint(endpoint);
+
+function sleep(time, callback) {
+    var stop = new Date().getTime();
+    while (new Date().getTime() < stop + time) {
+        ;
+    }
+    callback();
+}
  
 CloudFoundry.getInfo().then(function (result) {
     console.log(result);
@@ -84,6 +96,16 @@ CloudFoundry.getInfo().then(function (result) {
     token_endpoint = result.token_endpoint;
     CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
     return CloudFoundryUsersUAA.login(username, password);
+}).then(function (result) {
+	refresh_token = result.refresh_token;
+    sleep(5000, function () {
+        console.log("5 second");
+    });	
+    return CloudFoundryUsersUAA.refreshToken(refresh_token_test);
+}).then(function (result) {
+    token_type = result.token_type;
+    access_token = result.access_token;
+    return CloudFoundryApps.getApps(token_type, access_token);
 }).then(function (result) {
     console.log(result);
 }).catch(function (reason) {
