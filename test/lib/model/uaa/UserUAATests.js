@@ -61,7 +61,7 @@ describe("Cloud Foundry Users UAA", function () {
         callback();
     }
 
-    it.only("Use a refresh token to renew Oauth token", function () {
+    it("Use a refresh token to renew Oauth token", function () {
         this.timeout(25000);
 
         var token_type_test = null;
