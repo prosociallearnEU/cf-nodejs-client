@@ -103,7 +103,7 @@ npm install cf-nodejs-client --save
 
 ```
 
-Online documentation:
+# Technical Documentation
 
 [JSDoc](https://prosociallearneu.github.io/cf-nodejs-client/) 
 
