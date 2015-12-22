@@ -8,6 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "lint": "eslint ./lib/utils/*",
     "test": "npm run test_local",
     "test_local": "mocha test --config=LOCAL_INSTANCE_1",
     "test_pws": "mocha test --config=PIVOTAL",
@@ -39,6 +40,7 @@
     "archiver": "0.20.0",
     "chai": "3.4.1",
     "chai-as-promised": "5.1.0",
+    "eslint": "^1.10.3",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
     "grunt-connect": "0.2.0",
