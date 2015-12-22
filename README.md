@@ -78,9 +78,12 @@ var access_token = null;
 var refresh_token = null;
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryUsersUAA = require("cf-nodejs-client").UsersUAA;
+var CloudFoundryApps = require("cf-nodejs-client").Apps;
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
+CloudFoundryApps = new CloudFoundryApps();
 CloudFoundry.setEndPoint(endpoint);
+CloudFoundryApps.setEndPoint(endpoint);
 
 function sleep(time, callback) {
     var stop = new Date().getTime();
@@ -101,7 +104,7 @@ CloudFoundry.getInfo().then(function (result) {
     sleep(5000, function () {
         console.log("5 second");
     });	
-    return CloudFoundryUsersUAA.refreshToken(refresh_token_test);
+    return CloudFoundryUsersUAA.refreshToken(refresh_token);
 }).then(function (result) {
     token_type = result.token_type;
     access_token = result.access_token;
