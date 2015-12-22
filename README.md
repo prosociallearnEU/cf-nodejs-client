@@ -165,6 +165,7 @@ Take a look this [doc](https://github.com/jabrena/cf-nodejs-client/blob/master/C
 
 # References
 
+* API Docs: http://apidocs.cloudfoundry.org/
 * Developer list: https://lists.cloudfoundry.org/archives/list/cf-dev@lists.cloudfoundry.org/
 * Issue management: https://overv.io
 
