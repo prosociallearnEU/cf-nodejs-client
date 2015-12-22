@@ -13,7 +13,7 @@ This project provides a simple client library to interact with the [Cloud Foundr
 
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-client/master/docs/cf_architecture_block.png)
 
-Using this library, you could interact the following components on [PWS](https://console.run.pivotal.io)
+Using this library, you could interact with the following platforms: [PWS](https://console.run.pivotal.io)
 , [Bluemix](https://console.ng.bluemix.net/) or a [Local Cloud Foundry instance](https://github.com/yudai/cf_nise_installer):
 
 | **[Cloud Controller](http://apidocs.cloudfoundry.org/)**  	| **[UAA](https://github.com/cloudfoundry/uaa)**   	| **Logging & Metrics** 	|
