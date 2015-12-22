@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils/HttpUtils.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utils/HttpUtils.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*jslint node: true*/
+
+var Promise = require('bluebird');
+var request = require('request');
+var rest = require('restler');
+
+/**
+ * HttpUtils is a private class designed manage REST operations with
+ * Cloud Foundry components (Cloud controller, UAA, Metrics).
+ * It is used by all classes of project.
+ * @constructor
+ */
+function HttpUtils() {
+    "use strict";
+    return undefined;
+}
+
+/**
+ * Stablish a http communications using REST Verbs: GET/POST/PUT/DELETE
+ *
+ * @param  {json} options          [define options to make the request with the CF component]
+ * @param  {number} httpStatusAssert [set expected http status code (200,201,204, etc...)]
+ * @param  {boolan} jsonOutput       [if the REST method retuns a String or a JSON representation]
+ * @return {string}                  [JSON/String]
+ *
+ * @example
+ * var url = "https://api.run.pivotal.io/v2/info";
+ *       var options = {
+ *           method: 'GET',
+ *           url: url
+ *       };
+ * HttpUtils.request(options, "200", true);
+ */
+HttpUtils.prototype.request = function (options, httpStatusAssert, jsonOutput) {
+    "use strict";
+    var result = null;
+
+    //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    var requestWithDefaults = request.defaults({
+        rejectUnauthorized: false
+    });
+
+    return new Promise(function (resolve, reject) {
+
+        try {
+
+            requestWithDefaults(options, function (error, response, body) {
+                if (error) {
+                    return reject(error);
+                }
+
+                if (jsonOutput) {
+                    try {
+                        result = JSON.parse(body);
+                    } catch (error) {
+                        return reject(body);
+                    }
+                } else {
+                    result = body;
+                }
+
+                if (!error &amp;&amp; response.statusCode == httpStatusAssert) {
+                    return resolve(result);
+                } else {
+                    if (body.length === 0) {
+                        return reject("EMPTY_BODY");
+                    }
+                    return reject(body);
+                }
+            });
+
+        } catch (error) {
+            return reject(error);
+        }
+
+    });
+
+};
+
+/**
+ * Method designed to upload zip file to Cloud Controller.
+ * It is the unique usage of Restler dependency.
+ *
+ * @param  {string} url              [url]
+ * @param  {json} options          [options]
+ * @param  {number} httpStatusAssert [set expected http status code (200,201,204, etc...)]
+ * @param  {boolan} jsonOutput       [if the REST method retuns a String or a JSON representation]
+ * @return {string}                  [JSON/String]
+ */
+HttpUtils.prototype.upload = function (url, options, httpStatusAssert, jsonOutput) {
+    "use strict";
+
+    return new Promise(function (resolve, reject) {
+
+        try {
+
+            rest.put(url, options).on('complete', function (result, response) {
+                if (result instanceof Error) {
+                    reject(result);
+                }
+
+                if (response.statusCode == httpStatusAssert) {
+
+                    if (jsonOutput) {
+                        return resolve(JSON.parse(result));
+                    } else {
+                        return resolve(result);
+                    }
+
+                }
+            });
+
+        } catch (error) {
+            return reject(error);
+        }
+
+    });
+};
+
+module.exports = HttpUtils;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Apps.html">Apps</a></li><li><a href="BuildPacks.html">BuildPacks</a></li><li><a href="CloudFoundry.html">CloudFoundry</a></li><li><a href="Domains.html">Domains</a></li><li><a href="Events.html">Events</a></li><li><a href="HttpUtils.html">HttpUtils</a></li><li><a href="Jobs.html">Jobs</a></li><li><a href="Logs.html">Logs</a></li><li><a href="Organizations.html">Organizations</a></li><li><a href="OrganizationsQuota.html">OrganizationsQuota</a></li><li><a href="Routes.html">Routes</a></li><li><a href="ServiceBindings.html">ServiceBindings</a></li><li><a href="ServiceInstances.html">ServiceInstances</a></li><li><a href="ServicePlans.html">ServicePlans</a></li><li><a href="Services.html">Services</a></li><li><a href="Spaces.html">Spaces</a></li><li><a href="SpacesQuota.html">SpacesQuota</a></li><li><a href="Stacks.html">Stacks</a></li><li><a href="UserProvidedServices.html">UserProvidedServices</a></li><li><a href="Users.html">Users</a></li><li><a href="UsersUAA.html">UsersUAA</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Dec 22 2015 10:56:57 GMT+0100 (Hora estándar romance)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
