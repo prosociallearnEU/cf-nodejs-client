@@ -18,7 +18,7 @@ Using this library, you could interact the following components on [PWS](https:/
 
 | **[Cloud Controller](http://apidocs.cloudfoundry.org/)**  	| **[UAA](https://github.com/cloudfoundry/uaa)**   	| **Logging & Metrics** 	|
 |------------------------ |-----------------------	|------------------------	|
-| [Apps](https://prosociallearneu.github.io/cf-nodejs-client/docs/v0.12.0/Apps.html)                    | [Users]https://prosociallearneu.github.io/cf-nodejs-client/docs/v0.12.0/UsersUAA.html)             	    | [Logs](https://prosociallearneu.github.io/cf-nodejs-client/docs/v0.12.0/Logs.html)                   	|
+| [Apps](https://prosociallearneu.github.io/cf-nodejs-client/docs/v0.12.0/Apps.html)                    | [Users](https://prosociallearneu.github.io/cf-nodejs-client/docs/v0.12.0/UsersUAA.html)             	    | [Logs](https://prosociallearneu.github.io/cf-nodejs-client/docs/v0.12.0/Logs.html)                   	|
 | [Buildpacks](https://prosociallearneu.github.io/cf-nodejs-client/docs/v0.12.0/BuildPacks.html)              |                    	    |                       	|
 | [Domains](https://prosociallearneu.github.io/cf-nodejs-client/docs/v0.12.0/Domains.html)                 |                    	    |                       	|
 | [Jobs](https://prosociallearneu.github.io/cf-nodejs-client/docs/v0.12.0/Jobs.html)                    |                    	    |                       	|
@@ -37,7 +37,7 @@ Using this library, you could interact the following components on [PWS](https:/
 
 # Applications
 
-[Node.js](https://nodejs.org/) with [Express](http://expressjs.com/) are a great combination to develop Web applications. If you <a href="https://www.google.com/trends/explore#q=python%20flask%2C%20node%20express%2C%20go%20pat%2C%20java%20spark%2C%20ruby%20sinatra&cmpt=q&tz=Etc%2FGMT-2" target="_blank">observe the Sinatra market</a>, you will notice that Node.js has a huge Traction.
+[Node.js](https://nodejs.org/) with [Express](http://expressjs.com/) are a great combination to develop Web applications. If you <a href="https://www.google.com/trends/explore#q=python%20flask%2C%20node%20express%2C%20golang%20pat%2C%20java%20spark%2C%20ruby%20sinatra&cmpt=q&tz=Etc%2FGMT-2" target="_blank">observe the Sinatra market</a>, you will notice that Node.js has a huge Traction.
 
 The development doesn't cover the whole CC API. Main areas of development are:
 
