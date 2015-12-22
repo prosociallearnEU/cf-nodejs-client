@@ -112,9 +112,9 @@ The development has been tested with:
 
 | [Local Instance](https://github.com/yudai/cf_nise_installer) | [PWS](https://console.run.pivotal.io)           | [Bluemix](https://console.ng.bluemix.net/) |
 | -------------- |:-------------:| -------:|
-| 2.25.0         | 2.44.0        | 2.27.0  |
+| 2.25.0         | 2.44.0        | 2.40.0  |
 
-Last test: 2015/12/15
+Last test: 2015/12/22
 
 **Test suite:**
 

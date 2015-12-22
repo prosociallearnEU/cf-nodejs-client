@@ -1,4 +1,4 @@
-## Version 0.12.0 2015-12-21
+## Version 0.12.0 2015-12-22
 
 - Support to refresh OAuth Token.
 - Adding PHP & Python buildpacks.
@@ -15,12 +15,18 @@ Pull Requests:
 
 Environment: LOCAL_INSTANCE_1
 
-  90 passing (3m)
-  32 pending
+  89 passing (3m)
+  33 pending
 
 Environment: PIVOTAL
 
+  82 passing (4m)
+  29 pending
+
 Environment: BLUEMIX
+
+  82 passing (4m)
+  29 pending
 
 
 ## Version 0.11.1 2015-11-23
