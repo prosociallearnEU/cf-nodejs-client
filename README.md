@@ -124,7 +124,7 @@ npm install cf-nodejs-client --save
 
 Online documentation:
 
-[JSDoc](http://prosociallearneu.github.io/cf-nodejs-client-docs/) 
+[JSDoc](https://prosociallearneu.github.io/cf-nodejs-client/) 
 
 # Testing
 
