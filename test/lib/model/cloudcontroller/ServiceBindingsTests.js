@@ -104,16 +104,16 @@ describe("Cloud foundry Service Bindings", function () {
         this.timeout(3000);
 
         var app_guid = null;
+        var ERROR_MESSAGE_NO_APPS = "No App";
 
         return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
             return new Promise(function (resolve, reject) {
                 expect(result.total_results).to.be.a('number');
-                if (result.total_results > 0) {
-                    app_guid = result.resources[0].metadata.guid;
-                    return resolve();
-                } else {
-                    return reject("Not found App.");
+                if (result.total_results === 0) {
+                    reject(ERROR_MESSAGE_NO_APPS);
                 }
+                app_guid = result.resources[0].metadata.guid;
+                return resolve();
             });
         }).then(function (result) {
             //app_guid
@@ -126,6 +126,9 @@ describe("Cloud foundry Service Bindings", function () {
             //console.log(result.resources[0].metadata.guid);
             //console.log(result.resources[0].entity.credentials);
             expect(result.total_results).is.a("number");
+        }).catch(function (reason) {
+            console.log(reason);
+            expect(reason).to.equal(ERROR_MESSAGE_NO_APPS);
         });
     });
 
@@ -296,7 +299,7 @@ describe("Cloud foundry Service Bindings", function () {
         });
     });
 
-    it("The platform creates an App, User Provided Service & Service Binding. Later, the test removes all stuff 2 (Alternative to remove service binding)", function () {
+    it.skip("The platform creates an App, User Provided Service & Service Binding. Later, the test removes all stuff 2 (Alternative to remove service binding)", function () {
         this.timeout(5000);
 
         //App
