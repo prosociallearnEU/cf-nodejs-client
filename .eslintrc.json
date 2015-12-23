@@ -89,7 +89,7 @@
         "no-warning-comments": [2, { "terms": ["todo", "fixme", "any other term"], "location": "anywhere" }],
         "no-with": 2,
         "radix": 2,
-        "vars-on-top": 2,
+        "vars-on-top": 1,
         "wrap-iife": 2,
         "yoda": 2,
 
@@ -124,7 +124,7 @@
         "array-bracket-spacing": [2, "always"],
         "block-spacing": 2,
         "brace-style": 2,
-        "camelcase": 2,
+        "camelcase": [2, {"properties": "never"}],
         "comma-spacing": [2, {"before": false, "after": true}],
         "comma-style": [2, "last"],
         "computed-property-spacing": [2, "always"],
@@ -202,13 +202,13 @@
         "no-dupe-class-members": 2,
         "no-this-before-super": 2,
         //"no-var": 2,
-        "object-shorthand": 2,
+        "object-shorthand": 1,
         //"prefer-arrow-callback": 2,
         "prefer-const": 2,
         "prefer-reflect": 2,
         //"prefer-rest-params": 2,
         "prefer-spread": 2,
-        "prefer-template": 2,
+        "prefer-template": 1,
         "require-yield": 2
         //"yield-star-spacing": [2, {"before": true, "after": false}]
     },
