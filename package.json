@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "FOLDER": "./lib/model/**/*.js",
-    "lint": "eslint  ./lib/model/uaa/*.js ./lib/utils/*.js",
+    "lintDebugged": "eslint  ./lib/model/uaa/*.js ./lib/model/metrics/*.js ./lib/utils/*.js",
+    "lint": "eslint  ./lib/model/cloudcontroller/Apps.js ",
     "test": "npm run test_local",
     "test_local": "mocha test --config=LOCAL_INSTANCE_1",
     "test_pws": "mocha test --config=PIVOTAL",
