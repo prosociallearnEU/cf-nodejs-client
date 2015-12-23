@@ -7,8 +7,7 @@
 
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "lint": "eslint ./lib/utils/*",
+    "lint": "eslint ./lib/model/**/*.js ./lib/utils/*.js",
     "test": "npm run test_local",
     "test_local": "mocha test --config=LOCAL_INSTANCE_1",
     "test_pws": "mocha test --config=PIVOTAL",
