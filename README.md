@@ -74,9 +74,9 @@ const endpoint = "https://api.run.pivotal.io";
 const username = "PWS_USERNAME";
 const password = "PWS_PASSWORD";
 
-var CloudFoundry = new (require("cf-nodejs-client")).CloudFoundry(endpoint);
-var CloudFoundryUsersUAA = new (require("cf-nodejs-client")).UsersUAA;
-var CloudFoundryApps = new (require("cf-nodejs-client")).Apps(endpoint);
+const CloudFoundry = new (require("cf-nodejs-client")).CloudFoundry(endpoint);
+const CloudFoundryUsersUAA = new (require("cf-nodejs-client")).UsersUAA;
+const CloudFoundryApps = new (require("cf-nodejs-client")).Apps(endpoint);
 
 CloudFoundry.getInfo().then(function (result) {
     CloudFoundryUsersUAA.setEndPoint(result.authorization_endpoint);
