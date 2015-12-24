@@ -4,19 +4,16 @@
   "description": "A Cloud Foundry Client for Node.js",
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
   "license": "Apache-2.0",
-
   "main": "index.js",
   "scripts": {
-    "FOLDER": "./lib/model/**/*.js",
-    "lintDebugged": "eslint  ./lib/model/uaa/*.js ./lib/model/metrics/*.js ./lib/utils/*.js",
-    "lint": "eslint  ./lib/model/cloudcontroller/Apps.js ",
-    "test": "npm run test_local",
+    "preversion": "npm run lint && npm run test_local",
+    "lint": "eslint  ./lib/model/**/*.js ./lib/utils/*.js",
+    "test": "npm run lint && npm run test_local",
     "test_local": "mocha test --config=LOCAL_INSTANCE_1",
     "test_pws": "mocha test --config=PIVOTAL",
     "test_bluemix": "mocha test --config=BLUEMIX",
-    "preversion": "npm run test_local"
+    "uml": "node ./node_modules/wavi/bin/wavi --png ./lib/ ./docs/umlDiagram.png --includenodemodules"
   },
-
   "homepage": "https://github.com/prosociallearnEU/cf-nodejs-client",
   "repository": {
     "type": "git",
@@ -41,7 +38,7 @@
     "archiver": "0.20.0",
     "chai": "3.4.1",
     "chai-as-promised": "5.1.0",
-    "eslint": "^1.10.3",
+    "eslint": "1.10.3",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
     "grunt-connect": "0.2.0",
@@ -51,7 +48,8 @@
     "mocha": "2.3.4",
     "nconf": "0.8.2",
     "optimist": "0.6.1",
-    "random-words": "0.0.1"
+    "random-words": "0.0.1",
+    "wavi": "0.2.16"
   },
   "keywords": [
     "cloud foundry",
