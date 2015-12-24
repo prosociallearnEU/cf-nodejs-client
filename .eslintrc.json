@@ -94,7 +94,7 @@
         "yoda": 2,
 
         //Strict
-        "strict": [2, "function"],
+        "strict": [2, "global"],
 
         //Variables
         "init-declarations": [2, "always"],
