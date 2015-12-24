@@ -37,6 +37,7 @@ var HttpUtils = require('../../../../lib/utils/HttpUtils');
 HttpUtils = new HttpUtils();
 
 var fs = require('fs');
+var JSZip = require("jszip");
 var ZipGenerator = require('../../../utils/ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
@@ -272,6 +273,108 @@ describe("Cloud Foundry Upload Static Apps", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).be.equal(false);
             });
+            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
+        }).then(function (result) {
+            route_guid = result.resources[0].metadata.guid;
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
+        }).then(function () {
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
+        }).then(function () {
+            expect(true).to.equal(true);
+        });
+    });
+
+    it("Create a Static App, Upload 1MB zip, Download Zip & Remove app", function () {
+        this.timeout(40000);
+
+        var app_guid = null;
+        var appName = "app2" + randomWords() + randomInt(1, 100);
+        var staticBuildPack = BuildPacks.get("static");
+        var zipPath = "./staticApp.zip";
+        var weight = 1;//MB
+        var compressionRate = 0;//No compression
+        var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 32,
+            "disk_quota" : 32,
+            "buildpack" : staticBuildPack
+        };
+
+        return createApp(token_type, access_token, appOptions).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).is.a("string");
+            expect(result.entity.buildpack).to.equal(staticBuildPack);
+            return ZipGenerator.generate(zipPath, weight, compressionRate);
+        }).then(function () {
+            //Does exist the zip?   
+            fs.exists(zipPath, function (result) {
+                expect(result).to.equal(true);
+            });
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
+        }).then(function (result) {
+            expect(JSON.stringify(result)).to.equal("{}");
+            return ZipGenerator.remove(zipPath);
+        }).then(function () {
+            fs.exists(zipPath, function (result) {
+                expect(result).be.equal(false);
+            });
+            return CloudFoundryApps.downloadBits(token_type, access_token, app_guid);
+        }).then(function (result) {
+            console.log(result);
+            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
+        }).then(function (result) {
+            route_guid = result.resources[0].metadata.guid;
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
+        }).then(function () {
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
+        }).then(function () {
+            expect(true).to.equal(true);
+        });
+    });
+
+    it.skip("Create a Static App, Upload 1MB zip, Download Droplet & Remove app", function () {
+        this.timeout(40000);
+
+        var app_guid = null;
+        var appName = "app2" + randomWords() + randomInt(1, 100);
+        var staticBuildPack = BuildPacks.get("static");
+        var zipPath = "./staticApp.zip";
+        var weight = 1;//MB
+        var compressionRate = 0;//No compression
+        var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 32,
+            "disk_quota" : 32,
+            "buildpack" : staticBuildPack
+        };
+
+        return createApp(token_type, access_token, appOptions).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).is.a("string");
+            expect(result.entity.buildpack).to.equal(staticBuildPack);
+            return ZipGenerator.generate(zipPath, weight, compressionRate);
+        }).then(function () {
+            //Does exist the zip?   
+            fs.exists(zipPath, function (result) {
+                expect(result).to.equal(true);
+            });
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, false);
+        }).then(function (result) {
+            expect(JSON.stringify(result)).to.equal("{}");
+            return ZipGenerator.remove(zipPath);
+        }).then(function () {
+            fs.exists(zipPath, function (result) {
+                expect(result).be.equal(false);
+            });
+            return CloudFoundryApps.downloadDroplet(token_type, access_token, app_guid);
+        }).then(function (result) {
+            console.log(result);
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
