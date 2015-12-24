@@ -68,19 +68,15 @@ The development doesn't cover the whole CC API. Main areas of development are:
 If you need to interact with a Cloud Foundry platform try this [online tool](https://tonicdev.com/npm/cf-nodejs-client) and use this example:
 
 ``` Javascript
-var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
-var CloudFoundryUsersUAA = require("cf-nodejs-client").UsersUAA;
-var CloudFoundryApps = require("cf-nodejs-client").Apps;
+"use-strict";
 
-CloudFoundry = new CloudFoundry();
-CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
-CloudFoundryApps = new CloudFoundryApps();
-CloudFoundry.setEndPoint(endpoint);
-CloudFoundryApps.setEndPoint(endpoint);
+const endpoint = "https://api.run.pivotal.io";
+const username = "PWS_USERNAME";
+const password = "PWS_PASSWORD";
 
-var endpoint = "https://api.run.pivotal.io";
-var username = "PWS_USERNAME";
-var password = "PWS_PASSWORD";
+var CloudFoundry = new (require("cf-nodejs-client")).CloudFoundry(endpoint);
+var CloudFoundryUsersUAA = new (require("cf-nodejs-client")).UsersUAA;
+var CloudFoundryApps = new (require("cf-nodejs-client")).Apps(endpoint);
 
 CloudFoundry.getInfo().then(function (result) {
     CloudFoundryUsersUAA.setEndPoint(result.authorization_endpoint);
