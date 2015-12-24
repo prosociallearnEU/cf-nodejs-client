@@ -322,7 +322,8 @@ describe("Cloud Foundry Upload Static Apps", function () {
             });
             return CloudFoundryApps.downloadBits(token_type, access_token, app_guid);
         }).then(function (result) {
-            console.log(result);
+            //TODO: Store in disk
+            //console.log(result);
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
