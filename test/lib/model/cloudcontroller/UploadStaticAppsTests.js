@@ -37,7 +37,6 @@ var HttpUtils = require('../../../../lib/utils/HttpUtils');
 HttpUtils = new HttpUtils();
 
 var fs = require('fs');
-var JSZip = require("jszip");
 var ZipGenerator = require('../../../utils/ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
