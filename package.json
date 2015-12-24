@@ -23,7 +23,8 @@
     "url": "https://github.com/prosociallearnEU/cf-nodejs-client/issues"
   },
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">=4.2.3",
+    "npm": ">=2.14.7"
   },
   "files": [
     "index.js",
