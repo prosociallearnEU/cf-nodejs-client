@@ -75,17 +75,17 @@ const username = "PWS_USERNAME";
 const password = "PWS_PASSWORD";
 
 const CloudFoundry = new (require("cf-nodejs-client")).CloudFoundry(endpoint);
-const CloudFoundryUsersUAA = new (require("cf-nodejs-client")).UsersUAA;
-const CloudFoundryApps = new (require("cf-nodejs-client")).Apps(endpoint);
+const UsersUAA = new (require("cf-nodejs-client")).UsersUAA;
+const Apps = new (require("cf-nodejs-client")).Apps(endpoint);
 
-CloudFoundry.getInfo().then(function (result) {
-    CloudFoundryUsersUAA.setEndPoint(result.authorization_endpoint);
-    return CloudFoundryUsersUAA.login(username, password);
-}).then(function (result) {
-    return CloudFoundryApps.getApps(result.token_type, result.access_token);
-}).then(function (result) {
+CloudFoundry.getInfo().then( (result) => {
+    UsersUAA.setEndPoint(result.authorization_endpoint);
+    return UsersUAA.login(username, password);
+}).then( (result) => {
+    return Apps.getApps(result.token_type, result.access_token);
+}).then( (result) => {
     console.log(result);
-}).catch(function (reason) {
+}).catch( (result) => {
     console.error("Error: " + reason);
 });
 
