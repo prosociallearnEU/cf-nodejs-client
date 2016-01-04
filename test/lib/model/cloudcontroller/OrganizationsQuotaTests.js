@@ -45,8 +45,8 @@ describe("Cloud foundry Organizations Quota", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
+            CloudFoundryOrg.setToken(result);
+            CloudFoundryOrgQuota.setToken(result);
         });
     });
 
@@ -59,7 +59,7 @@ describe("Cloud foundry Organizations Quota", function () {
 
         var org_guid = null;
 
-        return CloudFoundryOrgQuota.getQuotaDefinitions(token_type, access_token).then(function (result) {
+        return CloudFoundryOrgQuota.getQuotaDefinitions().then(function (result) {
             //console.log(result.resources);
             expect(true).is.a("boolean");
         });
@@ -70,10 +70,10 @@ describe("Cloud foundry Organizations Quota", function () {
 
         var org_guid = null;
 
-        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+        return CloudFoundryOrg.getOrganizations().then(function (result) {
             console.log(result);
             org_guid = result.resources[0].metadata.guid;
-            return CloudFoundryOrg.getQuotaDefinition(token_type, access_token, org_guid);
+            return CloudFoundryOrg.getQuotaDefinition(org_guid);
         }).then(function (result) {
             console.log(result.resources);
             expect(true).is.a("boolean");
@@ -93,7 +93,7 @@ describe("Cloud foundry Organizations Quota", function () {
             'instance_memory_limit': 1024                
         };
 
-        return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+        return CloudFoundryOrgQuota.add(quotaOptions).then(function (result) {
             console.log(result);
             expect(true).is.a("boolean");
         });
@@ -107,7 +107,7 @@ describe("Cloud foundry Organizations Quota", function () {
             'async': false
         };
 
-        return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async).then(function (result) {
+        return CloudFoundryOrgQuota.remove(quota_guid, async).then(function (result) {
             console.log(result);
             expect(true).is.a("boolean");
         });
@@ -133,9 +133,9 @@ describe("Cloud foundry Organizations Quota", function () {
             var async = {
                 'async': false
             };
-            return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+            return CloudFoundryOrgQuota.add(quotaOptions).then(function (result) {
                 quota_guid = result.metadata.guid;
-                return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async);
+                return CloudFoundryOrgQuota.remove(quota_guid, async);
             }).then(function (result) {
                 expect(true).is.a("boolean");
             });

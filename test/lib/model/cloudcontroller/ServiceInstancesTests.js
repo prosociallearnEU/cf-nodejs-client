@@ -32,7 +32,7 @@ CloudFoundryServicePlans = new CloudFoundryServicePlans();
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices();
 BuildPacks = new BuildPacks();
 
-describe("Cloud foundry Service Instances", function () {
+describe.skip("Cloud foundry Service Instances", function () {
     "use strict";
     var authorization_endpoint = null;
     var token_endpoint = null;

@@ -19,7 +19,7 @@ describe("HttpUtils", function () {
             url: url
         };
 
-        return HttpUtils.request(options, "200", false).then(function (result) {
+        return HttpUtils.request(options, 200, false).then(function (result) {
             expect(result).is.a("string");
         });
     });
@@ -33,7 +33,7 @@ describe("HttpUtils", function () {
             url: url
         };
 
-        return HttpUtils.request(options, "200", true).then(function (result) {
+        return HttpUtils.request(options, 200, true).then(function (result) {
             expect(result).is.a("string");
         }).catch(function (reason) {
             console.log(reason);
@@ -50,7 +50,7 @@ describe("HttpUtils", function () {
             url: url
         };
 
-        return HttpUtils.request(options, "404", false).then(function (result) {
+        return HttpUtils.request(options, 404, false).then(function (result) {
             expect(result).is.a("string");
         });
     });

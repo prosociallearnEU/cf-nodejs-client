@@ -42,8 +42,7 @@ describe("Cloud foundry Domains", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
+            CloudFoundryDomains.setToken(result);
         });
     });
 
@@ -51,7 +50,7 @@ describe("Cloud foundry Domains", function () {
         this.timeout(3000);
 
         var domain = null;
-        return CloudFoundryDomains.getDomains(token_type, access_token).then(function (result) {
+        return CloudFoundryDomains.getDomains().then(function (result) {
             domain = result.resources[0].entity.name;
             expect(domain).is.a("string");
             expect(result.resources.length).to.be.above(0);
@@ -63,7 +62,7 @@ describe("Cloud foundry Domains", function () {
         this.timeout(5000);
 
         var domain = null;
-        return CloudFoundryDomains.getSharedDomains(token_type, access_token).then(function (result) {
+        return CloudFoundryDomains.getSharedDomains().then(function (result) {
             domain = result.resources[0].entity.name;
             expect(domain).is.a("string");
             expect(result.resources.length).to.be.above(0);

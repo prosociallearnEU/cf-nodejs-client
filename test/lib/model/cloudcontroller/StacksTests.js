@@ -40,8 +40,7 @@ describe("Cloud foundry Stacks", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
+            CloudFoundryStacks.setToken(result);
         });
 
     });
@@ -49,7 +48,7 @@ describe("Cloud foundry Stacks", function () {
     it("The platform returns Stacks installed", function () {
         this.timeout(3000);
 
-        return CloudFoundryStacks.getStacks(token_type, access_token).then(function (result) {
+        return CloudFoundryStacks.getStacks().then(function (result) {
             expect(result.total_results).is.a("number");
         });
     });

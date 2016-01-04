@@ -42,9 +42,8 @@ describe("Cloud Foundry Users UAA", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
-            refresh_token = result.refresh_token;
+            CloudFoundryApps.setToken(result);
+            CloudFoundryUsersUAA.setToken(result);
         });
 
     });
@@ -69,21 +68,21 @@ describe("Cloud Foundry Users UAA", function () {
         var refresh_token_test = null;
 
         return CloudFoundryUsersUAA.login(username, password).then(function (result) {
-            refresh_token_test = result.refresh_token;
+            CloudFoundryUsersUAA.setToken(result);
             sleep(5000, function () {
                 console.log("5 second");
             });
-            return CloudFoundryUsersUAA.refreshToken(refresh_token_test);
-       }).then(function (result) {
-            token_type_test = result.token_type;
-            access_token_test = result.access_token;
-            return CloudFoundryApps.getApps(token_type, access_token);
-        }).then(function (result) {          
-            return CloudFoundryUsersUAA.refreshToken(refresh_token_test);
+            return CloudFoundryUsersUAA.refreshToken();
         }).then(function (result) {
-            token_type_test = result.token_type;
-            access_token_test = result.access_token;
-            return CloudFoundryApps.getApps(token_type, access_token);            
+            CloudFoundryUsersUAA.setToken(result);
+            CloudFoundryApps.setToken(result);
+            return CloudFoundryApps.getApps();
+        }).then(function (result) {          
+            return CloudFoundryUsersUAA.refreshToken();
+        }).then(function (result) {
+            CloudFoundryUsersUAA.setToken(result);
+            CloudFoundryApps.setToken(result);
+            return CloudFoundryApps.getApps();            
         }).then(function (result) {
             expect(result.resources).to.be.a('array');
         });

@@ -39,8 +39,7 @@ describe("Cloud foundry Events", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
+            CloudFoundryEvents.setToken(result);
         });
     });
 
@@ -48,7 +47,7 @@ describe("Cloud foundry Events", function () {
     it.skip("The platform returns the Events", function () {
         this.timeout(150000);
 
-        return CloudFoundryEvents.getEvents(token_type, access_token).then(function (result) {
+        return CloudFoundryEvents.getEvents().then(function (result) {
             expect(result.total_results).is.a("number");
         });
     });
@@ -66,7 +65,7 @@ describe("Cloud foundry Events", function () {
             q: ['timestamp>=' + "2015-12-10T00:00:00Z"],
             'results-per-page': resultsPerPage
         };
-        return CloudFoundryEvents.getEvents(token_type, access_token, filter).then(function (result) {
+        return CloudFoundryEvents.getEvents(filter).then(function (result) {
             expect(result.total_results).is.a("number");
             //Sometimes, system returns less than 20.
             //expect(result.resources.length).to.equal(20);

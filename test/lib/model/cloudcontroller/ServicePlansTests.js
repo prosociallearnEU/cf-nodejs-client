@@ -31,7 +31,7 @@ CloudFoundryServicePlans = new CloudFoundryServicePlans();
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices();
 BuildPacks = new BuildPacks();
 
-describe("Cloud foundry Service Plans", function () {
+describe.skip("Cloud foundry Service Plans", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;

@@ -43,10 +43,12 @@ describe("Cloud foundry Logs", function () {
             token_endpoint = result.token_endpoint;
             logging_endpoint = result.logging_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
+            CloudFoundryUsersUAA.setToken(result);
+            CloudFoundryApps.setToken(result);
+            CloudFoundryLogs.setToken(result);
         });
     });
 
@@ -56,7 +58,7 @@ describe("Cloud foundry Logs", function () {
         var app_guid = null;
         var ERROR_MESSAGE_NO_APPS = "No App";
 
-        return CloudFoundryApps.getApps(token_type, access_token).then(function (result) {
+        return CloudFoundryApps.getApps().then(function (result) {
 
             if (result.total_results === 0) {
                 return new Promise(function check(resolve, reject) {
@@ -71,7 +73,8 @@ describe("Cloud foundry Logs", function () {
             logging_endpoint = logging_endpoint.replace(":4443", "");
             logging_endpoint = logging_endpoint.replace(":443", "");//Bluemix support
             //console.log(logging_endpoint);
-            return CloudFoundryLogs.getRecent(logging_endpoint,token_type, access_token, app_guid);
+            CloudFoundryLogs.setEndPoint(logging_endpoint);
+            return CloudFoundryLogs.getRecent(app_guid);
         }).then(function () {
             //console.log(result);
             expect(true).is.equal(true);

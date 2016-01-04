@@ -41,8 +41,7 @@ describe("Cloud foundry Spaces Quotas", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
+            CloudFoundrySpacesQuota.setToken(result);
         });
 
     });
@@ -50,7 +49,7 @@ describe("Cloud foundry Spaces Quotas", function () {
     it("The platform returns Space Quota Defininitions", function () {
         this.timeout(3000);
 
-        return CloudFoundrySpacesQuota.getQuotaDefinitions(token_type, access_token).then(function (result) {
+        return CloudFoundrySpacesQuota.getQuotaDefinitions().then(function (result) {
             expect(result.total_results).to.be.a('number');
         });
     });

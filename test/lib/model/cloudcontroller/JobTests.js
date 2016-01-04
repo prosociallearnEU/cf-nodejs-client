@@ -62,12 +62,15 @@ describe("Cloud Foundry Jobs", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
-            return CloudFoundryDomains.getDomains(token_type, access_token);
+            CloudFoundryApps.setToken(result);
+            CloudFoundrySpaces.setToken(result);
+            CloudFoundryDomains.setToken(result);
+            CloudFoundryRoutes.setToken(result);
+            CloudFoundryJobs.setToken(result);            
+            return CloudFoundryDomains.getDomains();
         }).then(function (result) {
             domain_guid = result.resources[0].metadata.guid;
-            return CloudFoundrySpaces.getSpaces(token_type, access_token);
+            return CloudFoundrySpaces.getSpaces();
         }).then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         });
@@ -86,7 +89,7 @@ describe("Cloud Foundry Jobs", function () {
         callback();
     }
 
-    function createApp(token_type, access_token, appOptions) {
+    function createApp(appOptions) {
 
         var app_guid = null;
         var routeName = null;
@@ -103,7 +106,7 @@ describe("Cloud Foundry Jobs", function () {
 
             //VALIDATIONS
             //1. Duplicated app
-            return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter).then(function (result) {
+            return CloudFoundrySpaces.getSpaceApps(space_guid, filter).then(function (result) {
 
                 //If exist the application, REJECT
                 if (result.total_results === 1) {
@@ -114,7 +117,7 @@ describe("Cloud Foundry Jobs", function () {
                     'q': 'host:' + appName + ';domain_guid:' + domain_guid,
                     'inline-relations-depth': 1
                 };
-                return CloudFoundryRoutes.getRoutes(token_type, access_token, filter);
+                return CloudFoundryRoutes.getRoutes(filter);
             //2. Duplicated route
             }).then(function (result) {
 
@@ -122,7 +125,7 @@ describe("Cloud Foundry Jobs", function () {
                     return reject("Exist the route:" + appName);
                 }
 
-                return CloudFoundryApps.add(token_type, access_token, appOptions).then(function (result) {
+                return CloudFoundryApps.add(appOptions).then(function (result) {
                     return new Promise(function (resolve) {
                         //console.log(result);
                         app_guid = result.metadata.guid;
@@ -131,21 +134,21 @@ describe("Cloud Foundry Jobs", function () {
                 });
             }).then(function () {
                 //TODO: How to make the inference?
-                return CloudFoundryDomains.getSharedDomains(token_type, access_token);
+                return CloudFoundryDomains.getSharedDomains();
             }).then(function () {
                 var routeOptions = {
                     'domain_guid' : domain_guid,
                     'space_guid' : space_guid,
                     'host' : appName
                 };
-                return CloudFoundryRoutes.add(token_type, access_token, routeOptions).then(function (result) {
+                return CloudFoundryRoutes.add(routeOptions).then(function (result) {
                     return new Promise(function (resolve) {
                         route_guid = result.metadata.guid;
                         return resolve(result);
                     });
                 });
             }).then(function () {
-                return CloudFoundryApps.associateRoute(token_type, access_token, app_guid, route_guid);
+                return CloudFoundryApps.associateRoute(app_guid, route_guid);
             }).then(function (result) {
                 return resolve(result);
             }).catch(function (reason) {
@@ -157,13 +160,13 @@ describe("Cloud Foundry Jobs", function () {
 
     }
 
-    function recursiveCheckJobState(token_type, access_token, job_guid) {
+    function recursiveCheckJobState(job_guid) {
         var counter = 0;
         var maximumLoops = 15;
 
         return new Promise(function check(resolve, reject) {
 
-            CloudFoundryJobs.getJob(token_type, access_token, job_guid).then(function (result) {
+            CloudFoundryJobs.getJob(job_guid).then(function (result) {
                 console.log(result.entity.status);
                 //console.log(counter);
                 if (result.entity.status === "finished") {
@@ -202,7 +205,7 @@ describe("Cloud Foundry Jobs", function () {
             "buildpack" : staticBuildPack
         };       
 
-        return createApp(token_type, access_token, appOptions).then(function (result) {
+        return createApp(appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -212,7 +215,7 @@ describe("Cloud Foundry Jobs", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, true);
+            return CloudFoundryApps.upload(app_guid, zipPath, true);
         }).then(function (result) {
             expect(result.metadata.guid).to.be.a('string');
 
@@ -225,16 +228,16 @@ describe("Cloud Foundry Jobs", function () {
                 expect(result).be.equal(false);
             });
 
-            return recursiveCheckJobState(token_type, access_token, job_guid);
+            return recursiveCheckJobState(job_guid);
         }).then(function (result) {
             expect(result.metadata.guid).to.be.a('string');
 
-            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
+            return CloudFoundryApps.getAppRoutes(app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.remove(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);
@@ -263,7 +266,7 @@ describe("Cloud Foundry Jobs", function () {
             "buildpack" : staticBuildPack
         };       
 
-        return createApp(token_type, access_token, appOptions).then(function (result) {
+        return createApp(appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
             expect(result.entity.buildpack).to.equal(staticBuildPack);
@@ -273,7 +276,7 @@ describe("Cloud Foundry Jobs", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).to.equal(true);
             });
-            return CloudFoundryApps.upload(token_type, access_token, app_guid, zipPath, true);
+            return CloudFoundryApps.upload(app_guid, zipPath, true);
         }).then(function (result) {
             expect(result.metadata.guid).to.be.a('string');
 
@@ -292,7 +295,7 @@ describe("Cloud Foundry Jobs", function () {
                     console.log("5 second");
                 });
 
-                return CloudFoundryJobs.getJob(token_type, access_token, job_guid).then(function (result) {
+                return CloudFoundryJobs.getJob(job_guid).then(function (result) {
                     return new Promise(function (resolve) {
                         var status = result.entity.status;
                         console.log(status);
@@ -321,7 +324,7 @@ describe("Cloud Foundry Jobs", function () {
                     console.log("5 second");
                 });
 
-                return CloudFoundryJobs.getJob(result.token_type, result.access_token, job_guid).then(function (result) {
+                return CloudFoundryJobs.getJob(job_guid).then(function (result) {
                     return new Promise(function (resolve) {
                         var status = result.entity.status;
                         console.log(status);
@@ -348,7 +351,7 @@ describe("Cloud Foundry Jobs", function () {
                     console.log("5 second");
                 });
 
-                return CloudFoundryJobs.getJob(result.token_type, result.access_token, job_guid).then(function (result) {
+                return CloudFoundryJobs.getJob(job_guid).then(function (result) {
                     return new Promise(function (resolve) {
                         var status = result.entity.status;
                         console.log(status);
@@ -363,12 +366,12 @@ describe("Cloud Foundry Jobs", function () {
             });
 
         }).then(function () {
-            return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
+            return CloudFoundryApps.getAppRoutes(app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
-            return CloudFoundryApps.remove(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(app_guid);
         }).then(function () {
-            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
+            return CloudFoundryRoutes.remove(route_guid);
         }).then(function () {
             //console.log(result);
             expect(true).to.equal(true);

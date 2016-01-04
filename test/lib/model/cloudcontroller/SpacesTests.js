@@ -44,8 +44,8 @@ describe("Cloud foundry Spaces", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
+            CloudFoundryApps.setToken(result);
+            CloudFoundrySpaces.setToken(result);
         });
 
     });
@@ -53,7 +53,7 @@ describe("Cloud foundry Spaces", function () {
     it("The platform always has defined a Space to operate.", function () {
         this.timeout(3000);
 
-        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+        return CloudFoundrySpaces.getSpaces().then(function (result) {
             expect(result.total_results).to.be.above(0);
         });
     });
@@ -63,10 +63,10 @@ describe("Cloud foundry Spaces", function () {
 
         var space_guid = null;
 
-        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+        return CloudFoundrySpaces.getSpaces().then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundrySpaces.getSpace(token_type, access_token, space_guid);
+            return CloudFoundrySpaces.getSpace(space_guid);
         }).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         });
@@ -77,13 +77,13 @@ describe("Cloud foundry Spaces", function () {
 
         var space_guid = null;
 
-        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+        return CloudFoundrySpaces.getSpaces().then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
             var filter = {
                 'guid' : space_guid
             };
-            return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter);
+            return CloudFoundrySpaces.getSpaceApps(space_guid, filter);
         }).then(function (result) {
             expect(result.total_results).to.be.a('number');
         });
@@ -94,10 +94,10 @@ describe("Cloud foundry Spaces", function () {
 
         var space_guid = null;
 
-        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+        return CloudFoundrySpaces.getSpaces().then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundrySpaces.getSummary(token_type, access_token, space_guid);
+            return CloudFoundrySpaces.getSummary(space_guid);
         }).then(function (result) {
             expect(true).to.be.a('boolean');
         });
@@ -108,10 +108,10 @@ describe("Cloud foundry Spaces", function () {
 
         var space_guid = null;
 
-        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+        return CloudFoundrySpaces.getSpaces().then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundrySpaces.getSummary(token_type, access_token, space_guid);
+            return CloudFoundrySpaces.getSummary(space_guid);
         }).then(function (result) {
 
             var usedServices = [];
@@ -129,10 +129,10 @@ describe("Cloud foundry Spaces", function () {
 
         var space_guid = null;
 
-        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+        return CloudFoundrySpaces.getSpaces().then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundrySpaces.getSummary(token_type, access_token, space_guid);
+            return CloudFoundrySpaces.getSummary(space_guid);
         }).then(function (result) {
 
             var servicesWithoutUsage = [];
@@ -150,10 +150,10 @@ describe("Cloud foundry Spaces", function () {
 
         var space_guid = null;
 
-        return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+        return CloudFoundrySpaces.getSpaces().then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         }).then(function () {
-            return CloudFoundrySpaces.getUserRoles(token_type, access_token, space_guid);
+            return CloudFoundrySpaces.getUserRoles(space_guid);
         }).then(function (result) {
             expect(result.total_results).to.be.a('number');
         });

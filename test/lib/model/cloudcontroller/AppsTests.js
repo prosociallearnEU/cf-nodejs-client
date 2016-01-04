@@ -49,9 +49,8 @@ describe.only("Cloud Foundry Apps", function () {
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
             CloudFoundryApps.setToken(result);
-            token_type = result.token_type;
-            access_token = result.access_token;
-            return CloudFoundrySpaces.getSpaces(token_type, access_token);
+            CloudFoundrySpaces.setToken(result);
+            return CloudFoundrySpaces.getSpaces();
         }).then(function (result) {
             space_guid = result.resources[0].metadata.guid;
         });
@@ -199,7 +198,7 @@ describe.only("Cloud Foundry Apps", function () {
         this.timeout(60000);
 
         //Inner function used to check when an application run in the system.
-        function recursiveCheckApp(token_type, access_token, app_guid) {
+        function recursiveCheckApp(app_guid) {
 
             var iterationLimit = 10;
             var counter = 0;
@@ -235,13 +234,13 @@ describe.only("Cloud Foundry Apps", function () {
         //var filter = {
         //    'guid' : space_guid
         //}                  
-        return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter).then(function (result) {
+        return CloudFoundrySpaces.getSpaceApps(space_guid, filter).then(function (result) {
             app_guid = result.resources[0].metadata.guid;
             //console.log(app_guid);
             console.log(result.resources[0].entity.state);
             return CloudFoundryApps.start(app_guid);
         }).then(function () {
-            return recursiveCheckApp(token_type, access_token, app_guid);
+            return recursiveCheckApp(app_guid);
         //RESET STATE
         }).then(function () {
             return CloudFoundryApps.stop(app_guid);
@@ -256,7 +255,7 @@ describe.only("Cloud Foundry Apps", function () {
     it("The platform returns Routes from an App", function () {
         this.timeout(50000);
 
-        function recursiveGetAppRoutes(token_type, access_token, appRouteGuidList) {
+        function recursiveGetAppRoutes(appRouteGuidList) {
 
             //Check maybe the limit is short
             var iterationLimit = 50;
@@ -307,7 +306,7 @@ describe.only("Cloud Foundry Apps", function () {
                 appRouteGuidList.push(result.resources[i].metadata.guid);
             }
 
-            return recursiveGetAppRoutes(token_type, access_token, appRouteGuidList);
+            return recursiveGetAppRoutes(appRouteGuidList);
         }).then(function (result) {
             expect(true).to.equal(true);
             //expect(result).to.be.a('Array');

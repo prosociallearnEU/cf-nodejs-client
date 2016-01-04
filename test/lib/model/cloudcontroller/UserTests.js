@@ -44,8 +44,8 @@ describe("Cloud Foundry Users", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
+            CloudFoundryUsersUAA.setToken(result);
+            CloudFoundryUsers.setToken(result);
         });
 
     });
@@ -60,7 +60,7 @@ describe("Cloud Foundry Users", function () {
         it("The platform retrieves Users from CC", function () {
             this.timeout(5000);
 
-            return CloudFoundryUsers.getUsers(token_type, access_token).then(function (result) {
+            return CloudFoundryUsers.getUsers().then(function (result) {
                 expect(result.resources).to.be.a('array');
             });
         });
@@ -83,8 +83,8 @@ describe("Cloud Foundry Users", function () {
             var searchOptions = "?filter=userName eq '" + username + "'";
             var user_guid = null;
 
-            return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options).then(function (result) {
-                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+            return CloudFoundryUsersUAA.add(uaa_options).then(function (result) {
+                return CloudFoundryUsersUAA.getUsers(searchOptions);
             }).then(function (result) {
                 if(result.resources.length !== 1){
                     return new Promise(function (resolve, reject) {
@@ -96,15 +96,15 @@ describe("Cloud Foundry Users", function () {
                 var userOptions = {
                     "guid": uaa_guid
                 }
-                return CloudFoundryUsers.add(token_type, access_token, userOptions);
+                return CloudFoundryUsers.add(userOptions);
             }).then(function (result) {
                 //console.log(result);
                 user_guid = result.metadata.guid;
-                return CloudFoundryUsers.remove(token_type, access_token, user_guid);
+                return CloudFoundryUsers.remove(user_guid);
             }).then(function (result) {
-                return CloudFoundryUsersUAA.remove(token_type, access_token, uaa_guid);
+                return CloudFoundryUsersUAA.remove(uaa_guid);
             }).then(function (result) {
-                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+                return CloudFoundryUsersUAA.getUsers(searchOptions);
             }).then(function (result) {
                 if(result.resources.length !== 0){
                     return new Promise(function (resolve, reject) {

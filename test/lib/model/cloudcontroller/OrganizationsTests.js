@@ -54,15 +54,17 @@ describe("Cloud foundry Organizations", function () {
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
+            CloudFoundryOrg.setToken(result);
+            CloudFoundryOrgQuota.setToken(result);
+            CloudFoundrySpaces.setToken(result);
+            CloudFoundryUsers.setToken(result);
         });
     });
 
     it("The platform returns the Organizations defined", function () {
         this.timeout(5000);
 
-        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+        return CloudFoundryOrg.getOrganizations().then(function (result) {
             expect(result.total_results).is.a("number");
         });
     });
@@ -72,7 +74,7 @@ describe("Cloud foundry Organizations", function () {
 
         var org_guid = null;
 
-        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+        return CloudFoundryOrg.getOrganizations().then(function (result) {
             org_guid = result.resources[0].metadata.guid;
             expect(result.total_results).is.a("number");
         });
@@ -83,10 +85,10 @@ describe("Cloud foundry Organizations", function () {
 
         var org_guid = null;
 
-        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+        return CloudFoundryOrg.getOrganizations().then(function (result) {
             //console.log(result.resources[0]);
             org_guid = result.resources[0].metadata.guid;
-            return CloudFoundryOrg.getMemoryUsage(token_type, access_token, org_guid);
+            return CloudFoundryOrg.getMemoryUsage(org_guid);
         }).then(function (result) {
             //console.log(result);
             expect(true).is.a("boolean");
@@ -98,9 +100,9 @@ describe("Cloud foundry Organizations", function () {
 
         var org_guid = null;
 
-        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+        return CloudFoundryOrg.getOrganizations().then(function (result) {
             org_guid = result.resources[0].metadata.guid;
-            return CloudFoundryOrg.getUsers(token_type, access_token, org_guid);
+            return CloudFoundryOrg.getUsers(org_guid);
         }).then(function (result) {
             //console.log(result.resources);
             expect(true).is.a("boolean");
@@ -112,9 +114,9 @@ describe("Cloud foundry Organizations", function () {
 
         var org_guid = null;
 
-        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+        return CloudFoundryOrg.getOrganizations().then(function (result) {
             org_guid = result.resources[0].metadata.guid;
-            return CloudFoundryOrg.getSummary(token_type, access_token, org_guid);
+            return CloudFoundryOrg.getSummary(org_guid);
         }).then(function (result) {
             //console.log(result);
             expect(true).is.a("boolean");
@@ -125,9 +127,9 @@ describe("Cloud foundry Organizations", function () {
         this.timeout(5000);
 
         var org_guid = null;
-        return CloudFoundryOrg.getOrganizations(token_type, access_token).then(function (result) {
+        return CloudFoundryOrg.getOrganizations().then(function (result) {
             org_guid = result.resources[0].metadata.guid;
-            return CloudFoundryOrg.getPrivateDomains(token_type, access_token, org_guid);
+            return CloudFoundryOrg.getPrivateDomains(org_guid);
         }).then(function (result) {
             expect(result.total_results).is.a("number");
         });
@@ -141,7 +143,7 @@ describe("Cloud foundry Organizations", function () {
             'name': "demo"             
         };
         //"quota_definition_guid"
-        return CloudFoundryOrg.add(token_type, access_token, orgOptions).then(function (result) {
+        return CloudFoundryOrg.add(orgOptions).then(function (result) {
             //console.log(result);
             expect(true).is.a("boolean");
         });
@@ -158,14 +160,14 @@ describe("Cloud foundry Organizations", function () {
                 'name': "demo" + randomInt(1, 10000)             
             };
             //"quota_definition_guid"
-            return CloudFoundryOrg.add(token_type, access_token, orgOptions).then(function (result) {
+            return CloudFoundryOrg.add(orgOptions).then(function (result) {
                 //console.log(result);
                 org_guid  = result.metadata.guid;
                 orgOptions = {
                     'recursive': true, 
                     'async': false                      
                 };
-                return CloudFoundryOrg.remove(token_type, access_token, org_guid, orgOptions)
+                return CloudFoundryOrg.remove(org_guid, orgOptions)
             }).then(function (result) {            
                 expect(true).is.a("boolean");
             });
@@ -187,13 +189,13 @@ describe("Cloud foundry Organizations", function () {
             var org_guid = null;
             var space_guid = null;
 
-            return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+            return CloudFoundryOrgQuota.add(quotaOptions).then(function (result) {
                 quota_guid = result.metadata.guid;
                 var orgOptions = {
                     'name': "demo" + randomInt(1, 10000),
                     "quota_definition_guid" : quota_guid     
                 };
-                return CloudFoundryOrg.add(token_type, access_token, orgOptions);
+                return CloudFoundryOrg.add(orgOptions);
             }).then(function (result) {                
                 //console.log(result);
                 org_guid  = result.metadata.guid;
@@ -201,25 +203,25 @@ describe("Cloud foundry Organizations", function () {
                     'name': "demo" + randomInt(1, 10000),
                     'organization_guid': org_guid      
                 };           
-                return CloudFoundrySpaces.add(token_type, access_token, spaceOptions);
+                return CloudFoundrySpaces.add(spaceOptions);
             }).then(function (result) {
                 space_guid = result.metadata.guid;
                 var spaceOptions = {
                     'recursive': true, 
                     'async': false                      
                 };
-                return CloudFoundrySpaces.remove(token_type, access_token, space_guid, spaceOptions);
+                return CloudFoundrySpaces.remove(space_guid, spaceOptions);
             }).then(function (result) { 
                 var orgOptions = {
                     'recursive': true, 
                     'async': false                      
                 };                           
-                return CloudFoundryOrg.remove(token_type, access_token, org_guid, orgOptions)
+                return CloudFoundryOrg.remove(org_guid, orgOptions)
             }).then(function (result) { 
                 var async = {
                     'async': false
                 };                
-                return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async);           
+                return CloudFoundryOrgQuota.remove(quota_guid, async);           
             }).then(function (result) {     
                 expect(true).is.a("boolean");
             });
@@ -256,13 +258,13 @@ describe("Cloud foundry Organizations", function () {
             var searchOptions = "?filter=userName eq '" + username + "'";
             var user_guid = null;         
 
-            return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+            return CloudFoundryOrgQuota.add(quotaOptions).then(function (result) {
                 quota_guid = result.metadata.guid;
                 var orgOptions = {
                     'name': "demo" + randomInt(1, 10000),
                     "quota_definition_guid" : quota_guid     
                 };
-                return CloudFoundryOrg.add(token_type, access_token, orgOptions);
+                return CloudFoundryOrg.add(orgOptions);
             }).then(function (result) {                
                 //console.log(result);
                 org_guid  = result.metadata.guid;
@@ -270,12 +272,12 @@ describe("Cloud foundry Organizations", function () {
                     'name': "demo" + randomInt(1, 10000),
                     'organization_guid': org_guid      
                 };           
-                return CloudFoundrySpaces.add(token_type, access_token, spaceOptions);
+                return CloudFoundrySpaces.add(spaceOptions);
             }).then(function (result) {
                 space_guid = result.metadata.guid;
-                return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options);
+                return CloudFoundryUsersUAA.add(uaa_options);
             }).then(function (result) {                
-                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+                return CloudFoundryUsersUAA.getUsers(searchOptions);
             }).then(function (result) {
                 if(result.resources.length !== 1){
                     return new Promise(function (resolve, reject) {
@@ -288,16 +290,16 @@ describe("Cloud foundry Organizations", function () {
                     "guid": uaa_guid,
                     "default_space_guid":space_guid
                 }
-                return CloudFoundryUsers.add(token_type, access_token, userOptions);
+                return CloudFoundryUsers.add(userOptions);
             //Remove elements  
             }).then(function (result) {
                 //console.log(result);
                 user_guid = result.metadata.guid;
-                return CloudFoundryUsers.remove(token_type, access_token, user_guid);
+                return CloudFoundryUsers.remove(user_guid);
             }).then(function (result) {
-                return CloudFoundryUsersUAA.remove(token_type, access_token, uaa_guid);
+                return CloudFoundryUsersUAA.remove(uaa_guid);
             }).then(function (result) {
-                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+                return CloudFoundryUsersUAA.getUsers(searchOptions);
             }).then(function (result) {
                 if(result.resources.length !== 0){
                     return new Promise(function (resolve, reject) {
@@ -310,18 +312,18 @@ describe("Cloud foundry Organizations", function () {
                     'recursive': true, 
                     'async': false                      
                 };
-                return CloudFoundrySpaces.remove(token_type, access_token, space_guid, spaceOptions);
+                return CloudFoundrySpaces.remove(space_guid, spaceOptions);
             }).then(function (result) { 
                 var orgOptions = {
                     'recursive': true, 
                     'async': false                      
                 };                           
-                return CloudFoundryOrg.remove(token_type, access_token, org_guid, orgOptions)
+                return CloudFoundryOrg.remove(org_guid, orgOptions)
             }).then(function (result) { 
                 var async = {
                     'async': false
                 };                
-                return CloudFoundryOrgQuota.remove(token_type, access_token, quota_guid, async);           
+                return CloudFoundryOrgQuota.remove(quota_guid, async);           
             }).then(function (result) {     
                 expect(true).is.a("boolean");
             });
@@ -359,13 +361,13 @@ describe("Cloud foundry Organizations", function () {
             var searchOptions = "?filter=userName eq '" + accountName + "'";
             var user_guid = null;         
 
-            return CloudFoundryOrgQuota.add(token_type, access_token, quotaOptions).then(function (result) {
+            return CloudFoundryOrgQuota.add(quotaOptions).then(function (result) {
                 quota_guid = result.metadata.guid;
                 var orgOptions = {
                     'name': accountName,
                     "quota_definition_guid" : quota_guid     
                 };
-                return CloudFoundryOrg.add(token_type, access_token, orgOptions);
+                return CloudFoundryOrg.add(orgOptions);
             }).then(function (result) {                
                 //console.log(result);
                 org_guid  = result.metadata.guid;
@@ -373,12 +375,12 @@ describe("Cloud foundry Organizations", function () {
                     'name': accountName,
                     'organization_guid': org_guid      
                 };           
-                return CloudFoundrySpaces.add(token_type, access_token, spaceOptions);
+                return CloudFoundrySpaces.add(spaceOptions);
             }).then(function (result) {
                 space_guid = result.metadata.guid;
-                return CloudFoundryUsersUAA.add(token_type, access_token, uaa_options);
+                return CloudFoundryUsersUAA.add(uaa_options);
             }).then(function (result) {                
-                return CloudFoundryUsersUAA.getUsers(token_type, access_token, searchOptions);
+                return CloudFoundryUsersUAA.getUsers(searchOptions);
             }).then(function (result) {
                 if(result.resources.length !== 1){
                     return new Promise(function (resolve, reject) {
@@ -396,15 +398,16 @@ describe("Cloud foundry Organizations", function () {
                 var userOptions = {
                     "guid": uaa_guid
                 }                
-                return CloudFoundryUsers.add(token_type, access_token, userOptions);
+                return CloudFoundryUsers.add(userOptions);
             }).then(function (result) {
                 user_guid = result.metadata.guid;
-                return CloudFoundryUsers.associateOrganization(token_type, access_token, user_guid, org_guid);
+                return CloudFoundryUsers.associateOrganization(user_guid, org_guid);
             }).then(function (result) {
-                return CloudFoundryUsers.associateSpace(token_type, access_token, user_guid, space_guid);               
+                return CloudFoundryUsers.associateSpace(user_guid, space_guid);               
             //Test Login with new account
             }).then(function (result) {
-                return CloudFoundryUsersUAA.login(authorization_endpoint, accountName, accountPassword);
+                CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+                return CloudFoundryUsersUAA.login(accountName, accountPassword);
             }).then(function (result) {
                 expect(result.token_type).to.equal("bearer");
             });
