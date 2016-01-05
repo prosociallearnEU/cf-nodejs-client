@@ -8,7 +8,7 @@
   "scripts": {
     "preversion": "npm run lint && npm run test_local",
     "lint": "eslint  ./lib/model/**/*.js ./lib/utils/*.js",
-    "test": "npm run test_pws",
+    "test": "npm run test_bluemix",
     "test_local": "mocha test --config=LOCAL_INSTANCE_1",
     "test_pws": "mocha test --config=PIVOTAL",
     "test_bluemix": "mocha test --config=BLUEMIX",
