@@ -15,14 +15,14 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     username = nconf.get(environment + "_" + 'username'),
     password = nconf.get(environment + "_" + 'password');
 
-var CloudFoundry = require("../../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudController = require("../../../../lib/model/cloudcontroller/CloudController");
 var CloudFoundryUsersUAA = require("../../../../lib/model/uaa/UsersUAA");
 var CloudFoundryApps = require("../../../../lib/model/cloudcontroller/Apps");
 var CloudFoundrySpaces = require("../../../../lib/model/cloudcontroller/Spaces");
 var CloudFoundryUserProvidedServices = require("../../../../lib/model/cloudcontroller/UserProvidedServices");
 var CloudFoundryServices = require("../../../../lib/model/cloudcontroller/Services");
 var BuildPacks = require("../../../../lib/model/cloudcontroller/BuildPacks");
-CloudFoundry = new CloudFoundry();
+CloudController = new CloudController();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryApps = new CloudFoundryApps();
 CloudFoundrySpaces = new CloudFoundrySpaces();

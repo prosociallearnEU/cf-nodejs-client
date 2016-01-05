@@ -1,4 +1,3 @@
-/*jslint node: true*/
 'use strict';
 
 var used = [],
@@ -8,7 +7,7 @@ var used = [],
  * Library Version
  * @type {String}
  */
-exports.version = '0.12.0';
+exports.version = '0.13.0';
 
 /**
  * Support for Apps
@@ -25,11 +24,11 @@ var BuildPacks = require('./lib/model/cloudcontroller/BuildPacks');
 exports.BuildPacks = BuildPacks;
 
 /**
- * Support for Cloud Foundry 
+ * Support for Cloud Controller
  * @type {[type]}
  */
-var CloudFoundry = require('./lib/model/cloudcontroller/CloudFoundry');
-exports.CloudFoundry = CloudFoundry;
+var CloudController = require('./lib/model/cloudcontroller/CloudController');
+exports.CloudController = CloudController;
 
 
 /**

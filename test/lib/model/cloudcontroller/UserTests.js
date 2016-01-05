@@ -17,10 +17,10 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     username = nconf.get(environment + "_" + 'username'),
     password = nconf.get(environment + "_" + 'password');
 
-var CloudFoundry = require("../../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudController = require("../../../../lib/model/cloudcontroller/CloudController");
 var CloudFoundryUsersUAA = require("../../../../lib/model/uaa/UsersUAA");
 var CloudFoundryUsers = require("../../../../lib/model/cloudcontroller/Users");
-CloudFoundry = new CloudFoundry();
+CloudController = new CloudController();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryUsers = new CloudFoundryUsers();
 
@@ -35,10 +35,10 @@ describe("Cloud Foundry Users", function () {
     before(function () {
         this.timeout(15000);
 
-        CloudFoundry.setEndPoint(cf_api_url);
+        CloudController.setEndPoint(cf_api_url);
         CloudFoundryUsers.setEndPoint(cf_api_url);
 
-        return CloudFoundry.getInfo().then(function (result) {
+        return CloudController.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;
             token_endpoint = result.token_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);

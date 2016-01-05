@@ -74,15 +74,16 @@ const endpoint = "https://api.run.pivotal.io";
 const username = "PWS_USERNAME";
 const password = "PWS_PASSWORD";
 
-const CloudFoundry = new (require("cf-nodejs-client")).CloudFoundry(endpoint);
+const CloudController = new (require("cf-nodejs-client")).CloudController(endpoint);
 const UsersUAA = new (require("cf-nodejs-client")).UsersUAA;
 const Apps = new (require("cf-nodejs-client")).Apps(endpoint);
 
-CloudFoundry.getInfo().then( (result) => {
+CloudController.getInfo().then( (result) => {
     UsersUAA.setEndPoint(result.authorization_endpoint);
     return UsersUAA.login(username, password);
 }).then( (result) => {
-    return Apps.getApps(result.token_type, result.access_token);
+	Apps.setToken(result);
+    return Apps.getApps();
 }).then( (result) => {
     console.log(result);
 }).catch( (result) => {

@@ -16,11 +16,11 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     username = nconf.get(environment + "_" + 'username'),
     password = nconf.get(environment + "_" + 'password');
 
-var CloudFoundry = require("../../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudController = require("../../../../lib/model/cloudcontroller/CloudController");
 var CloudFoundryUsersUAA = require("../../../../lib/model/uaa/UsersUAA");
 var CloudFoundryOrg = require("../../../../lib/model/cloudcontroller/Organizations");
 var CloudFoundryOrgQuota = require("../../../../lib/model/cloudcontroller/OrganizationsQuota");
-CloudFoundry = new CloudFoundry();
+CloudController = new CloudController();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryOrg = new CloudFoundryOrg();
 CloudFoundryOrgQuota = new CloudFoundryOrgQuota();
@@ -35,11 +35,11 @@ describe("Cloud foundry Organizations Quota", function () {
     before(function () {
         this.timeout(15000);
 
-        CloudFoundry.setEndPoint(cf_api_url);
+        CloudController.setEndPoint(cf_api_url);
         CloudFoundryOrg.setEndPoint(cf_api_url);
         CloudFoundryOrgQuota.setEndPoint(cf_api_url);
 
-        return CloudFoundry.getInfo().then(function (result) {
+        return CloudController.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;
             token_endpoint = result.token_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);

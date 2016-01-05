@@ -14,7 +14,7 @@ var cf_api_url = nconf.get(environment + "_" + 'CF_API_URL'),
     username = nconf.get(environment + "_" + 'username'),
     password = nconf.get(environment + "_" + 'password');
 
-var CloudFoundry = require("../../../../lib/model/cloudcontroller/CloudFoundry");
+var CloudController = require("../../../../lib/model/cloudcontroller/CloudController");
 var CloudFoundryUsersUAA = require("../../../../lib/model/uaa/UsersUAA");
 var CloudFoundryApps = require("../../../../lib/model/cloudcontroller/Apps");
 var CloudFoundrySpaces = require("../../../../lib/model/cloudcontroller/Spaces");
@@ -22,7 +22,7 @@ var CloudFoundryDomains = require("../../../../lib/model/cloudcontroller/Domains
 var CloudFoundryRoutes = require("../../../../lib/model/cloudcontroller/Routes");
 var CloudFoundryJobs = require("../../../../lib/model/cloudcontroller/Jobs");
 var BuildPacks = require("../../../../lib/model/cloudcontroller/BuildPacks");
-CloudFoundry = new CloudFoundry();
+CloudController = new CloudController();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryApps = new CloudFoundryApps();
 CloudFoundrySpaces = new CloudFoundrySpaces();
@@ -49,14 +49,14 @@ describe("Cloud Foundry Jobs", function () {
     before(function () {
         this.timeout(10000);
 
-        CloudFoundry.setEndPoint(cf_api_url);
+        CloudController.setEndPoint(cf_api_url);
         CloudFoundryApps.setEndPoint(cf_api_url);
         CloudFoundrySpaces.setEndPoint(cf_api_url);
         CloudFoundryDomains.setEndPoint(cf_api_url);
         CloudFoundryRoutes.setEndPoint(cf_api_url);
         CloudFoundryJobs.setEndPoint(cf_api_url);
 
-        return CloudFoundry.getInfo().then(function (result) {
+        return CloudController.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;            
             token_endpoint = result.token_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
