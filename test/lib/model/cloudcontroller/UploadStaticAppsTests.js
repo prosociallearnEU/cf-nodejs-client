@@ -342,6 +342,71 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
 
     }
 
+    it("Create a Static App, Upload 1MB zip, get a File & Remove app", function () {
+        this.timeout(40000);
+
+        var app_guid = null;
+        var appName = "app2" + randomWords() + randomInt(1, 100);
+        var staticBuildPack = BuildPacks.get("static");
+        var zipPath = "./staticApp.zip";
+        var weight = 1;//MB
+        var compressionRate = 0;//No compression
+        var route_guid = null;
+        var appOptions = {
+            "name": appName,
+            "space_guid": space_guid,
+            "instances" : 1,
+            "memory" : 32,
+            "disk_quota" : 32,
+            "buildpack" : staticBuildPack
+        };
+
+        return createApp(appOptions).then(function (result) {
+            app_guid = result.metadata.guid;
+            expect(app_guid).is.a("string");
+            expect(result.entity.buildpack).to.equal(staticBuildPack);
+            return ZipGenerator.generate(zipPath, weight, compressionRate);
+        }).then(function () {
+            //Does exist the zip?   
+            fs.exists(zipPath, function (result) {
+                expect(result).to.equal(true);
+            });
+            return CloudFoundryApps.upload(app_guid, zipPath, false);
+        }).then(function (result) {
+            expect(JSON.stringify(result)).to.equal("{}");
+            return ZipGenerator.remove(zipPath);
+        }).then(function () {
+            fs.exists(zipPath, function (result) {
+                expect(result).be.equal(false);
+            });
+            return CloudFoundryApps.start(app_guid);
+        //STAGING
+        }).then(function () {
+            console.log(appName);
+            return recursiveStageApp(appName, space_guid);
+        //RUNNING
+        }).then(function () {
+            return recursiveCheckRunningState(app_guid);
+        }).then(function (result) {
+            expect(result["0"].state).to.equal("RUNNING");
+            console.log("FILES:");
+            return CloudFoundryApps.getFile(app_guid,"./logs/staging_task.log");
+        }).then(function (result) {
+            console.log(result);
+            return CloudFoundryApps.getAppRoutes(app_guid);
+        }).then(function (result) {
+            route_guid = result.resources[0].metadata.guid;
+
+            return CloudFoundryApps.stop(app_guid);
+        }).then(function () {                 
+            return CloudFoundryApps.remove(app_guid);
+        }).then(function () {
+            return CloudFoundryRoutes.remove(route_guid);
+        }).then(function () {
+            expect(true).to.equal(true);
+        });
+    });
+
     it.skip("Create a Static App, Upload 1MB zip, Download Droplet & Remove app", function () {
         this.timeout(40000);
 
