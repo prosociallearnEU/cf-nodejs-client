@@ -40,7 +40,7 @@ var fs = require('fs');
 var ZipGenerator = require('../../../utils/ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
-describe.only("Cloud Foundry Upload Static Apps", function () {
+describe("Cloud Foundry Upload Static Apps", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -286,8 +286,8 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
         });
     });
 
-    it("Create a Static App, Upload 1MB zip, Download Zip & Remove app", function () {
-        this.timeout(60000);
+    it.only("Create a Static App, Upload 1MB zip, Download Zip & Remove app", function () {
+        this.timeout(80000);
 
         var app_guid = null;
         var appName = "app2" + randomWords() + randomInt(1, 100);
