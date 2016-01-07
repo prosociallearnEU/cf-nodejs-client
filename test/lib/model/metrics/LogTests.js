@@ -43,7 +43,6 @@ describe("Cloud foundry Logs", function () {
             token_endpoint = result.token_endpoint;
             logging_endpoint = result.logging_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
-            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
             CloudFoundryUsersUAA.setToken(result);
