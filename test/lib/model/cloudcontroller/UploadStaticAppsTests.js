@@ -24,6 +24,7 @@ var CloudFoundrySpaces = require("../../../../lib/model/cloudcontroller/Spaces")
 var CloudFoundryDomains = require("../../../../lib/model/cloudcontroller/Domains");
 var CloudFoundryRoutes = require("../../../../lib/model/cloudcontroller/Routes");
 var CloudFoundryJobs = require("../../../../lib/model/cloudcontroller/Jobs");
+var CloudFoundryLogs = require("../../../../lib/model/metrics/Logs");
 var BuildPacks = require("../../../../lib/model/cloudcontroller/BuildPacks");
 CloudController = new CloudController();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
@@ -32,6 +33,7 @@ CloudFoundrySpaces = new CloudFoundrySpaces();
 CloudFoundryDomains = new CloudFoundryDomains();
 CloudFoundryRoutes = new CloudFoundryRoutes();
 CloudFoundryJobs = new CloudFoundryJobs();
+CloudFoundryLogs = new CloudFoundryLogs();
 BuildPacks = new BuildPacks();
 var HttpUtils = require('../../../../lib/utils/HttpUtils');
 HttpUtils = new HttpUtils();
@@ -40,10 +42,11 @@ var fs = require('fs');
 var ZipGenerator = require('../../../utils/ZipGenerator');
 ZipGenerator = new ZipGenerator();
 
-describe.only("Cloud Foundry Upload Static Apps", function () {
+describe("Cloud Foundry Upload Static Apps", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
+    var logging_endpoint = null;  
     var token_type = null;
     var access_token = null;
     var domain_guid = null;
@@ -62,6 +65,7 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
         return CloudController.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;            
             token_endpoint = result.token_endpoint;
+            logging_endpoint = result.logging_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
@@ -69,7 +73,8 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
             CloudFoundrySpaces.setToken(result);
             CloudFoundryDomains.setToken(result);
             CloudFoundryRoutes.setToken(result);
-            CloudFoundryJobs.setToken(result); 
+            CloudFoundryJobs.setToken(result);
+            CloudFoundryLogs.setToken(result);
             return CloudFoundryDomains.getDomains();
         }).then(function (result) {
             domain_guid = result.resources[0].metadata.guid;
@@ -330,6 +335,7 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
             }).then(function (result) {
                 //TODO: Store in disk
                 //console.log(result);
+            }).then(function (result) {
                 return CloudFoundryApps.getAppRoutes(app_guid);
             }).then(function (result) {
                 route_guid = result.resources[0].metadata.guid;
@@ -344,7 +350,7 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
     }
 
 
-    it("Create a Static App, Upload 1MB zip, get a File & Remove app", function () {
+    it.skip("Create a Static App, Upload 1MB zip, get a File & Remove app", function () {
         this.timeout(60000);
 
         var app_guid = null;
@@ -362,6 +368,20 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
             "disk_quota" : 32,
             "buildpack" : staticBuildPack
         };
+        if(environment === "PIVOTAL") {
+            appOptions = {
+                "name": appName,
+                "space_guid": space_guid,
+                "instances" : 1,
+                "memory" : 64,
+                "disk_quota" : 64,
+                "buildpack" : staticBuildPack,
+                "diego": true
+            };
+        }         
+
+        var url = null;
+        var options = null;
 
         return createApp(appOptions).then(function (result) {
             app_guid = result.metadata.guid;
@@ -391,8 +411,125 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
             return recursiveCheckRunningState(app_guid);
         }).then(function (result) {
             expect(result["0"].state).to.equal("RUNNING");
-            console.log("FILES:");
-            return CloudFoundryApps.getFile(app_guid,"./logs/staging_task.log");
+
+            sleep(5000, function () {
+                console.log("5 second");
+            });
+
+            url = "http://" + result["0"].stats.uris[0];
+            options = {
+                method: 'GET',
+                url: url
+            };            
+            return HttpUtils.request(options, 200, false).then(function (result) {
+                console.log(result);
+                expect(result).is.a("string");
+            });
+        }).then(function (result) {
+            return HttpUtils.request(options, 200, false).then(function (result) {
+                console.log(result);
+                expect(result).is.a("string");
+            });
+        }).then(function (result) {
+            return HttpUtils.request(options, 200, false).then(function (result) {
+                console.log(result);
+                expect(result).is.a("string");
+            });
+        }).then(function (result) {
+            return HttpUtils.request(options, 200, false).then(function (result) {
+                console.log(result);
+                expect(result).is.a("string");
+            });
+        }).then(function (result) {
+            return HttpUtils.request(options, 200, false).then(function (result) {
+                console.log(result);
+                expect(result).is.a("string");
+            });                                    
+        }).then(function (result) {            
+            console.log("\nFILES:\n");
+            return CloudFoundryApps.getFile(app_guid,".");
+        //}).then(function (result) {
+        //    console.log(result);
+        //    var filePath = ".bash_logout";
+        //    console.log("\n" + filePath + "\n");         
+        //    return CloudFoundryApps.getFile(app_guid, filePath);
+        //}).then(function (result) {
+        //    console.log(result);
+        //    var filePath = ".bashrc";
+        //    console.log("\n" + filePath + "\n");         
+        //    return CloudFoundryApps.getFile(app_guid, filePath);     
+        //}).then(function (result) {
+        //    console.log(result);
+        //    var filePath = ".profile";
+        //    console.log("\n" + filePath + "\n");         
+        //    return CloudFoundryApps.getFile(app_guid, filePath);       
+        }).then(function (result) {
+            console.log(result);
+            var filePath = "staging_info.yml";
+            console.log("\n" + filePath + "\n");         
+            return CloudFoundryApps.getFile(app_guid, filePath);                                        
+        }).then(function (result) {
+            console.log(result);
+            var filePath = "./logs/staging_task.log";
+            console.log("\n" + filePath + "\n");         
+            return CloudFoundryApps.getFile(app_guid, filePath);
+        }).then(function (result) {
+            console.log(result);
+            var filePath = "./app/";
+            console.log("\n" + filePath + "\n");         
+            return CloudFoundryApps.getFile(app_guid, filePath);  
+        //}).then(function (result) {
+        //    console.log(result);
+        //    var filePath = "./app/boot.sh";
+        //    console.log("\n" + filePath + "\n");         
+        //    return CloudFoundryApps.getFile(app_guid, filePath);    
+        }).then(function (result) {
+            console.log(result);
+            var filePath = "./app/nginx/";
+            console.log("\n" + filePath + "\n");         
+            return CloudFoundryApps.getFile(app_guid, filePath);   
+        }).then(function (result) {
+            console.log(result);
+            var filePath = "./app/nginx/logs/";
+            console.log("\n" + filePath + "\n");         
+            return CloudFoundryApps.getFile(app_guid, filePath);    
+        //}).then(function (result) {
+        //    console.log(result);
+        //    var filePath = "./app/nginx/logs/access.log";
+        //    console.log("\n" + filePath + "\n");         
+        //    return CloudFoundryApps.getFile(app_guid, filePath);     
+        //}).then(function (result) {
+        //    console.log(result);
+        //    var filePath = "./app/nginx/logs/error.log";
+        //    console.log("\n" + filePath + "\n");         
+        //    return CloudFoundryApps.getFile(app_guid, filePath);     
+        //}).then(function (result) {
+        //    console.log(result);
+        //    var filePath = "./app/nginx/logs/nginx.pid";
+        //    console.log("\n" + filePath + "\n");         
+        //    return CloudFoundryApps.getFile(app_guid, filePath);                                          
+        }).then(function (result) {
+            console.log(result);
+
+            console.log("\n" + "LOGS:" + "\n"); 
+
+            logging_endpoint = logging_endpoint.replace("wss", "https");
+            logging_endpoint = logging_endpoint.replace(":4443", "");
+            logging_endpoint = logging_endpoint.replace(":443", "");//Bluemix support
+            //console.log(logging_endpoint);
+            CloudFoundryLogs.setEndPoint(logging_endpoint);
+            return CloudFoundryLogs.getRecent(app_guid);
+        }).then(function (result) {
+            //console.log(result);
+
+            var filePath = "./app/public/";
+            console.log("\n" + filePath + "\n");         
+            return CloudFoundryApps.getFile(app_guid, filePath);    
+        //}).then(function (result) {
+        //    console.log(result);
+        //    var filePath = "./app/sources.yml";
+        //    console.log("\n" + filePath + "\n");         
+        //    return CloudFoundryApps.getFile(app_guid, filePath);                                                     
         }).then(function (result) {
             console.log(result);
             return CloudFoundryApps.getAppRoutes(app_guid);
@@ -428,6 +565,18 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
             "buildpack" : staticBuildPack
         };
 
+        if(environment === "PIVOTAL") {
+            appOptions = {
+                "name": appName,
+                "space_guid": space_guid,
+                "instances" : 1,
+                "memory" : 64,
+                "disk_quota" : 64,
+                "buildpack" : staticBuildPack,
+                "diego": true
+            };
+        } 
+
         return createApp(appOptions).then(function (result) {
             app_guid = result.metadata.guid;
             expect(app_guid).is.a("string");
@@ -446,9 +595,21 @@ describe.only("Cloud Foundry Upload Static Apps", function () {
             fs.exists(zipPath, function (result) {
                 expect(result).be.equal(false);
             });
+            return CloudFoundryApps.start(app_guid);
+        //STAGING
+        }).then(function () {
+            console.log(appName);
+            return recursiveStageApp(appName, space_guid);
+        //RUNNING
+        }).then(function () {
+            return recursiveCheckRunningState(app_guid);
+        }).then(function (result) {
+            expect(result["0"].state).to.equal("RUNNING");
+
             return CloudFoundryApps.downloadDroplet(app_guid);
         }).then(function (result) {
-            console.log(result);
+            //TODO: Save in disk. Heavy content. Do not print using console.
+            //console.log(result);
             return CloudFoundryApps.getAppRoutes(app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;
