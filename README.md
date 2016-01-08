@@ -145,6 +145,12 @@ Take a look this [doc](https://github.com/prosociallearnEU/cf-nodejs-client/blob
 
 * API Docs: http://apidocs.cloudfoundry.org/
 * Developer list: https://lists.cloudfoundry.org/archives/list/cf-dev@lists.cloudfoundry.org/
+* PWS Forum: https://support.run.pivotal.io/forums
+* Bluemix Forum: https://developer.ibm.com/answers/
+* CF for Beginners: From Zero to Hero http://slides.cf-hero.cloudcredo.io/
+
+## Others references
+
 * Issue management: https://overv.io
 
 # Issues
