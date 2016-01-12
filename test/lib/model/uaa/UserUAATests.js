@@ -60,6 +60,20 @@ describe("Cloud Foundry Users UAA", function () {
         callback();
     }
 
+    it("Using an unique Login, it is possible to execute several REST operations", function () {
+        this.timeout(5000);
+
+        return CloudFoundryApps.getApps().then(function () {
+            return CloudFoundryApps.getApps();
+        }).then(function () {
+            return CloudFoundryApps.getApps();
+        }).then(function () {
+            return CloudFoundryApps.getApps();
+        }).then(function () {
+            expect(true).to.equal(true);
+        });
+    });
+
     it("Use a refresh token to renew Oauth token", function () {
         this.timeout(25000);
 
