@@ -31,7 +31,7 @@ CloudFoundryServicePlans = new CloudFoundryServicePlans();
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices();
 BuildPacks = new BuildPacks();
 
-describe.skip("Cloud foundry Service Plans", function () {
+describe("Cloud foundry Service Plans", function () {
 
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -42,13 +42,10 @@ describe.skip("Cloud foundry Service Plans", function () {
     before(function () {
         this.timeout(25000);
 
-        CloudFoundry.setEndPoint(cf_api_url);
-        CloudFoundryApps.setEndPoint(cf_api_url);
-        CloudFoundrySpaces.setEndPoint(cf_api_url);
+        CloudController.setEndPoint(cf_api_url);
         CloudFoundryServicePlans.setEndPoint(cf_api_url);
-        CloudFoundryUserProvidedServices.setEndPoint(cf_api_url);
 
-        return CloudFoundry.getInfo().then(function (result) {
+        return CloudController.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;            
             token_endpoint = result.token_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -56,9 +53,7 @@ describe.skip("Cloud foundry Service Plans", function () {
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
-            return CloudFoundrySpaces.getSpaces(token_type, access_token);
-        }).then(function (result) {
-            space_guid = result.resources[0].metadata.guid;
+            CloudFoundryServicePlans.setToken(result);
         });
 
     });
@@ -71,7 +66,7 @@ describe.skip("Cloud foundry Service Plans", function () {
         this.timeout(3000);
 
         var errorMessage = "No Service Plan";
-        return CloudFoundryServicePlans.getServicePlans(token_type, access_token).then(function (result) {
+        return CloudFoundryServicePlans.getServicePlans().then(function (result) {
             if(result.total_results === 0){
                 return new Promise(function (resolve, reject) {
                     return reject(errorMessage);
@@ -90,7 +85,7 @@ describe.skip("Cloud foundry Service Plans", function () {
         this.timeout(3000);
 
         var errorMessage = "No Service Plan";
-        return CloudFoundryServicePlans.getServicePlans(token_type, access_token).then(function (result) {
+        return CloudFoundryServicePlans.getServicePlans().then(function (result) {
             if(result.total_results === 0){
                 return new Promise(function (resolve, reject) {
                     return reject(errorMessage);
@@ -107,14 +102,14 @@ describe.skip("Cloud foundry Service Plans", function () {
 
         var errorMessage = "No Service Plan";
         var servicePlan_guid = null;
-        return CloudFoundryServicePlans.getServicePlans(token_type, access_token).then(function (result) {
+        return CloudFoundryServicePlans.getServicePlans().then(function (result) {
             if(result.total_results === 0){
                 return new Promise(function (resolve, reject) {
                     return reject(errorMessage);
                 });                
             }
             servicePlan_guid = result.resources[0].metadata.guid;
-            return CloudFoundryServicePlans.getServicePlan(token_type, access_token, servicePlan_guid);
+            return CloudFoundryServicePlans.getServicePlan(servicePlan_guid);
         }).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         }).catch(function (reason) {
@@ -129,7 +124,7 @@ describe.skip("Cloud foundry Service Plans", function () {
         var filter = {
           q: 'active:' + true
         };            
-        return CloudFoundryServicePlans.getServicePlans(token_type, access_token, filter).then(function (result) {
+        return CloudFoundryServicePlans.getServicePlans(filter).then(function (result) {
             if(result.total_results === 0){
                 return new Promise(function (resolve, reject) {
                     return reject(errorMessage);
@@ -146,14 +141,14 @@ describe.skip("Cloud foundry Service Plans", function () {
 
         var errorMessage = "No Service Plan";
         var servicePlan_guid = null;
-        return CloudFoundryServicePlans.getServicePlans(token_type, access_token).then(function (result) {
+        return CloudFoundryServicePlans.getServicePlans().then(function (result) {
             if(result.total_results === 0){
                 return new Promise(function (resolve, reject) {
                     return reject(errorMessage);
                 });                
             }
             servicePlan_guid = result.resources[0].metadata.guid;
-            return CloudFoundryServicePlans.getServicePlanInstances(token_type, access_token, servicePlan_guid);
+            return CloudFoundryServicePlans.getServicePlanInstances(servicePlan_guid);
         }).then(function (result) {
             expect(result.total_results).is.a("number");
         }).catch(function (reason) {
@@ -166,14 +161,14 @@ describe.skip("Cloud foundry Service Plans", function () {
 
         var errorMessage = "No Service Plan";
         var servicePlan_guid = null;
-        return CloudFoundryServicePlans.getServicePlans(token_type, access_token).then(function (result) {
+        return CloudFoundryServicePlans.getServicePlans().then(function (result) {
             if(result.total_results === 0){
                 return new Promise(function (resolve, reject) {
                     return reject(errorMessage);
                 });                
             }
             servicePlan_guid = result.resources[1].metadata.guid;
-            return CloudFoundryServicePlans.remove(token_type, access_token, servicePlan_guid);
+            return CloudFoundryServicePlans.remove(servicePlan_guid);
         }).then(function (result) {
             expect(true).to.equal(true);
         }).catch(function (reason) {

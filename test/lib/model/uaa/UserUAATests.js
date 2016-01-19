@@ -61,7 +61,7 @@ describe("Cloud Foundry Users UAA", function () {
     }
 
     it("Using an unique Login, it is possible to execute several REST operations", function () {
-        this.timeout(5000);
+        this.timeout(15000);
 
         return CloudFoundryApps.getApps().then(function () {
             return CloudFoundryApps.getApps();

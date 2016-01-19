@@ -86,7 +86,7 @@ CloudController.getInfo().then( (result) => {
     return Apps.getApps();
 }).then( (result) => {
     console.log(result);
-}).catch( (result) => {
+}).catch( (reason) => {
     console.error("Error: " + reason);
 });
 
@@ -112,9 +112,9 @@ The development has been tested with:
 
 | [Local Instance](https://github.com/yudai/cf_nise_installer) | [PWS](https://console.run.pivotal.io)           | [Bluemix](https://console.ng.bluemix.net/) |
 | -------------- |:-------------:| -------:|
-| 2.25.0         | 2.44.0        | 2.40.0  |
+| 2.25.0         | 2.46.0        | 2.40.0  |
 
-Last test: 2015/12/22
+**Last test:** 2016/01/18
 
 **Test suite:**
 

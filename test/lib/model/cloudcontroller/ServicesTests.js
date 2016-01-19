@@ -30,7 +30,7 @@ CloudFoundryServices = new CloudFoundryServices();
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices();
 BuildPacks = new BuildPacks();
 
-describe.skip("Cloud foundry Services", function () {
+describe("Cloud foundry Services", function () {
     "use strict";
     var authorization_endpoint = null;
     var token_endpoint = null;
@@ -41,23 +41,16 @@ describe.skip("Cloud foundry Services", function () {
     before(function () {
         this.timeout(25000);
 
-        CloudFoundry.setEndPoint(cf_api_url);
-        CloudFoundryApps.setEndPoint(cf_api_url);
-        CloudFoundrySpaces.setEndPoint(cf_api_url);
+        CloudController.setEndPoint(cf_api_url);
         CloudFoundryServices.setEndPoint(cf_api_url);
-        CloudFoundryUserProvidedServices.setEndPoint(cf_api_url);
 
-        return CloudFoundry.getInfo().then(function (result) {
+        return CloudController.getInfo().then(function (result) {
             authorization_endpoint = result.authorization_endpoint;
             token_endpoint = result.token_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
         }).then(function (result) {
-            token_type = result.token_type;
-            access_token = result.access_token;
-            return CloudFoundrySpaces.getSpaces(token_type, access_token);
-        }).then(function (result) {
-            space_guid = result.resources[0].metadata.guid;
+            CloudFoundryServices.setToken(result);
         });
 
     });
@@ -69,7 +62,7 @@ describe.skip("Cloud foundry Services", function () {
     it.skip("Show a list of Services available", function () {
         this.timeout(5000);
 
-        return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
+        return CloudFoundryServices.getServices().then(function (result) {
             for(var i = 0; i < result.resources.length; i++){
                 console.log(i + " | " + result.resources[i].entity.label + " | " + result.resources[i].entity.description);
             }
@@ -80,7 +73,7 @@ describe.skip("Cloud foundry Services", function () {
     it("The platform returns a list of Services available", function () {
         this.timeout(5000);
 
-        return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
+        return CloudFoundryServices.getServices().then(function (result) {
             expect(result.total_results).is.a("number");
         });
     });
@@ -89,14 +82,14 @@ describe.skip("Cloud foundry Services", function () {
         this.timeout(5000);
 
         var service_guid = null;
-        return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
+        return CloudFoundryServices.getServices().then(function (result) {
             if(result.total_results === 0){
                 return new Promise(function (resolve, reject) {
                     return reject("No Service");
                 });
             }
             service_guid = result.resources[0].metadata.guid;
-            return CloudFoundryServices.getService(token_type, access_token, service_guid);
+            return CloudFoundryServices.getService(service_guid);
         }).then(function (result) {
             expect(result.metadata.guid).is.a("string");
         }).catch(function (reason) {
@@ -110,7 +103,7 @@ describe.skip("Cloud foundry Services", function () {
         var filter = {
           q: 'active:' + true
         };
-        return CloudFoundryServices.getServices(token_type, access_token, filter).then(function (result) {
+        return CloudFoundryServices.getServices(filter).then(function (result) {
             expect(result.total_results).is.a("number");
         });
     });
@@ -122,9 +115,9 @@ describe.skip("Cloud foundry Services", function () {
             this.timeout(5000);
 
             var service_guid = null;
-            return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
+            return CloudFoundryServices.getServices().then(function (result) {
                 service_guid = result.resources[0].metadata.guid;
-                return CloudFoundryServices.getServicePlans(token_type, access_token, service_guid);
+                return CloudFoundryServices.getServicePlans(service_guid);
             }).then(function (result) {
                 expect(result.total_results).is.a("number");
             })
@@ -136,9 +129,9 @@ describe.skip("Cloud foundry Services", function () {
         this.timeout(5000);
 
         var service_guid = null;
-        return CloudFoundryServices.getServices(token_type, access_token).then(function (result) {
+        return CloudFoundryServices.getServices().then(function (result) {
             service_guid = result.resources[1].metadata.guid;
-            return CloudFoundryServices.remove(token_type, access_token, service_guid);
+            return CloudFoundryServices.remove(service_guid);
         }).then(function (result) {
             expect(true).to.equal(true);
         });
