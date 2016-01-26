@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: model/cloudcontroller/ServicePlans.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: model/cloudcontroller/ServicePlans.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+
+const CloudControllerBase = require("./CloudControllerBase");
+
+/**
+ * Manages Service Plan on Cloud Foundry
+ */
+class ServicePlans extends CloudControllerBase {
+
+    /**
+     * @param {String} endPoint [CC endpoint]
+     * @constructor
+     * @returns {void}
+     */
+    constructor(endPoint) {
+        super(endPoint);
+    }
+
+    /**
+     * Get Service Plans
+     * {@link https://apidocs.cloudfoundry.org/226/service_plans/list_all_service_plans.html}
+     *
+     * @param  {String} filter         [Search options]
+     * @return {JSON}              [return a JSON response]
+     */
+    getServicePlans (filter) {
+
+        const url = `${this.API_URL}/v2/service_plans`;
+        let qs = {};
+
+        if (filter) {
+            qs = filter;
+        }
+        const options = {
+            method: "GET",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            },
+            qs: qs
+        };
+
+        return this.REST.request(options, this.HttpStatus.OK, true);
+    }
+
+    /**
+     * Get a Service Plan
+     * {@link https://apidocs.cloudfoundry.org/226/service_plans/retrieve_a_particular_service_plan.html}
+     *
+     * @param  {String} guid         [servicePlan guid]
+     * @return {JSON}              [return a JSON response]
+     */
+    getServicePlan (guid) {
+
+        const url = `${this.API_URL}/v2/service_plans/${guid}`;
+        const options = {
+            method: "GET",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            }
+        };
+
+        return this.REST.request(options, this.HttpStatus.OK, true);
+    }
+
+    /**
+     * List all Service Instances for a Service Plan
+     * {@link https://apidocs.cloudfoundry.org/226/service_plans/list_all_service_instances_for_the_service_plan.html}
+     *
+     * @param  {String} guid         [servicePlan guid]
+     * @return {JSON}              [return a JSON response]
+     */
+    getServicePlanInstances (guid) {
+
+        const url = `${this.API_URL}/v2/service_plans/${guid}/service_instances`;
+        const options = {
+            method: "GET",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            }
+        };
+
+        return this.REST.request(options, this.HttpStatus.OK, true);
+    }
+
+    /**
+     * Remove a Service Plan
+     * {@link https://apidocs.cloudfoundry.org/226/service_plans/delete_a_particular_service_plans.html}
+     *
+     * @param  {String} guid [servicePlan_guid]
+     * @return {JSON}              [return a JSON response]
+     */
+    remove (guid) {
+
+        const url = `${this.API_URL}/v2/service_plans/${guid}`;
+        const options = {
+            method: "DELETE",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            }
+        };
+
+        return this.REST.request(options, this.HttpStatus.NO_CONTENT, false);
+    }
+
+}
+
+module.exports = ServicePlans;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Apps.html">Apps</a></li><li><a href="BuildPacks.html">BuildPacks</a></li><li><a href="CloudController.html">CloudController</a></li><li><a href="CloudControllerBase.html">CloudControllerBase</a></li><li><a href="Domains.html">Domains</a></li><li><a href="Events.html">Events</a></li><li><a href="HttpUtils.html">HttpUtils</a></li><li><a href="Jobs.html">Jobs</a></li><li><a href="Logs.html">Logs</a></li><li><a href="Organizations.html">Organizations</a></li><li><a href="OrganizationsQuota.html">OrganizationsQuota</a></li><li><a href="Routes.html">Routes</a></li><li><a href="ServiceBindings.html">ServiceBindings</a></li><li><a href="ServiceInstances.html">ServiceInstances</a></li><li><a href="ServicePlans.html">ServicePlans</a></li><li><a href="Services.html">Services</a></li><li><a href="Spaces.html">Spaces</a></li><li><a href="SpacesQuota.html">SpacesQuota</a></li><li><a href="Stacks.html">Stacks</a></li><li><a href="UserProvidedServices.html">UserProvidedServices</a></li><li><a href="Users.html">Users</a></li><li><a href="UsersUAA.html">UsersUAA</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Jan 26 2016 11:50:27 GMT+0100 (Hora estándar romance)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

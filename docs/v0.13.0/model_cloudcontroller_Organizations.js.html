@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: model/cloudcontroller/Organizations.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: model/cloudcontroller/Organizations.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+
+const CloudControllerBase = require("./CloudControllerBase");
+
+/**
+ * Manage Organizations in Cloud Foundry
+ */
+class Organizations extends CloudControllerBase {
+
+    /**
+     * @param {String} endPoint [CC endpoint]
+     * @constructor
+     * @returns {void}
+     */
+    constructor(endPoint) {
+        super(endPoint);
+    }
+
+    /**
+     * Get Organizations
+     * {@link http://apidocs.cloudfoundry.org/213/organizations/list_all_organizations.html}
+     *
+     * @param  {String} token_type   [Authentication type]
+     * @param  {String} access_token [Authentication token]
+     * @return {JSON}              [return a JSON response]
+     */
+    getOrganizations () {
+
+        const url = `${this.API_URL}/v2/organizations`;
+        const options = {
+            method: "GET",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            }
+        };
+
+        return this.REST.request(options, this.HttpStatus.OK, true);
+    }
+
+    /**
+     * Get memory usage from an Organization
+     * {@link http://apidocs.cloudfoundry.org/222/organizations/retrieving_organization_memory_usage.html}
+     *
+     * @param  {String} guid     [org guid]
+     * @return {JSON}              [return a JSON response]
+     */
+    getMemoryUsage (guid) {
+
+        const url = `${this.API_URL}/v2/organizations/${guid}/memory_usage`;
+        const options = {
+            method: "GET",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            }
+        };
+
+        return this.REST.request(options, this.HttpStatus.OK, true);
+    }
+
+    /**
+     * Get summary from an Organization
+     * {@link http://apidocs.cloudfoundry.org/222/organizations/get_organization_summary.html}
+     *
+     * @param  {String} guid     [org guid]
+     * @return {JSON}              [return a JSON response]
+     */
+    getSummary (guid) {
+
+        const url = `${this.API_URL}/v2/organizations/${guid}/summary`;
+        const options = {
+            method: "GET",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            }
+        };
+
+        return this.REST.request(options, this.HttpStatus.OK, true);
+    }
+
+    /**
+     * Get private domains from an Organizations
+     * {@link http://apidocs.cloudfoundry.org/214/organizations/list_all_private_domains_for_the_organization.html}
+     *
+     * @param  {String} guid     [org guid]
+     * @return {JSON}              [return a JSON response]
+     */
+    getPrivateDomains (guid) {
+
+        const url = `${this.API_URL}/v2/organizations/${guid}/private_domains`;
+        const options = {
+            method: "GET",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            }
+        };
+
+        return this.REST.request(options, this.HttpStatus.OK, true);
+    }
+
+    /**
+     * Add a new organization
+     * {@link http://apidocs.cloudfoundry.org/222/organizations/creating_an_organization.html}
+     *
+     * @param {JSon} orgOptions   [org options]
+     * @return {JSON}              [return a JSON response]
+     */
+    add (orgOptions) {
+
+        const url = `${this.API_URL}/v2/organizations`;
+        const options = {
+            method: "POST",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            },
+            form: JSON.stringify(orgOptions)
+        };
+
+        return this.REST.request(options, this.HttpStatus.CREATED, true);
+    }
+
+    /**
+     * Remove an Organization
+     * {@link http://apidocs.cloudfoundry.org/222/organizations/delete_a_particular_organization.html}
+     *
+     * @param  {String} guid     [org guid]
+     * @param  {JSon} orgOptions   [org options]
+     * @return {String}              [output]
+     */
+    remove (guid, orgOptions) {
+
+        const url = `${this.API_URL}/v2/organizations/${guid}`;
+        let qs = {};
+
+        if (orgOptions) {
+            qs = orgOptions;
+        }
+        const options = {
+            method: "DELETE",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            },
+            qs: qs
+        };
+
+        return this.REST.request(options, this.HttpStatus.NO_CONTENT, false);
+    }
+
+    /**
+     * Get users from an Organization
+     * {@link http://apidocs.cloudfoundry.org/222/organizations/list_all_users_for_the_organization.html}
+     *
+     * @param  {String} guid     [org guid]
+     * @param  {Json} filter       [filter to search]
+     * @return {Json}              [output]
+     */
+    getUsers (guid, filter) {
+
+        const url = `${this.API_URL}/v2/organizations/${guid}/users`;
+        let qs = {};
+
+        if (filter) {
+            qs = filter;
+        }
+        const options = {
+            method: "GET",
+            url: url,
+            headers: {
+                Authorization: `${this.UAA_TOKEN.token_type} ${this.UAA_TOKEN.access_token}`
+            },
+            qs: qs
+        };
+
+        return this.REST.request(options, this.HttpStatus.OK, true);
+    }
+
+}
+
+module.exports = Organizations;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Apps.html">Apps</a></li><li><a href="BuildPacks.html">BuildPacks</a></li><li><a href="CloudController.html">CloudController</a></li><li><a href="CloudControllerBase.html">CloudControllerBase</a></li><li><a href="Domains.html">Domains</a></li><li><a href="Events.html">Events</a></li><li><a href="HttpUtils.html">HttpUtils</a></li><li><a href="Jobs.html">Jobs</a></li><li><a href="Logs.html">Logs</a></li><li><a href="Organizations.html">Organizations</a></li><li><a href="OrganizationsQuota.html">OrganizationsQuota</a></li><li><a href="Routes.html">Routes</a></li><li><a href="ServiceBindings.html">ServiceBindings</a></li><li><a href="ServiceInstances.html">ServiceInstances</a></li><li><a href="ServicePlans.html">ServicePlans</a></li><li><a href="Services.html">Services</a></li><li><a href="Spaces.html">Spaces</a></li><li><a href="SpacesQuota.html">SpacesQuota</a></li><li><a href="Stacks.html">Stacks</a></li><li><a href="UserProvidedServices.html">UserProvidedServices</a></li><li><a href="Users.html">Users</a></li><li><a href="UsersUAA.html">UsersUAA</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Jan 26 2016 11:50:27 GMT+0100 (Hora estándar romance)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
