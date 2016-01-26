@@ -204,7 +204,7 @@ describe("Cloud foundry Service Bindings", function () {
     });
 
     it("The platform creates an App, User Provided Service & Service Binding. Later, the test removes all stuff", function () {
-        this.timeout(5000);
+        this.timeout(15000);
 
         //App
         var appName = "app2" + randomWords() + randomInt(1, 100);

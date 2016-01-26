@@ -50,7 +50,7 @@ describe("Cloud Controller", function () {
         });
     });
 
-    it("The connection with the PaaS is OK", function () {
+    it.skip("The connection with the PaaS is OK", function () {
         return expect(CloudController.getInfo()).eventually.property("version", 2);
     });
 

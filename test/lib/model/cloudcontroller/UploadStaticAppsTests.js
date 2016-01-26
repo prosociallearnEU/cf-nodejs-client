@@ -294,7 +294,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
 
     if(environment !== "BLUEMIX") {
 
-        it("Create a Static App, Upload 1MB zip, Download Zip & Remove app", function () {
+        it.skip("[TESTING] Create a Static App, Upload 1MB zip, Download Zip & Remove app", function () {
             this.timeout(80000);
 
             var app_guid = null;
@@ -350,7 +350,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
     }
 
 
-    it.skip("Create a Static App, Upload 1MB zip, get a File & Remove app", function () {
+    it.skip("[TESTING] Create a Static App, Upload 1MB zip, get a File & Remove app", function () {
         this.timeout(60000);
 
         var app_guid = null;
@@ -546,7 +546,7 @@ describe("Cloud Foundry Upload Static Apps", function () {
         });
     });
 
-    it.skip("Create a Static App, Upload 1MB zip, Download Droplet & Remove app", function () {
+    it.skip("[TESTING] Create a Static App, Upload 1MB zip, Download Droplet & Remove app", function () {
         this.timeout(40000);
 
         var app_guid = null;

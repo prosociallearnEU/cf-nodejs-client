@@ -1,3 +1,22 @@
+## Version 0.13.0 2016-01-26
+
+- Add ESLint support
+- Refactor code to ES2015
+- Initial support to deploy Docker containers on CF
+- Refactor log support
+- Add method setToken in every Object to avoid sending token in every method
+
+Environment: LOCAL_INSTANCE_1
+
+  90 passing (3m)
+  37 pending
+
+Environment: PIVOTAL
+
+  87 passing (5m)
+  33 pending
+
+
 ## Version 0.12.0 2015-12-22
 
 - Support to refresh OAuth Token.

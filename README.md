@@ -112,9 +112,9 @@ The development has been tested with:
 
 | [Local Instance](https://github.com/yudai/cf_nise_installer) | [PWS](https://console.run.pivotal.io)           | [Bluemix](https://console.ng.bluemix.net/) |
 | -------------- |:-------------:| -------:|
-| 2.25.0         | 2.46.0        | 2.40.0  |
+| 2.25.0         | 2.47.0        | 2.40.0  |
 
-**Last test:** 2016/01/18
+**Last test:** 2016/01/26
 
 **Test suite:**
 
@@ -145,6 +145,8 @@ Take a look this [doc](https://github.com/prosociallearnEU/cf-nodejs-client/blob
 
 * API Docs: http://apidocs.cloudfoundry.org/
 * Developer list: https://lists.cloudfoundry.org/archives/list/cf-dev@lists.cloudfoundry.org/
+* PWS Console: https://console.run.pivotal.io
+* Bluemix Console: https://console.ng.bluemix.net/
 * PWS Forum: https://support.run.pivotal.io/forums
 * Bluemix Forum: https://developer.ibm.com/answers/
 * CF for Beginners: From Zero to Hero http://slides.cf-hero.cloudcredo.io/
