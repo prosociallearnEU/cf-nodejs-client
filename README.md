@@ -151,10 +151,6 @@ Take a look this [doc](https://github.com/IBM-Bluemix/cf-nodejs-client/blob/mast
 * Bluemix Forum: https://developer.ibm.com/answers/
 * CF for Beginners: From Zero to Hero http://slides.cf-hero.cloudcredo.io/
 
-## Others references
-
-* Issue management: https://overv.io
-
 # Issues
 
 If you have any question or doubt, please [create an issue](https://github.com/IBM-Bluemix/cf-nodejs-client/issues).
