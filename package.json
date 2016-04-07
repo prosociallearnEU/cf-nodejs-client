@@ -17,10 +17,10 @@
   "homepage": "https://github.com/IBM-Bluemix/cf-nodejs-client",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Bluemix/cf-nodejs-client.git"
+    "url": "git+https://github.com/IBM-Bluemix/cf-nodejs-client.git"
   },
   "bugs": {
-    "url": "https://github.com/Bluemix/cf-nodejs-client/issues"
+    "url": "https://github.com/IBM-Bluemix/cf-nodejs-client/issues"
   },
   "engines": {
     "node": ">=4.2.3",
