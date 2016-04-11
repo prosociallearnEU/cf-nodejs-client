@@ -1,6 +1,6 @@
 {
   "name": "cf-client",
-  "version": "0.13.5",
+  "version": "0.13.6",
   "description": "A Cloud Foundry Client for Node.js",
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
   "license": "Apache-2.0",
