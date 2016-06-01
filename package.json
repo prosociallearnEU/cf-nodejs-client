@@ -1,6 +1,6 @@
 {
   "name": "@ibm/cf-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "IBM Fork of a Cloud Foundry Client for Node.js",
   "author": "Alex Weidner <aeweidne@us.ibm.com>",
   "license": "Apache-2.0",
