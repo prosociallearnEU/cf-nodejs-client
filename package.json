@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
-    "preversion": "npm run lint && npm run test_local",
+    "preversion": "npm run lint",
     "lint": "eslint  ./lib/model/**/*.js ./lib/utils/*.js",
     "test": "npm run lint && npm run test_pws",
     "test_local": "mocha test --config=LOCAL_INSTANCE_1",
