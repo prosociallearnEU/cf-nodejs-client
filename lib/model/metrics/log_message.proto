@@ -20,4 +20,3 @@ message LogEnvelope {
     required bytes signature = 2;
     required LogMessage log_message = 3;
 }
-
