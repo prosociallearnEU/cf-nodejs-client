@@ -1,17 +1,17 @@
 {
-  "name": "@ibm/cf-client",
-  "version": "1.0.1",
+  "name": "cf-client",
+  "version": "0.13.18",
   "description": "IBM Fork of a Cloud Foundry Client for Node.js",
-  "author": "Alex Weidner <aeweidne@us.ibm.com>",
+  "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
-    "preversion": "npm run lint",
+    "preversion": "npm run lint && npm test",
     "lint": "eslint  ./lib/model/**/*.js ./lib/utils/*.js",
-    "test": "npm run lint && npm run test_pws",
-    "test_local": "mocha test --config=LOCAL_INSTANCE_1",
-    "test_pws": "mocha test --config=PIVOTAL",
-    "test_bluemix": "mocha test --config=BLUEMIX",
+    "test": "npm run lint && npm run test:bluemix",
+    "test:local": "mocha test --config=LOCAL_INSTANCE_1",
+    "test:pws": "mocha test --config=PIVOTAL",
+    "test:bluemix": "mocha test --config=BLUEMIX",
     "uml": "node ./node_modules/wavi/bin/wavi --png ./lib/ ./docs/umlDiagram.png --includenodemodules"
   },
   "homepage": "https://github.com/IBM-Bluemix/cf-nodejs-client",
@@ -66,6 +66,7 @@
     "api",
     "REST",
     "cf",
-    "cf client"
+    "cf client",
+    "paas"
   ]
 }
