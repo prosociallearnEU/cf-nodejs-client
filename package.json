@@ -1,7 +1,7 @@
 {
   "name": "cf-client",
   "version": "0.13.18",
-  "description": "IBM Fork of a Cloud Foundry Client for Node.js",
+  "description": "A Cloud Foundry Client for Node.js",
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
   "license": "Apache-2.0",
   "main": "index.js",
@@ -34,7 +34,8 @@
     "bluebird": "3.0.6",
     "protobufjs": "5.0.1",
     "request": "2.67.0",
-    "restler": "3.4.0"
+    "restler": "3.4.0",
+    "ws": "1.1.0"
   },
   "devDependencies": {
     "archiver": "0.20.0",
