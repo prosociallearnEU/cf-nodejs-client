@@ -106,7 +106,7 @@ npm install cf-client --save
 
 # Testing
 
-This project has a test suite to ensure the reability of this project. Take a look the [Tests cases](https://github.com/jabrena/cf-nodejs-client/tree/master/test/) developed with [Mocha](https://mochajs.org/) & [Chai](http://chaijs.com/api/bdd/) to understand some stuff about [Cloud Foundry](https://www.cloudfoundry.org/)  and the usage of this client. Besides, the project has invested some amount of time in testing phase to be the code with a nice coverage level.
+This project has a test suite to ensure the readability of this project. Take a look the [Tests cases](https://github.com/jabrena/cf-nodejs-client/tree/master/test/) developed with [Mocha](https://mochajs.org/) & [Chai](http://chaijs.com/api/bdd/) to understand some stuff about [Cloud Foundry](https://www.cloudfoundry.org/)  and the usage of this client. Besides, the project has invested some amount of time in testing phase to be the code with a nice coverage level.
 
 The development has been tested with:
 
@@ -115,6 +115,12 @@ The development has been tested with:
 | 2.25.0         | 2.47.0        | 2.40.0  |
 
 **Last test:** 2016/01/26
+
+**Testing against Bluemix:**
+
+``` shell
+export BLUEMIX_CF_API_URL=https://api.ng.bluemix.net && export BLUEMIX_username=$USERNAME && export BLUEMIX_password=$PASSWORD && npm run test:bluemix
+```
 
 **Test suite:**
 
