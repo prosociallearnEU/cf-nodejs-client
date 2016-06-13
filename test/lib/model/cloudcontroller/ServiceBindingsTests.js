@@ -49,7 +49,7 @@ describe("Cloud foundry Service Bindings", function () {
         CloudFoundryUserProvidedServices.setEndPoint(cf_api_url);
 
         return CloudController.getInfo().then(function (result) {
-            authorization_endpoint = result.authorization_endpoint;            
+            authorization_endpoint = result.authorization_endpoint;
             token_endpoint = result.token_endpoint;
             CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
             return CloudFoundryUsersUAA.login(username, password);
@@ -70,7 +70,7 @@ describe("Cloud foundry Service Bindings", function () {
     }
 
     it("The platform returns a list of Service Bindings used", function () {
-        this.timeout(3000);
+        this.timeout(30000);
 
         return CloudFoundryServiceBindings.getServiceBindings().then(function (result) {
             //console.log(result.resources[0].metadata.guid);
@@ -80,7 +80,7 @@ describe("Cloud foundry Service Bindings", function () {
     });
 
     it("The platform returns the first Service Bindings", function () {
-        this.timeout(3000);
+        this.timeout(30000);
 
         var serviceBinding_guid = null;
         return CloudFoundryServiceBindings.getServiceBindings().then(function (result) {
@@ -88,7 +88,7 @@ describe("Cloud foundry Service Bindings", function () {
             if(result.total_results === 0){
                 return new Promise(function (resolve, reject) {
                     return reject("No Service Binding");
-                });                
+                });
             }
             serviceBinding_guid = result.resources[0].metadata.guid;
             return CloudFoundryServiceBindings.getServiceBinding(serviceBinding_guid);
@@ -102,7 +102,7 @@ describe("Cloud foundry Service Bindings", function () {
     });
 
     it("The platform returns a list of Service Bindings filtering by app_guid", function () {
-        this.timeout(3000);
+        this.timeout(30000);
 
         var app_guid = null;
         var ERROR_MESSAGE_NO_APPS = "No App";
@@ -120,7 +120,7 @@ describe("Cloud foundry Service Bindings", function () {
             //app_guid
             var filter = {
                 'q': 'app_guid:' + app_guid
-            };            
+            };
             return CloudFoundryServiceBindings.getServiceBindings(filter);
         }).then(function (result) {
             //console.log(result.resources);
@@ -134,7 +134,7 @@ describe("Cloud foundry Service Bindings", function () {
     });
 
     it("The platform returns a list of Service Bindings filtering by service_instance", function () {
-        this.timeout(3000);
+        this.timeout(30000);
 
         var service_guid = null;
 
@@ -152,7 +152,7 @@ describe("Cloud foundry Service Bindings", function () {
             //service_instance_guid
             var filter = {
                 'q': 'service_instance_guid:' + service_guid
-            };            
+            };
             return CloudFoundryServiceBindings.getServiceBindings(filter);
         }).then(function (result) {
             //console.log(result.resources[0].metadata.guid);
@@ -165,7 +165,7 @@ describe("Cloud foundry Service Bindings", function () {
     });
 
     it.skip("The platform associates a Service with an App", function () {
-        this.timeout(3000);
+        this.timeout(30000);
 
         var serviceBinding_guid = null;
         var service_guid = null;
@@ -192,7 +192,7 @@ describe("Cloud foundry Service Bindings", function () {
     });
 
     it.skip("The platform removes a Service Binding", function () {
-        this.timeout(3000);
+        this.timeout(30000);
 
         var serviceBinding_guid = null;
         return CloudFoundryServiceBindings.getServiceBindings().then(function (result) {
@@ -218,14 +218,14 @@ describe("Cloud foundry Service Bindings", function () {
             "name": appName,
             "space_guid": space_guid,
             "buildpack" : staticBuildPack
-        };      
+        };
         //Service
         var serviceName = "s" + randomWords() + randomInt(1, 100);
         var service_guid = null;
         var credentials = {
             dbname : "demo",
             host : "8.8.8.8",
-            port : "3306", 
+            port : "3306",
             username : "root",
             password : "123456"
         };
@@ -233,7 +233,7 @@ describe("Cloud foundry Service Bindings", function () {
             "space_guid" : space_guid,
             "name" : serviceName,
             "credentials" : credentials
-        };        
+        };
         //Service binding
         var serviceBinding_guid = null;
 
@@ -246,7 +246,7 @@ describe("Cloud foundry Service Bindings", function () {
                 throw new Error("Exist the app: " + appName);
             }
 
-            return CloudFoundryApps.add(appOptions).then(function (result) {  
+            return CloudFoundryApps.add(appOptions).then(function (result) {
                 return new Promise(function (resolve) {
                     //console.log(result);
                     app_guid = result.metadata.guid;
@@ -260,7 +260,7 @@ describe("Cloud foundry Service Bindings", function () {
                     service_guid = result.metadata.guid;
                     return resolve(service_guid);
                 });
-            });                
+            });
         }).then(function (result) {
             //console.log(result);
             return CloudFoundryServiceBindings.associateServiceWithApp(service_guid, app_guid).then(function (result) {
@@ -275,19 +275,19 @@ describe("Cloud foundry Service Bindings", function () {
         }).then(function (result) {
             var filter = {
                 'q': 'service_instance_guid:' + service_guid
-            };            
+            };
             return CloudFoundryApps.getServiceBindings(app_guid, filter);
         }).then(function (result) {
             expect(result.total_results).to.equal(1);
             var filter = {
                 'q': 'app_guid:' + app_guid
-            };             
+            };
             return CloudFoundryServiceBindings.getServiceBindings(filter);
         }).then(function (result) {
-            expect(result.total_results).to.equal(1); 
+            expect(result.total_results).to.equal(1);
             return new Promise(function (resolve) {
                 return resolve();
-            });          
+            });
         //Removing the Service Binding, Service & App (Cleaning process)
         }).then(function (result) {
             return CloudFoundryServiceBindings.remove(serviceBinding_guid);
@@ -319,14 +319,14 @@ describe("Cloud foundry Service Bindings", function () {
                 "name": appName,
                 "space_guid": space_guid,
                 "buildpack" : staticBuildPack
-            };      
+            };
             //Service
             var serviceName = "s" + randomWords() + randomInt(1, 100);
             var service_guid = null;
             var credentials = {
                 dbname : "demo",
                 host : "8.8.8.8",
-                port : "3306", 
+                port : "3306",
                 username : "root",
                 password : "123456"
             };
@@ -334,7 +334,7 @@ describe("Cloud foundry Service Bindings", function () {
                 "space_guid" : space_guid,
                 "name" : serviceName,
                 "credentials" : credentials
-            };        
+            };
             //Service binding
             var serviceBinding_guid = null;
 
@@ -347,7 +347,7 @@ describe("Cloud foundry Service Bindings", function () {
                     throw new Error("Exist the app: " + appName);
                 }
 
-                return CloudFoundryApps.add(appOptions).then(function (result) {  
+                return CloudFoundryApps.add(appOptions).then(function (result) {
                     return new Promise(function (resolve) {
                         //console.log(result);
                         app_guid = result.metadata.guid;
@@ -361,7 +361,7 @@ describe("Cloud foundry Service Bindings", function () {
                         service_guid = result.metadata.guid;
                         return resolve(service_guid);
                     });
-                });                
+                });
             }).then(function (result) {
                 //console.log(result);
                 return CloudFoundryServiceBindings.associateServiceWithApp(service_guid, app_guid).then(function (result) {
@@ -376,32 +376,32 @@ describe("Cloud foundry Service Bindings", function () {
             }).then(function (result) {
                 var filter = {
                     'q': 'service_instance_guid:' + service_guid
-                };            
+                };
                 return CloudFoundryApps.getServiceBindings(app_guid, filter);
             }).then(function (result) {
                 expect(result.total_results).to.equal(1);
                 var filter = {
                     'q': 'app_guid:' + app_guid
-                };             
+                };
                 return CloudFoundryServiceBindings.getServiceBindings(filter);
             }).then(function (result) {
-                expect(result.total_results).to.equal(1); 
+                expect(result.total_results).to.equal(1);
                 return new Promise(function (resolve) {
                     return resolve();
-                });          
+                });
             //Removing the Service Binding, Service & App (Cleaning process)
             }).then(function (result) {
                 return CloudFoundryApps.removeServiceBindings(app_guid, serviceBinding_guid);
             }).then(function (result) {
                 var filter = {
                     'q': 'app_guid:' + app_guid
-                };             
+                };
                 return CloudFoundryServiceBindings.getServiceBindings(filter);
             }).then(function (result) {
-                expect(result.total_results).to.equal(0); 
+                expect(result.total_results).to.equal(0);
                 return new Promise(function (resolve) {
                     return resolve();
-                });            
+                });
                 return CloudFoundryUserProvidedServices.remove(service_guid);
             }).then(function (result) {
                 return CloudFoundryApps.remove(app_guid);
@@ -414,7 +414,7 @@ describe("Cloud foundry Service Bindings", function () {
 
     //Note: it is necessary to stop->start to apply the change with the service.
     it.skip("[TOOL] Given an app, bind a service.", function () {
-        this.timeout(3000);
+        this.timeout(30000);
 
         var serviceBinding_guid = null;
         var app_guid = null;
@@ -424,7 +424,7 @@ describe("Cloud foundry Service Bindings", function () {
             'inline-relations-depth': 1
         };
         var ups_name = 'mySQLService';
-        var service_guid = null             
+        var service_guid = null
         return CloudFoundrySpaces.getSpaceApps(space_guid, filter).then(function (result) {
             app_guid = result.resources[0].metadata.guid;
             console.log(app_guid);
