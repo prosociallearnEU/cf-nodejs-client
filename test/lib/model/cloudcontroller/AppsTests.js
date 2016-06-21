@@ -58,7 +58,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it("The platform returns Apps", function () {
-        this.timeout(2500);
+        this.timeout(25000);
 
         return CloudFoundryApps.getApps().then(function (result) {
             expect(result.total_results).to.be.a('number');
@@ -66,7 +66,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it("The platform returns Apps with Filter", function () {
-        this.timeout(2500);
+        this.timeout(25000);
 
         var filter = {
             'q': 'name:' + "demo1",
@@ -81,7 +81,7 @@ describe("Cloud Foundry Apps", function () {
 
     //TODO: Open
     it.skip("[DEBUGGING] The platform returns Apps with Filter in body", function () {
-        this.timeout(2500);
+        this.timeout(25000);
 
         var filter = {};
         var bodyFilter = {
@@ -95,7 +95,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it("The platform can't find an unknown app", function () {
-        this.timeout(3500);
+        this.timeout(35000);
 
         var app_guid = null;
         var appToFind = "unknownApp";
@@ -122,7 +122,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it.skip("The platform returns a Summary from an App", function () {
-        this.timeout(4500);
+        this.timeout(45000);
 
         var app_guid = null;
 
@@ -147,7 +147,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it.skip("The platform returns Stats from an App", function () {
-        this.timeout(3500);
+        this.timeout(35000);
 
         var app_guid = null;
 
@@ -171,7 +171,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it.skip("The platform returns instances from an App", function () {
-        this.timeout(3500);
+        this.timeout(35000);
 
         var app_guid = null;
 
@@ -195,7 +195,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it.skip("Start an App", function () {
-        this.timeout(60000);
+        this.timeout(600000);
 
         //Inner function used to check when an application run in the system.
         function recursiveCheckApp(app_guid) {
@@ -233,7 +233,7 @@ describe("Cloud Foundry Apps", function () {
         };
         //var filter = {
         //    'guid' : space_guid
-        //}                  
+        //}
         return CloudFoundrySpaces.getSpaceApps(space_guid, filter).then(function (result) {
             app_guid = result.resources[0].metadata.guid;
             //console.log(app_guid);
@@ -253,7 +253,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it("The platform returns Routes from an App", function () {
-        this.timeout(70000);
+        this.timeout(700000);
 
         function recursiveGetAppRoutes(appRouteGuidList) {
 
@@ -269,9 +269,6 @@ describe("Cloud Foundry Apps", function () {
                 CloudFoundryApps.getAppRoutes(app_guid).then(function (result) {
 
                     if (result.resources.length > 0) {
-                        if (result.resources.length > 1) {
-                            reject(new Error("RARE CASE"));
-                        }
                         appRouteGuidMap[result.resources[0].metadata.guid] = result.resources[0].metadata.guid;
                     }
 
@@ -308,16 +305,14 @@ describe("Cloud Foundry Apps", function () {
 
             return recursiveGetAppRoutes(appRouteGuidList);
         }).then(function (result) {
-            expect(true).to.equal(true);
-            //expect(result).to.be.a('Array');
-        }).catch(function (reason) {
-            console.log(reason);
+            expect(result).to.be.a('Object');
+        }).error(function (reason) {
             expect(reason).to.equal(ERROR_MESSAGE_NO_APPS);
         });
     });
 
     it("The platform returns Service Bindings from an App", function () {
-        this.timeout(25000);
+        this.timeout(250000);
 
         var app_guid = null;
 
@@ -341,7 +336,7 @@ describe("Cloud Foundry Apps", function () {
     });
 
     it("The platform returns Service Bindings from an App with a filter", function () {
-        this.timeout(3500);
+        this.timeout(35000);
 
         var app_guid = null;
 
@@ -367,10 +362,10 @@ describe("Cloud Foundry Apps", function () {
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
         });
-    }); 
+    });
 
     it("The platform returns Environment Variables from an App", function () {
-        this.timeout(3500);
+        this.timeout(35000);
 
         var app_guid = null;
 
@@ -392,10 +387,10 @@ describe("Cloud Foundry Apps", function () {
         }).catch(function (reason) {
             expect(reason).to.equal("Not found App.");
         });
-    });       
+    });
 
     it.skip("[TOOL] Remove app", function () {
-        this.timeout(40000);
+        this.timeout(400000);
 
         var app_guid = "c3efd256-1225-4b2a-83ab-453e2f902944";
 

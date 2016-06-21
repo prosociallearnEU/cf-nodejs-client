@@ -59,7 +59,7 @@ describe("Cloud foundry Service Instances", function () {
             token_type = result.token_type;
             access_token = result.access_token;
             CloudFoundrySpaces.setToken(result);
-            CloudFoundryServiceInstances.setToken(result);            
+            CloudFoundryServiceInstances.setToken(result);
             return CloudFoundrySpaces.getSpaces();
         }).then(function (result) {
             space_guid = result.resources[0].metadata.guid;
@@ -80,7 +80,7 @@ describe("Cloud foundry Service Instances", function () {
     });
 
     it("The platform returns the first Service", function () {
-        this.timeout(5000);
+        this.timeout(50000);
 
         var messageNoService = "No service";
         var service_instance_guid = null;
@@ -98,7 +98,7 @@ describe("Cloud foundry Service Instances", function () {
     });
 
     it("The platform returns a list of Service Instance in a Space available", function () {
-        this.timeout(5000);
+        this.timeout(50000);
 
         var filter = {
             q: 'space_guid:' + space_guid
@@ -109,7 +109,7 @@ describe("Cloud foundry Service Instances", function () {
     });
 
     it("The platform returns Service Instance permissions", function () {
-        this.timeout(5000);
+        this.timeout(50000);
 
         var service_instance_guid = null;
         return CloudFoundryServiceInstances.getInstances().then(function (result) {
@@ -126,7 +126,7 @@ describe("Cloud foundry Service Instances", function () {
     });
 
     it("The platform returns Service Instance Bindings", function () {
-        this.timeout(5000);
+        this.timeout(50000);
 
         var service_instance_guid = null;
         return CloudFoundryServiceInstances.getInstances().then(function (result) {
@@ -143,7 +143,7 @@ describe("Cloud foundry Service Instances", function () {
     });
 
     it("The platform returns Service Instance Routes", function () {
-        this.timeout(5000);
+        this.timeout(50000);
 
         var service_instance_guid = null;
         return CloudFoundryServiceInstances.getInstances().then(function (result) {
@@ -160,7 +160,7 @@ describe("Cloud foundry Service Instances", function () {
     });
 
     it.skip("The platform creates a new Service Instance and then removes it.", function () {
-        this.timeout(5000);
+        this.timeout(50000);
 
         return CloudFoundryServicePlans.getServicePlans().then(function (result) {
             var options = {

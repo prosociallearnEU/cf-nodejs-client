@@ -1,26 +1,27 @@
 {
-  "name": "cf-nodejs-client",
-  "version": "0.13.0",
+  "name": "cf-client",
+  "version": "0.13.20",
   "description": "A Cloud Foundry Client for Node.js",
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
-    "preversion": "npm run lint && npm run test_local",
-    "lint": "eslint  ./lib/model/**/*.js ./lib/utils/*.js",
-    "test": "npm run lint && npm run test_pws",
-    "test_local": "mocha test --config=LOCAL_INSTANCE_1",
-    "test_pws": "mocha test --config=PIVOTAL",
-    "test_bluemix": "mocha test --config=BLUEMIX",
+    "preversion": "npm run lint && npm test",
+    "lint": "eslint ./lib/model/**/*.js ./lib/utils/*.js",
+    "lint:fix": "eslint --fix ./lib/model/**/*.js ./lib/utils/*.js",
+    "test": "npm run lint && npm run test:bluemix",
+    "test:local": "mocha test --config=LOCAL_INSTANCE_1",
+    "test:pws": "mocha test --config=PIVOTAL",
+    "test:bluemix": "mocha test --config=BLUEMIX",
     "uml": "node ./node_modules/wavi/bin/wavi --png ./lib/ ./docs/umlDiagram.png --includenodemodules"
   },
-  "homepage": "https://github.com/prosociallearnEU/cf-nodejs-client",
+  "homepage": "https://github.com/IBM-Bluemix/cf-nodejs-client",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/prosociallearnEU/cf-nodejs-client.git"
+    "url": "git+https://github.com/IBM-Bluemix/cf-nodejs-client.git"
   },
   "bugs": {
-    "url": "https://github.com/prosociallearnEU/cf-nodejs-client/issues"
+    "url": "https://github.com/IBM-Bluemix/cf-nodejs-client/issues"
   },
   "engines": {
     "node": ">=4.2.3",
@@ -32,14 +33,17 @@
   ],
   "dependencies": {
     "bluebird": "3.0.6",
+    "protobufjs": "5.0.1",
     "request": "2.67.0",
-    "restler": "3.4.0"
+    "restler": "3.4.0",
+    "ws": "1.1.0"
   },
   "devDependencies": {
     "archiver": "0.20.0",
     "chai": "3.4.1",
     "chai-as-promised": "5.1.0",
-    "eslint": "1.10.3",
+    "eslint": "^2.11.1",
+    "eslint-config-strongloop": "^2.0.1",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
     "grunt-connect": "0.2.0",
@@ -65,6 +69,7 @@
     "api",
     "REST",
     "cf",
-    "cf client"
+    "cf client",
+    "paas"
   ]
 }
