@@ -65,18 +65,18 @@ The development doesn't cover the whole CC API. Main areas of development are:
 
 # Getting Started
 
-If you need to interact with a Cloud Foundry platform try this [online tool](https://tonicdev.com/npm/cf-nodejs-client) and use this example:
+If you need to interact with a Cloud Foundry platform try this [online tool](https://tonicdev.com/npm/cf-client) and use this example:
 
 ``` Javascript
 "use-strict";
 
-const endpoint = "https://api.run.pivotal.io";
+const endpoint = "https://api.ng.bluemix.net";
 const username = "PWS_USERNAME";
 const password = "PWS_PASSWORD";
 
-const CloudController = new (require("cf-nodejs-client")).CloudController(endpoint);
-const UsersUAA = new (require("cf-nodejs-client")).UsersUAA;
-const Apps = new (require("cf-nodejs-client")).Apps(endpoint);
+const CloudController = new (require("cf-client")).CloudController(endpoint);
+const UsersUAA = new (require("cf-client")).UsersUAA;
+const Apps = new (require("cf-client")).Apps(endpoint);
 
 CloudController.getInfo().then( (result) => {
     UsersUAA.setEndPoint(result.authorization_endpoint);
