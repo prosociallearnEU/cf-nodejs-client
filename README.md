@@ -1,4 +1,4 @@
-# cf-nodejs-client
+# cf-client
 
 [![Build Status](https://travis-ci.org/IBM-Bluemix/cf-nodejs-client.svg)](https://travis-ci.org/IBM-Bluemix/cf-nodejs-client)
 [![Dependency Status](https://david-dm.org/IBM-Bluemix/cf-nodejs-client.svg)](https://david-dm.org/IBM-Bluemix/cf-nodejs-client)
