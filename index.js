@@ -1,7 +1,6 @@
 'use strict';
 
-var used = [],
-    exports = module.exports = {};
+var exports = module.exports = {};
 
 /**
  * Library Version
