@@ -1,4 +1,8 @@
 language: node_js
 node_js:
-  - "4.2.3"
-sudo: false
+  - "0.12"
+  - 4.4.7
+  - 5.10.1
+  - 6.3.0
+install: npm i
+script: npm run lint
