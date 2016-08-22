@@ -103,7 +103,7 @@ npm install cf-client --save
 
 # Technical Documentation
 
-[JSDoc](https://IBM-Bluemix.github.io/cf-nodejs-client/)
+[JSDoc](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master)
 
 # Testing
 
