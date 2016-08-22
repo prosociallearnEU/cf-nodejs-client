@@ -19,22 +19,22 @@ Using this library, you could interact with the following platforms: [PWS](https
 
 | **[Cloud Controller](http://apidocs.cloudfoundry.org/)**  	| **[UAA](https://github.com/cloudfoundry/uaa)**   	| **Logging & Metrics** 	|
 |------------------------ |-----------------------	|------------------------	|
-| [Apps](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Apps.html)                    | [Users](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/UsersUAA.html)             	    | [Logs](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Logs.html)                   	|
-| [Buildpacks](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/BuildPacks.html)              |                    	    |                       	|
-| [Domains](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Domains.html)                 |                    	    |                       	|
-| [Jobs](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Jobs.html)                    |                    	    |                       	|
-| [Organizations](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Organizations.html)           |                    	    |                       	|
-| [Organizations Quotas](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/OrganizationsQuota.html)     |                    	    |                       	|
-| [Routes](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Routes.html)                  |                    	    |                       	|
-| [Services](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Services.html) | | |
-| [Service Bindings](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/ServiceBindings.html)        |                    	    |                       	|
-| [Service Instances](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/ServiceInstances.html) | | |
-| [Service Plans](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/ServicePlans.html) | | |
-| [Spaces](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Spaces.html)                  |                    	    |                       	|
-| [Spaces Quotas](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/SpacesQuota.html)            |                    	    |                       	|
-| [Stacks](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Stacks.html)                  |                    	    |                       	|
-| [User provided Services](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/UserProvidedServices.html)  |                    	    |                       	|
-| [Users](https://IBM-Bluemix.github.io/cf-nodejs-client/docs/v0.12.0/Users.html)                   |                    	    |                       	|
+| [Apps](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Apps)                    | [Users](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-UsersUAA)             	    | [Logs](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Logs)                   	|
+| [Buildpacks](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-BuildPacks)              |                    	    |                       	|
+| [Domains](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Domains)                 |                    	    |                       	|
+| [Jobs](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Jobs)                    |                    	    |                       	|
+| [Organizations](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Organizations)           |                    	    |                       	|
+| [Organizations Quotas](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-OrganizationsQuota)     |                    	    |                       	|
+| [Routes](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Routes)                  |                    	    |                       	|
+| [Services](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Services) | | |
+| [Service Bindings](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-ServiceBindings)        |                    	    |                       	|
+| [Service Instances](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-ServiceInstances) | | |
+| [Service Plans](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-ServicePlans) | | |
+| [Spaces](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Spaces)                  |                    	    |                       	|
+| [Spaces Quotas](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-SpacesQuota)            |                    	    |                       	|
+| [Stacks](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Stacks)                  |                    	    |                       	|
+| [User provided Services](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-UserProvidedServices)  |                    	    |                       	|
+| [Users](https://doclets.io/IBM-Bluemix/cf-nodejs-client/master#dl-Users)                   |                    	    |                       	|
 
 # Applications
 
