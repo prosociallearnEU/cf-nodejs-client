@@ -1,4 +1,26 @@
+sudo: required
+
+env:
+  global:
+    - LOCAL_INSTANCE_1_CF_API_URL=https://api.bosh-lite.com
+    - LOCAL_INSTANCE_1_username=admin
+    - LOCAL_INSTANCE_1_password=admin
+
 language: node_js
 node_js:
-  - "4.2.3"
-sudo: false
+  - 4.4.7
+  - 5.10.1
+  - 6.3.0
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install dnsmasq httping
+  - echo "address=/bosh-lite.com/${CF_IP}" | sudo tee -a /etc/dnsmasq.conf > /dev/null
+  - sudo dpkg-reconfigure resolvconf
+  - sudo /etc/init.d/dnsmasq restart
+
+install: npm i
+
+script:
+  - npm run lint
+  - npm run test:local
