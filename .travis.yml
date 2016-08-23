@@ -8,6 +8,8 @@ env:
 
 language: node_js
 node_js:
+  - 4.4.7
+  - 5.10.1
   - 6.3.0
 
 before_install:
