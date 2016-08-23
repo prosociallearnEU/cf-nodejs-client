@@ -8,8 +8,6 @@ env:
 
 language: node_js
 node_js:
-  - 4.4.7
-  - 5.10.1
   - 6.3.0
 
 before_install:
@@ -18,7 +16,6 @@ before_install:
   - echo "address=/bosh-lite.com/${CF_IP}" | sudo tee -a /etc/dnsmasq.conf > /dev/null
   - sudo dpkg-reconfigure resolvconf
   - sudo /etc/init.d/dnsmasq restart
-  - ping -c 4 api.bosh-lite.com
 
 install: npm i
 
