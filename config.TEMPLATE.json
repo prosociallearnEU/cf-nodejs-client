@@ -1,0 +1,15 @@
+{
+
+	"LOCAL_INSTANCE_1_CF_API_URL" : "https://api.1.1.1.1.xip.io",
+    "LOCAL_INSTANCE_1_username" : "admin",
+    "LOCAL_INSTANCE_1_password" : "123456",
+	"PIVOTAL_CF_API_URL" : "https://api.run.pivotal.io",
+    "PIVOTAL_username" : "pepe@example.com",
+    "PIVOTAL_password" : "123456",    
+	"BLUEMIX_CF_API_URL" : "https://api.eu-gb.bluemix.net",
+    "BLUEMIX_username" : "pepe@example.com",
+    "BLUEMIX_password" : "123456",
+	"USER_CF_API_URL" : "https://api.1.1.1.1.xip.io",
+    "USER_username" : "pepe@example.com",
+    "USER_password" : "123456"    
+}

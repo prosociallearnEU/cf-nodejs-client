@@ -1,6 +1,6 @@
 {
   "name": "cf-nodejs-client",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "A Cloud Foundry Client for Node.js",
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info>",
   "license": "Apache-2.0",
@@ -11,8 +11,7 @@
     "test": "npm run lint && npm run test_pws",
     "test_local": "mocha test --config=LOCAL_INSTANCE_1",
     "test_pws": "mocha test --config=PIVOTAL",
-    "test_bluemix": "mocha test --config=BLUEMIX",
-    "uml": "node ./node_modules/wavi/bin/wavi --png ./lib/ ./docs/umlDiagram.png --includenodemodules"
+    "test_bluemix": "mocha test --config=BLUEMIX"
   },
   "homepage": "https://github.com/prosociallearnEU/cf-nodejs-client",
   "repository": {
@@ -49,8 +48,7 @@
     "mocha": "2.3.4",
     "nconf": "0.8.2",
     "optimist": "0.6.1",
-    "random-words": "0.0.1",
-    "wavi": "0.2.16"
+    "random-words": "0.0.1"
   },
   "keywords": [
     "cloud foundry",
